@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.LeavingDao">
+	<insert id="addLeaving">
+		insert into leaving (emp_id, leaving_date, leaving_time, vacation_type, leaving_reason) 
+		values (#{empId}, #{leavingDate}, #{leavingTime}, #{vacationType}, #{leavingReason})
+	</insert>
+	
+	<update id="deleteLeaving">
+		update leaving set flag=0 where leaving_id=#{leavingId}
+	</update>
+	
+	<select id="displayLeaving" resultType="leaving">
+		select leaving_id, leaving.emp_id, emp_name, leaving_date, leaving_time, vacation_type, vacation_name, leaving_reason from leaving 
+		inner join emp on leaving.emp_id=emp.emp_id 
+		inner join vacation on vacation.vacation_id=leaving.vacation_type where leaving.flag=1
+	</select>
+</mapper>

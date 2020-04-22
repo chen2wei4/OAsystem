@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.InterviewDao">
+	<insert id="addInterview">
+		insert into interview (interviewee_id, position_id, interview_interviewer, interview_location, interview_time) 
+		values (#{intervieweeId}, #{positionId}, #{interviewInterviewer}, #{interviewLocation}, #{interviewTime})
+	</insert>
+	
+	<delete id="deleteInterview">
+		delete from interview where interview_id=#{interviewId}
+	</delete>
+	
+	<select id="displayInterview" resultType="interview">
+		select interview_id, interview.interviewee_id, interview.position_id, interview.interview_interviewer, interviewee_name, interviewee_age, position_name, emp_name, interview_location, interview_time from interview 
+		inner join interviewee_info on interview.interviewee_id=interviewee_info.interviewee_id
+		inner join emp on emp_id=interview_interviewer
+		inner join empty_position on interview.position_id=empty_position.position_id
+	</select>
+	
+</mapper>
