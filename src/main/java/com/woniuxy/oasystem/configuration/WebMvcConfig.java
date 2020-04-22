@@ -1,6 +1,5 @@
 package com.woniuxy.oasystem.configuration;
 
-import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
