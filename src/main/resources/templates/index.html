@@ -8,9 +8,9 @@
 <meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
 <meta name="description" content="LightYear是一个基于Bootstrap v3.3.7的后台管理系统的HTML模板。">
 <meta name="author" content="yinqi">
-<link href="css/bootstrap.min.css" rel="stylesheet">
-<link href="css/materialdesignicons.min.css" rel="stylesheet">
-<link href="css/style.min.css" rel="stylesheet">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
 </head>
   
 <body>
@@ -21,7 +21,7 @@
       
       <!-- logo -->
       <div id="logo" class="sidebar-header">
-        <a href="index.html"><img src="images/logo-sidebar.png" title="LightYear" alt="LightYear" /></a>
+        <a href="index.html"><img th:src="@{/images/logo-sidebar.png}" title="LightYear" alt="LightYear" /></a>
       </div>
       <div class="lyear-layout-sidebar-scroll"> 
         
@@ -130,8 +130,8 @@
           <ul class="topbar-right">
             <li class="dropdown dropdown-profile">
               <a href="javascript:void(0)" data-toggle="dropdown">
-                <img class="img-avatar img-avatar-48 m-r-10" src="images/users/avatar.jpg" alt="笔下光年" />
-                <span>[[${session.emp.empName]] <span class="caret"></span></span>
+                <img class="img-avatar img-avatar-48 m-r-10" th:src="@{/images/users/avatar.jpg}" alt="笔下光年" />
+                <span>[[${session.emp.empName}]]<span class="caret"></span></span>
               </a>
               <ul class="dropdown-menu dropdown-menu-right">
                 <li> <a href="lyear_pages_profile.html"><i class="mdi mdi-account"></i> 个人信息</a> </li>
@@ -490,13 +490,13 @@
   </div>
 </div>
 
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
-<script type="text/javascript" src="js/main.min.js"></script>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.min.js}"></script>
 
 <!--图表插件-->
-<script type="text/javascript" src="js/Chart.js"></script>
+<script type="text/javascript" th:src="@{/js/Chart.js}"></script>
 <script type="text/javascript">
 $(document).ready(function(e) {
     var $dashChartBarsCnt  = jQuery( '.js-chartjs-bars' )[0].getContext( '2d' ),
