@@ -21,4 +21,20 @@ public class EmpServiceImp implements EmpService {
 		return emps;
 	}
 	
+	@Override
+	public Emp getEmpId(Integer empId) {
+		Emp emp = empDao.getEmpId(empId);
+		return emp;
+	}
+	@Override
+	public Emp getEmpCellNumber(String empTel) {
+		Emp emp = empDao.getEmpCellNumber(empTel);
+		return emp;
+	}
+	@Override
+	public Emp getEmpEmail(String empEmail) {
+		Emp emp = empDao.getEmpEmail(empEmail);
+		return emp;
+	}
+	
 }
