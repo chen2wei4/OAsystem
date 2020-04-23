@@ -1,9 +1,13 @@
+<!-- 
+	@description:面试人信息页面
+	@author:王培霖
+ -->
 <!DOCTYPE html>
 <html lang="zh">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>提示 / 弹出框 - 光年(Light Year Admin)后台管理系统模板</title>
+<title>面试人信息 - 光年(Light Year Admin)后台管理系统模板</title>
 <link rel="icon" href="favicon.ico" type="image/ico">
 <meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
 <meta name="description" content="LightYear是一个基于Bootstrap v3.3.7的后台管理系统的HTML模板。">
@@ -28,7 +32,7 @@
         <nav class="sidebar-main">
           <ul class="nav nav-drawer">
             <li class="nav-item"> <a href="index.html"><i class="mdi mdi-home"></i> 后台首页</a> </li>
-            <li class="nav-item nav-item-has-subnav active open">
+            <li class="nav-item nav-item-has-subnav">
               <a href="javascript:void(0)"><i class="mdi mdi-palette"></i> UI 元素</a>
               <ul class="nav nav-subnav">
                 <li> <a href="lyear_ui_buttons.html">按钮</a> </li>
@@ -37,7 +41,7 @@
                 <li> <a href="lyear_ui_icons.html">图标</a> </li>
                 <li> <a href="lyear_ui_tables.html">表格</a> </li>
                 <li> <a href="lyear_ui_modals.html">模态框</a> </li>
-                <li class="active"> <a href="lyear_ui_tooltips_popover.html">提示 / 弹出框</a> </li>
+                <li> <a href="lyear_ui_tooltips_popover.html">提示 / 弹出框</a> </li>
                 <li> <a href="lyear_ui_alerts.html">警告框</a> </li>
                 <li> <a href="lyear_ui_pagination.html">分页</a> </li>
                 <li> <a href="lyear_ui_progress.html">进度条</a> </li>
@@ -56,10 +60,10 @@
                 <li> <a href="lyear_forms_switch.html">开关</a> </li>
               </ul>
             </li>
-            <li class="nav-item nav-item-has-subnav">
-              <a href="javascript:void(0)"><i class="mdi mdi-file-outline"></i> 示例页面</a>
+            <li class="nav-item nav-item-has-subnav active open">
+              <a href="javascript:void(0)"><i class="mdi mdi-file-outline"></i> 人事业务</a>
               <ul class="nav nav-subnav">
-                <li> <a href="lyear_pages_doc.html">文档列表</a> </li>
+                <li class="active"> <a href="lyear_pages_doc.html">文档列表</a> </li>
                 <li> <a href="lyear_pages_gallery.html">图库列表</a> </li>
                 <li> <a href="lyear_pages_config.html">网站配置</a> </li>
                 <li> <a href="lyear_pages_rabc.html">设置权限</a> </li>
@@ -104,7 +108,7 @@
               <span class="lyear-toggler-bar"></span>
               <span class="lyear-toggler-bar"></span>
             </div>
-            <span class="navbar-page-title"> UI元素 - 提示 / 弹出框 </span>
+            <span class="navbar-page-title"> 人事业务 - 面试人信息 </span>
           </div>
           
           <ul class="topbar-right">
@@ -264,41 +268,75 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="card">
-              <div class="card-header"><h4>提示 / 弹出框</h4></div>
+              <div class="card-toolbar clearfix">
+                <form class="pull-right search-bar" method="get" action="#!" role="form">
+                  <div class="input-group">
+                    <div class="input-group-btn">
+                      <input type="hidden" name="search_field" id="search-field" value="title">
+                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                      标题 <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">标题</a> </li>
+                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>
+                      </ul>
+                    </div>
+                    <input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称">
+                  </div>
+                </form>
+                <div class="toolbar-btn-action">
+                  <a class="btn btn-primary m-r-5" href="#!"><i class="mdi mdi-plus"></i> 新增</a>
+                  <a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
+                  <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
+                  <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+                </div>
+              </div>
               <div class="card-body">
                 
-                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Tooltip on left">Tooltip on 左侧</button>
-                
-                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Tooltip on top">Tooltip on 顶部</button>
-                
-                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">Tooltip on 底部</button>
-                
-                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="right" title="Tooltip on right">Tooltip on 右侧</button>
-                
-                <button type="button" class="btn btn-default" data-toggle="tooltip" data-html="true" title="" data-original-title="<em>Tooltip</em> <u>with</u> <b>HTML</b>">Html Tooltip</button>
-                
-                <hr>
-                
-                <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." title="Popover title">
-                  Popover on 顶部
-                </button>
-                
-                <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Vivamus
-                sagittis lacus vel augue laoreet rutrum faucibus.">
-                  Popover on 底部
-                </button>
-                
-                <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
-                  Popover on 右侧
-                </button>
-                
-                <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
-                  Popover on 左侧
-                </button>
-                
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>
+                          <label class="lyear-checkbox checkbox-primary">
+                            <input type="checkbox" id="check-all"><span></span>
+                          </label>
+                        </th>
+                        <th>姓名</th>
+                        <th>年龄</th>
+                        <th>应聘职位</th>
+                        <th>性别</th>
+                        <th>电话</th>
+                        <th>学历</th>
+                        <th>毕业院校</th>
+                        <th>专业</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="displayarea">
+                    </tbody>
+                  </table>
+                </div>
+                <ul class="pagination">
+                  <li class="disabled"><span>«</span></li>
+                  <li class="active"><span>1</span></li>
+                  <li><a href="#1">2</a></li>
+                  <li><a href="#1">3</a></li>
+                  <li><a href="#1">4</a></li>
+                  <li><a href="#1">5</a></li>
+                  <li><a href="#1">6</a></li>
+                  <li><a href="#1">7</a></li>
+                  <li><a href="#1">8</a></li>
+                  <li class="disabled"><span>...</span></li>
+                  <li><a href="#!">14452</a></li>
+                  <li><a href="#!">14453</a></li>
+                  <li><a href="#!">»</a></li>
+                </ul>
+       
               </div>
             </div>
           </div>
+          
         </div>
         
       </div>
@@ -312,5 +350,48 @@
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
 <script type="text/javascript" src="js/main.min.js"></script>
+<script type="text/javascript">
+function displayIntervieweeInfo(){
+    $.ajax({
+      url:"/intervieweeInfo/display",
+      dataType:"json",
+      success:function(data){
+    	  var content = null;
+				      
+		  for (var i = 0; i < data.length; i++){
+			   content += '<tr><td>' +
+			           '<label class="lyear-checkbox checkbox-primary">' +
+			           '<input type="checkbox" name="ids[]" value="1"><span></span>' +
+			           '</label></td>' +
+				       '<td>'+data[i].intervieweeName+'</td>' +
+			  		   '<td>'+data[i].intervieweeAge+'</td>' +
+			  		   '<td>'+data[i].positionName+'</td>' +
+			  		   '<td>'+data[i].intervieweeGender+'</td>' +
+			  		   '<td>'+data[i].intervieweePhone+'</td>' +
+			  		   '<td>'+data[i].intervieweeEducationBackground+'</td>' +
+			  		   '<td>'+data[i].intervieweeGraduateInstitution+'</td>' +
+			  		   '<td>'+data[i].intervieweeMajor+'</td>' +
+			  		   '<td><div class="btn-group">' +
+			  		   '<a class="btn btn-xs btn-default" href="#!" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>' +
+			  		   '<a class="btn btn-xs btn-default" href="#!" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>' +
+			  		   '</div></td></tr>';
+		  } 
+    	$("#displayarea").html(content);
+      }
+    });
+  }
+  
+$(function(){
+    $('.search-bar .dropdown-menu a').click(function() {
+        var field = $(this).data('field') || '';
+        $('#search-field').val(field);
+        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+    });
+
+    // 加载所有空缺职位信息
+    displayIntervieweeInfo();
+});
+
+</script>
 </body>
 </html>
