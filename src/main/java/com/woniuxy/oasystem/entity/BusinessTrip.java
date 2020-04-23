@@ -1,7 +1,5 @@
 package com.woniuxy.oasystem.entity;
 
-import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +16,14 @@ public class BusinessTrip {
 	private String tripLocation;
 	private String tripReason;
 	private int flag;
-	// 构造方法
+	/**
+	 * 构造方法
+	 * @param empId
+	 * @param tripDate
+	 * @param tripTime
+	 * @param tripLocation
+	 * @param tripReason
+	 */
 	public BusinessTrip(int empId, String tripDate, float tripTime, String tripLocation, String tripReason) {
 		super();
 		this.empId = empId;

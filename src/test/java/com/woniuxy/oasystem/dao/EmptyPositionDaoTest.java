@@ -9,10 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.woniuxy.oasystem.entity.EmptyPosition;
 import com.woniuxy.oasystem.service.EmptyPositionService;
 
+
+
 @SpringBootTest
 public class EmptyPositionDaoTest {
 	@Autowired
-	EmptyPositionDaoTest emptyPositionDao;
+	EmptyPositionDao emptyPositionDao;
 	
 	@Autowired
 	EmptyPositionService emptyPositionService;
@@ -20,7 +22,7 @@ public class EmptyPositionDaoTest {
 	// 添加空缺职位
 	@Test
 	public void addEmptyPosition() {
-		EmptyPosition hr = new EmptyPosition(1, "软件工程师", 3, 6500, "本科", "Java开发", 1);
+		EmptyPosition hr = new EmptyPosition(1, "机械工程师", 2, 4500, "本科", "机械图纸设计");
 		//emptyPositionDao.addEmptyPosition(hr);
 		emptyPositionService.addEmptyPosition(hr);
 	}
@@ -33,7 +35,7 @@ public class EmptyPositionDaoTest {
 	}
 	
 	// 显示全部空缺职位
-	//@Test
+	@Test
 	public void displayEmptyPosition() {
 		//List<EmptyPosition> positions = emptyPositionDao.displayEmptyPosition();
 		List<EmptyPosition> positions = emptyPositionService.displayEmptyPosition();

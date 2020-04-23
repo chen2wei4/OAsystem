@@ -21,7 +21,7 @@ public class BusinessTripDaoTest {
 	// 新增出差记录
 	@Test
 	public void addBusinessTrip() {
-		BusinessTrip businessTrip = new BusinessTrip(2, "2020-01-10", 3f, "北京", "总部开会");
+		BusinessTrip businessTrip = new BusinessTrip(1, "2018-04-09", 1f, "重庆", "处理工商业务");
 		//businessTripDao.addBusinessTrip(businessTrip);
 		businessTripService.addBusinessTrip(businessTrip);
 	}

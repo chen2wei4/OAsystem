@@ -19,7 +19,18 @@ public class IntervieweeInfo {
 	private String intervieweeMajor;
 	private String intervieweePhone;
 	private int flag;
-	// 构造方法
+	/**
+	 * 构造方法
+	 * @param positionId
+	 * @param intervieweeName
+	 * @param intervieweeAge
+	 * @param intervieweeGender
+	 * @param intervieweeEducationBackground
+	 * @param intervieweeGraduateInstitution
+	 * @param intervieweeMajor
+	 * @param intervieweePhone
+	 * @param flag
+	 */
 	public IntervieweeInfo(int positionId, String intervieweeName, int intervieweeAge, String intervieweeGender,
 			String intervieweeEducationBackground, String intervieweeGraduateInstitution, String intervieweeMajor,
 			String intervieweePhone, int flag) {
