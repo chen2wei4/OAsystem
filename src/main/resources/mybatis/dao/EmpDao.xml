@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.EmpDao">
+	<select id="displayEmp" resultType="emp">
+		select emp_id, department_name, role_id, emp.department_id, emp_name, emp_date, emp_sex, 
+		emp_tel, emp_email, emp_idnumber, emp_hiredate, emp_political_status from emp 
+		inner join department on emp.department_id=department.department_id where emp.flag=1
+	</select>
+	
+	<select id="getEmpId" resultType="Emp">
+  		select * from emp where emp_id=#{empId}
+  	</select>
+  	<select id="getEmpEmail" resultType="Emp">
+  		select * from emp where emp_email=#{empEmail}
+  	</select>
+  	<select id="getEmpCellNumber" resultType="Emp">
+  		select * from emp where emp_tel=#{empTel}
+  	</select>
+</mapper>

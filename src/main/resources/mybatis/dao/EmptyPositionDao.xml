@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.EmptyPositionDao">
+	<!-- 添加求职人员信息 -->
+	<insert id="addEmptyPosition">
+		insert into empty_position (department_id, position_name, position_number, position_salary, position_education_background, position_description, flag) 
+		values (#{departmentId}, #{positionName}, #{positionNumber}, #{positionSalary}, #{positionEducationBackground}, #{positionDescription}, 1)
+	</insert>
+	
+	<update id="deleteEmptyPosition">
+		update empty_position set flag = 0 where position_id=#{positionId}
+	</update>
+	
+	<select id="displayEmptyPosition" resultType="emptyPosition">
+		select position_id, empty_position.department_id, department_name, position_name, position_number, position_salary, position_education_background, position_description from empty_position 
+		inner join department on empty_position.department_id=department.department_id where empty_position.flag=1
+	</select>
+</mapper>
