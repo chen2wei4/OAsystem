@@ -1,36 +1,133 @@
-/**
- * @author 陈一玮
- * @createDate 2020年4月26日
- */
 package com.woniuxy.oasystem.entity;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 /**
- * @Description 分页的实体类
- * @author 陈一玮
- * @changeLog 1.创建 (2020年4月26日 上午10:10:24 [陈一玮]
- *            2.
+ * 
+ * @Description  分页实体类
+ * @author  张钰平
+ * @changeLog 	1. 创建 (2020年4月23日 [张钰平])
+ *
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Component
 public class PageBean<T> {
-	private List<T> beanList; //分页的所有数据集合
-	private Integer beginPage; //分页的起始页
-	private Integer pageSize; //分页的页大小
-	private Integer endPage; //分页的结束页
-	private Integer currentPage; //分页的当前页
-	private Integer totalPage; //分页的总页数
-	private Integer totalData; //总数据条数
-	private String uri; //在哪赋值
+	private List<T> beanList;//当前页数据
+	private Integer pageSize;//页大小
+	private Integer pageIndex;//当前页
+	private Integer totalRecord;//数据总条数
+	private Integer totalPage;//总页数
+	private Integer pageBegin;//开始页码
+	private Integer pageEnd;//结束页码
+	private String url;
+	
+	public PageBean() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public PageBean(List<T> beanList, Integer pageSize, Integer pageIndex, Integer totalRecord, Integer totalPage,
+			Integer pageBegin, Integer pageEnd, String url) {
+		super();
+		this.beanList = beanList;
+		this.pageSize = pageSize;
+		this.pageIndex = pageIndex;
+		this.totalRecord = totalRecord;
+		this.totalPage = totalPage;
+		this.pageBegin = pageBegin;
+		this.pageEnd = pageEnd;
+		this.url = url;
+	}
+
+	public List<T> getBeanList() {
+		return beanList;
+	}
+
+	public void setBeanList(List<T> beanList) {
+		this.beanList = beanList;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public Integer getPageIndex() {
+		return pageIndex;
+	}
+
+	public void setPageIndex(Integer pageIndex) {
+		this.pageIndex = pageIndex;
+	}
+
+	public Integer getTotalRecord() {
+		return totalRecord;
+	}
+
+	public void setTotalRecord(Integer totalRecord) {
+		this.totalRecord = totalRecord;
+	}
+
+	public Integer getTotalPage() {
+		return totalPage;
+	}
+
+	public void setTotalPage(Integer totalPage) {
+		this.totalPage = totalPage;
+	}
+
+	public Integer getPageBegin() {
+		return pageBegin;
+	}
+
+	public void setPageBegin(Integer pageBegin) {
+		this.pageBegin = pageBegin;
+	}
+
+	public Integer getPageEnd() {
+		return pageEnd;
+	}
+
+	public void setPageEnd(Integer pageEnd) {
+		this.pageEnd = pageEnd;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	@Override
+	public String toString() {
+		return "PageBean [beanList=" + beanList + ", pageSize=" + pageSize + ", pageIndex=" + pageIndex
+				+ ", totalRecord=" + totalRecord + ", totalPage=" + totalPage + ", pageBegin=" + pageBegin
+				+ ", pageEnd=" + pageEnd + ", url=" + url + "]";
+	}
+
+	public void setPageBeginAndPageEnd() {
+		if(getTotalPage()<10) {
+			pageBegin=1;
+			pageEnd=getTotalPage();
+		}else {
+			pageBegin=pageIndex-5;
+			pageEnd=pageIndex+4;
+			if(pageBegin<1) {
+				pageBegin=1;
+				pageEnd=10;
+			}
+			if(pageEnd>getTotalPage()) {
+				pageBegin=getTotalPage()-9;
+				pageEnd=getTotalPage();
+			}
+		}
+	}
 	/**
 	 * 设置页码索引(起始页和结束页)
 	 * @changeLog 1.创建 (2020年4月26日 上午10:45:33 [陈一玮]
@@ -38,17 +135,17 @@ public class PageBean<T> {
 	 */
 	public void setBeginPageAndEndPage() {
 		if(totalPage<=pageSize) {
-			beginPage=1;
-			endPage=totalPage;
-		}else if(currentPage<=6){
-			beginPage=1;
-			endPage=pageSize;
-		}else if(currentPage==totalPage) {
-			beginPage=totalPage-pageSize;
-			endPage=totalPage;
+			pageBegin=1;
+			pageEnd=totalPage;
+		}else if(pageIndex<=6){
+			pageBegin=1;
+			pageEnd=pageSize;
+		}else if(pageIndex==totalPage) {
+			pageBegin=totalPage-pageSize;
+			pageEnd=totalPage;
 		}else {
-			beginPage=currentPage-5;
-			endPage=currentPage+4;
+			pageBegin=pageIndex-5;
+			pageEnd=pageIndex+4;
 		}
 	}
 }

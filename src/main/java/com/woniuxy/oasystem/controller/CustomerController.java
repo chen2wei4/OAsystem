@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.woniuxy.oasystem.entity.Customer;
@@ -47,7 +46,7 @@ public class CustomerController {
 		}
 		PageBean<Customer> pb = customerService.showCustomers(customer,currentPage);
 		System.out.println(pb);
-		pb.setUri("/business/customers");
+		pb.setUrl("/business/customers");
 		model.addAttribute("pb", pb);
 		return "/lyear_pages_customers";
 	}
@@ -80,7 +79,7 @@ public class CustomerController {
 		return "redirect:/business/customers";
 	}
 	/**
-	 * 新增一条客户信息
+	 * 更改一条客户信息
 	 * @param customer 需要更改的客户信息
 	 * @param customerTypeId 更改的客户信息中的客户类型id
 	 * @return 返回值为String，使用模板引擎会跳转到templates下客户信息页面

@@ -6,12 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.woniuxy.oasystem.dao.CustomerDao;
-import com.woniuxy.oasystem.dao.EmpDao;
 import com.woniuxy.oasystem.entity.Customer;
-import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.PageBean;
 import com.woniuxy.oasystem.service.CustomerService;
-import com.woniuxy.oasystem.service.EmpService;
 /**
  * 
  * @Description 客户信息接口实现类
@@ -37,9 +34,9 @@ public class CustomerServiceImp implements CustomerService {
 		//设置分页大小
 		pb.setPageSize(10);
 		//设置当前页码
-		pb.setCurrentPage(currentPage);
+		pb.setPageIndex(currentPage);
 		//设置数据总条数
-		pb.setTotalData(totalData);
+		pb.setTotalRecord(totalData);
 		//设置总页码
 		pb.setTotalPage((totalData%10==0)?(totalData/10):(totalData/10+1));
 		//设置起始页码和结束页码

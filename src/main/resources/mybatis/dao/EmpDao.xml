@@ -36,18 +36,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   		<association property="role" javaType="Role" select="selectRole" column="role_id"/>
   		<association property="department" javaType="Department" select="selectDepartment" column="department_id"/>
   	</resultMap>
+  	<!-- 根据部门id查询部门 -->
   	<select id="selectDepartment" resultType="Department">
   		select * from department where department_id=#{department_id} and flag=1
   	</select>
+  	<!-- 根据角色id查询角色 -->
   	<select id="selectRole" resultType="Role">
   		select * from role where role_id=#{role_id} and flag=1
   	</select>
+  	<!-- 更改密码 -->
   	<update id="changeNewPwd">
   		update emp set emp_password=#{newPwd} where flag=1 and emp_id=#{empId}
   	</update>
+  	<!-- 绑定手机号 -->
   	<update id="bindTel">
   		update emp set emp_tel=#{bindTel} where flag=1 and emp_id=#{empId}
   	</update>
+  	 <!-- 绑定邮箱 -->
   	<update id="bindEmail">
   	update emp set emp_email=#{bindEmail} where flag=1 and emp_id=#{empId}
   	</update>
