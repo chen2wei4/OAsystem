@@ -92,11 +92,25 @@ public class CustomerController {
 		customerService.updateCustomer(customer, customerTypeId);
 		return "redirect:/business/customers";
 	}
+	/**
+	 * 删除一条客户信息
+	 * @param 需要删除的客户编号id
+	 * @return 返回值为String，使用模板引擎会跳转到templates下客户信息页面
+	 * @changeLog 1.创建 (2020年4月27日 下午6:17:57 [陈一玮]
+	 *            2.
+	 */
 	@DeleteMapping("/business/customers/{customerId}")
 	public String deleteCustomer(@PathVariable("customerId")Integer customerId) {
 		customerService.deleteCustomer(customerId);
 		return "redirect:/business/customers";
 	}
+	/**
+	 * 删除复选框选中的客户信息
+	 * @param ids 客户信息id数组
+	 * @return 返回值为String，使用模板引擎会跳转到templates下客户信息页面
+	 * @changeLog 1.创建 (2020年4月27日 下午6:18:44 [陈一玮]
+	 *            2.
+	 */
 	@DeleteMapping("/business/customers")
 	public String deleteAllCustomer(@RequestParam(value = "ids[]" ,required = false)Integer[] ids)  {
 		System.out.println(ids);

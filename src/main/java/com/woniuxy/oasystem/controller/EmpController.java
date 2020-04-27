@@ -171,6 +171,13 @@ public class EmpController {
 		}
 		return "/lyear_pages_bind_account";
 	}
+	/**
+	 * 注销账户
+	 * @param session 会话对象
+	 * @return 返回值为String，使用模板引擎会跳转到templates下的登录账号页面
+	 * @changeLog 1.创建 (2020年4月27日 下午6:17:17 [陈一玮]
+	 *            2.
+	 */
 	@RequestMapping("/emp/logoff")
 	public String logOff(HttpSession session) {
 		session.removeAttribute("emp");

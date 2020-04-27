@@ -10,5 +10,4 @@ public class OastystemApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OastystemApplication.class, args);
 	}
-
 }
