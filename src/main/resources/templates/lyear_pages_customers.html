@@ -124,15 +124,15 @@
                    </form>
                 </div>
                 <ul class="pagination" >
-                  <li th:class="${pb.currentPage ==1}?disabled">
-                  <a th:href="${pb.currentPage ==1}?'javaScript:void(0)':${pb.uri}+'?currentPage='+${pb.currentPage-1}">«</a>
+                  <li th:class="${pb.pageIndex ==1}?disabled">
+                  <a th:href="${pb.pageIndex ==1}?'javaScript:void(0)':${pb.url}+'?currentPage='+${pb.pageIndex-1}">«</a>
                   </li>
-                  <li th:class="${pb.currentPage == i} ?active" th:each="i:${#numbers.sequence(1,pb.totalPage)}"  th:switch="${pb.currentPage}">
+                  <li th:class="${pb.pageIndex == i} ?active" th:each="i:${#numbers.sequence(1,pb.totalPage)}"  th:switch="${pb.pageIndex}">
                   <a th:case="${i}">[[${i}]]</a>
-                  <a th:href="${pb.uri}+'?currentPage='+${i}"  th:case="*">[[${i}]]</a>
+                  <a th:href="${pb.url}+'?currentPage='+${i}"  th:case="*">[[${i}]]</a>
                   </li>
-                  <li th:class="${pb.currentPage ==pb.totalPage}?disabled">
-                  <a th:href="${pb.currentPage ==pb.totalPage}?'javaScript:void(0)':${pb.uri}+'?currentPage='+${pb.currentPage+1}">»</a>
+                  <li th:class="${pb.pageIndex ==pb.totalPage}?disabled">
+                  <a th:href="${pb.pageIndex ==pb.totalPage}?'javaScript:void(0)':${pb.url}+'?currentPage='+${pb.pageIndex+1}">»</a>
                   </li>
                 </ul>
 

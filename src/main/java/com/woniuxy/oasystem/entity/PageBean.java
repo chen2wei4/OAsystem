@@ -2,9 +2,8 @@ package com.woniuxy.oasystem.entity;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
 /**
  * 
  * @Description  分页实体类
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
  * @changeLog 	1. 创建 (2020年4月23日 [张钰平])
  *
  */
+@Component
 public class PageBean<T> {
 	private List<T> beanList;//当前页数据
 	private Integer pageSize;//页大小
@@ -24,7 +24,6 @@ public class PageBean<T> {
 	
 	public PageBean() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public PageBean(List<T> beanList, Integer pageSize, Integer pageIndex, Integer totalRecord, Integer totalPage,
