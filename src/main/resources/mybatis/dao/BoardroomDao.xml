@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 会议室管理 -->
+<mapper namespace="com.woniuxy.oasystem.dao.BoardroomDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultType="Boardroom">
+		select * from boardroom where flag = 1
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(*) from boardroom 
+		where flag = 1
+		<include refid="conditionSql"/>
+	</select>
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="b.name!= null and b.name!=''">
+				and name like '%' #{b.name} '%'
+			</if>
+			<if test="b.address!= null and b.address!=''">
+				and address like '%' #{b.address} '%'
+			</if>
+			<if test="b.useState!= null and b.useState!=''">
+				and use_state like '%' #{b.useState} '%'
+			</if>
+			
+	</sql>
+	<!-- 根据BoardroomId删除 -->
+	<update id="deleteByBoardroomId">
+		update boardroom set flag = 0 where boardroom_id = #{boardroomId}
+	</update>
+	<!-- 根据BoardroomId修改 -->
+	<update id="updateByBoardroomId">
+		update boardroom set 
+		name=#{b.name},address=#{b.address},use_state=#{b.useState}
+		where boardroom_id = #{b.boardroomId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into boardroom (name,address,use_state) 
+		values (#{b.name},#{b.address},#{b.useState})
+	</insert>
+</mapper>
