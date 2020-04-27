@@ -25,6 +25,7 @@ public class ReportsServiceImpl implements ReportsService {
 		pb.setPageSize(pageSize);
 		int totalRecord = reportsDao.selectReportsByConditionPageCount(reports);
 		pb.setTotalRecord(totalRecord);
+		pb.setTotalPage((totalRecord % pageSize == 0) ? totalRecord / pageSize : totalRecord / pageSize + 1);
 		pb.setPageBeginAndPageEnd();
 		System.out.println(pb);
 		return pb;

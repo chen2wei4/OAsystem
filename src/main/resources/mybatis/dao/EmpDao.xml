@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 通过id查询职工信息 -->
   	<select id="getEmpId" resultMap="EmpSelectMap">
-  		select * from emp where e.emp_id=#{empId} and flag=1
+  		select * from emp where emp_id=#{empId} and flag=1
   	</select>
 	<!-- 通过邮箱查询职工信息 -->
   	<select id="getEmpEmail" resultMap="EmpSelectMap">

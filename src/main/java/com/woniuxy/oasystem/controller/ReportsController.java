@@ -51,10 +51,10 @@ public class ReportsController {
 	// 新增报表
 	@PostMapping(value = "/reportDetails")
 	public String reportDetails(@ModelAttribute Reports reports) {
-		Date reportDate = new Date();
-		reports.setReportDate(reportDate);
-		reports.setReportName("哎呀");
-		reportsService.insertReports(reports);
+//		Date reportDate = new Date();
+//		reports.setReportDate(reportDate);
+//		reports.setReportName("测试");
+//		reportsService.insertReports(reports);
 		return "lyear_pages_add_reports.html";
 	}
 }

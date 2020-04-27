@@ -18,32 +18,32 @@
 <body>
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
-   <!--左侧导航-->
-    <div th:replace="common :: lefter"></div>
-    <!--End 左侧导航-->
-    
-    <!--头部信息-->
-    <header class="lyear-layout-header">
-      
-      <nav class="navbar navbar-default">
-        <div class="topbar">
-          
-          <div class="topbar-left">
-            <div class="lyear-aside-toggler">
-              <span class="lyear-toggler-bar"></span>
-              <span class="lyear-toggler-bar"></span>
-              <span class="lyear-toggler-bar"></span>
-            </div>
-            <span class="navbar-page-title"> 后台首页 </span>
-          </div>
-          <!-- 导航栏信息 -->
-          <ul class="topbar-right" th:replace="common :: header"></ul>
-          
-        </div>
-      </nav>
-      
-    </header>
-    <!--End 头部信息-->
+			<!--左侧导航-->
+			<div th:replace="common :: lefter"></div>
+			<!--End 左侧导航-->
+
+			<!--头部信息-->
+			<header class="lyear-layout-header">
+
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 后台首页 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header"></ul>
+
+					</div>
+				</nav>
+
+			</header>
+			<!--End 头部信息-->
 
 			<!--页面主要内容-->
 			<main class="lyear-layout-content">
@@ -77,7 +77,8 @@
 									</div>
 								</form>
 								<div class="toolbar-btn-action">
-									<a class="btn btn-warning m-r-5" th:href="@{/anmanage(pageIndex=1)}"><i
+									<a class="btn btn-warning m-r-5"
+										th:href="@{/anmanage(pageIndex=1)}"><i
 										class="mdi mdi-settings">管理</i></a>
 								</div>
 							</div>
@@ -126,26 +127,29 @@
 										<nav aria-label="Page navigation">
 											<ul class="pagination">
 												<!-- 首页 -->
-												<li th:if="${page.pageIndex!=1}">
-												<a th:href="@{/announcement(atId=${atId},pageIndex=${page.pageBegin})}">首页</a>
+												<li th:if="${page.pageIndex!=1}"><a
+													th:href="@{/announcement(atId=${atId},pageIndex=${page.pageBegin})}">首页</a>
 												</li>
 												<!-- 上一页 -->
-												<li th:if="${page.pageIndex!=1}">
-												<a th:href="@{/announcement(atId=${atId},pageIndex=${page.pageIndex-1})}" aria-label="Previous">«</a>
-												</li>
+												<li th:if="${page.pageIndex!=1}"><a
+													th:href="@{/announcement(atId=${atId},pageIndex=${page.pageIndex-1})}"
+													aria-label="Previous">«</a></li>
 												<!--循环遍历连续显示的页面，若是当前页就高亮显示，并且没有链接-->
-                            					<li th:each="i:${#numbers.sequence(page.pageBegin,page.pageEnd)}" >
-                            					<a th:href="@{/announcement(atId=${atId},pageIndex=${i})}" th:text="${i}" th:if="${page.PageIndex!=i}"></a>
-                            					<span th:if="${page.PageIndex==i}" th:text="${i}" aria-hidden="true" style="background-color:#C0C0C0"></span>
-                            					</li>
-                            					<!--下一页-->
-                    							<li th:if="${page.pageIndex!=page.pageEnd}">
-                            					<a th:href="@{/announcement(atId=${atId},pageIndex=${page.pageIndex+1})}">»</a>
-                            					</li>
-                            					<!-- 尾页 -->
-                            					<li th:if="${page.pageIndex!=page.pageEnd}">
-                            					<a th:href="@{/announcement(atId=${atId},pageIndex=${page.pageEnd})}">尾页</a>
-                            					</li>
+												<li
+													th:each="i:${#numbers.sequence(page.pageBegin,page.pageEnd)}">
+													<a th:href="@{/announcement(atId=${atId},pageIndex=${i})}"
+													th:text="${i}" th:if="${page.PageIndex!=i}"></a> <span
+													th:if="${page.PageIndex==i}" th:text="${i}"
+													aria-hidden="true" style="background-color: #C0C0C0"></span>
+												</li>
+												<!--下一页-->
+												<li th:if="${page.pageIndex!=page.pageEnd}"><a
+													th:href="@{/announcement(atId=${atId},pageIndex=${page.pageIndex+1})}">»</a>
+												</li>
+												<!-- 尾页 -->
+												<li th:if="${page.pageIndex!=page.pageEnd}"><a
+													th:href="@{/announcement(atId=${atId},pageIndex=${page.pageEnd})}">尾页</a>
+												</li>
 											</ul>
 										</nav>
 									</div>

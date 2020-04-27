@@ -1,7 +1,6 @@
 package com.woniuxy.oasystem.entity;
 
 import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 /**
