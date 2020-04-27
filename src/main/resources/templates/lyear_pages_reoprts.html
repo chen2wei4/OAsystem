@@ -122,8 +122,8 @@
 							<li class="dropdown dropdown-profile"><a
 								href="javascript:void(0)" data-toggle="dropdown"> <img
 									class="img-avatar img-avatar-48 m-r-10"
-									src="images/users/avatar.jpg" alt="笔下光年" /> <span>笔下光年
-										<span class="caret"></span>
+									src="images/users/avatar.jpg" alt="笔下光年" /> <span>[[${session.emp.empName}]]<span
+										class="caret"></span>
 								</span>
 							</a>
 								<ul class="dropdown-menu dropdown-menu-right">
@@ -282,8 +282,9 @@
 									</div>
 								</form>
 								<div class="toolbar-btn-action">
-									<a class="btn btn-primary m-r-5" th:href="@{/reportDetailsPageJumps}"><i
-										class="mdi mdi-plus"></i> 新增</a> <a class="btn btn-danger"
+									<a class="btn btn-primary m-r-5"
+										th:href="@{/reportDetailsPageJumps}"><i
+										class="mdi mdi-plus"></i> 新增报表</a> <a class="btn btn-danger"
 										href="#!"><i class="mdi mdi-window-close"></i> 删除所选</a>
 								</div>
 							</div>
