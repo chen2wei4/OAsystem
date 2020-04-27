@@ -17,7 +17,17 @@ public class Interview {
 	private String positionName; // 面试职位
 	private String interviewLocation; // 面试地点
 	private String interviewTime; // 面试时间
-	// 构造方法
+	/**
+	 * 构造方法
+	 * @param intervieweeId
+	 * @param positionId
+	 * @param interviewInterviewer
+	 * @param intervieweeName
+	 * @param empName
+	 * @param positionName
+	 * @param interviewLocation
+	 * @param interviewTime
+	 */
 	public Interview(int intervieweeId, int positionId, int interviewInterviewer, String intervieweeName,
 			String empName, String positionName, String interviewLocation, String interviewTime) {
 		super();
@@ -31,6 +41,14 @@ public class Interview {
 		this.interviewTime = interviewTime;
 	}
 	
+	/**
+	 * 构造方法
+	 * @param intervieweeId
+	 * @param positionId
+	 * @param interviewInterviewer
+	 * @param interviewLocation
+	 * @param interviewTime
+	 */
 	public Interview(int intervieweeId, int positionId, int interviewInterviewer, String interviewLocation,
 			String interviewTime) {
 		super();

@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<select id="displayEmptyPosition" resultType="emptyPosition">
-		select * from empty_position where flag=1
+		select position_id, empty_position.department_id, department_name, position_name, position_number, position_salary, position_education_background, position_description from empty_position 
+		inner join department on empty_position.department_id=department.department_id where empty_position.flag=1
 	</select>
 </mapper>

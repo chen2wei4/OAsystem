@@ -17,7 +17,14 @@ public class Leaving {
 	private String vacationName; // 假期名称
 	private String leavingReason; // 请假原因
 	private int flag; // 软删除
-	// 构造方法
+	/**
+	 * 构造方法
+	 * @param empId
+	 * @param leavingDate
+	 * @param leavingTime
+	 * @param vacationType
+	 * @param leavingReason
+	 */
 	public Leaving(int empId, String leavingDate, float leavingTime, int vacationType, String leavingReason) {
 		super();
 		this.empId = empId;

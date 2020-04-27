@@ -19,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 通过手机号查询职工信息 -->
   	<select id="getEmpCellNumber" resultMap="EmpSelectMap">
   		select * from emp where emp_tel=#{empTel} and flag=1
+	
   	</select>
   	<resultMap type="Emp" id="EmpSelectMap">
   		<id column="emp_id" property="empId"/>
