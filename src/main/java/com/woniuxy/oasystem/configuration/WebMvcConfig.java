@@ -36,6 +36,10 @@ public class WebMvcConfig {
 					registry.addViewController("/organizationchart").setViewName("/lyear_pages_organization_chart");
 					//localhost:8080/organizationchart进入显示组织架构图页面
 					registry.addViewController("/addcustomer").setViewName("/lyear_pages_addcustomer");
+					//公告相关
+					registry.addViewController("/addaantype").setViewName("addantype");
+					registry.addViewController("/anmanage").setViewName("announcementmanage");
+					registry.addViewController("/anmanagetype").setViewName("announcementtypemanage");
 		}
 	};
 }
