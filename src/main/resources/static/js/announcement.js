@@ -8,10 +8,11 @@ function getRootPath(){
 //公告类别标签
 function showAnType(d){
 	//拼接标签
-	var html= "<li> <a href='"+getRootPath()+"/announcement/"+d.atId+"'>"+d.atName+"</a> </li>";
+	var html= "<li> <a href='"+getRootPath()+"/announcement?pageIndex=1&atId="+d.atId+"'>"+d.atName+"</a> </li>";
 	$(html).appendTo($("#antype"));
 	
 };
+
 //初始化所有公告类别
 function initantype(){
 	$.get(getRootPath()+"/announcement/alltypes",

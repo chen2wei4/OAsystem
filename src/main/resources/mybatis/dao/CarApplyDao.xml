@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 车辆申请管理 -->
+<mapper namespace="com.woniuxy.oasystem.dao.CarApplyDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultType="CarApply">
+		select * from car_apply where flag = 1
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(*) from car_apply 
+		where flag = 1
+		<include refid="conditionSql"/>
+	</select>
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="ca.empId!= null and ca.empId!=''">
+				and emp_id like '%' #{ca.empId} '%'
+			</if>
+			<if test="ca.license!= null and ca.license!=''">
+				and license like '%' #{ca.license} '%'
+			</if>
+			<if test="ca.applyTime!= null and ca.applyTime!=''">
+				and apply_time like '%' #{ca.applyTime} '%'
+			</if>
+			<if test="ca.startTime!= null and ca.startTime!=''">
+				and start_time like '%' #{ca.startTime} '%'
+			</if>
+			<if test="ca.endTime!= null and ca.endTime!=''">
+				and end_time like '%' #{ca.endTime} '%'
+			</if>
+			<if test="ca.purpose!= null and ca.purpose!=''">
+				and purpose like '%' #{ca.purpose} '%'
+			</if>
+			<if test="ca.review!= null and ca.review!=''">
+				and review like '%' #{ca.review} '%'
+			</if>
+	</sql>
+	<!-- 根据caId删除 -->
+	<update id="deleteByCaId">
+		update car_apply set flag = 0 where ca_id = #{caId}
+	</update>
+	<!-- 根据caId修改 -->
+	<update id="updateByCaId">
+		update car_apply set 
+		license=#{ca.license},emp_id=#{ca.empId},apply_time=#{ca.applyTime},start_time=#{ca.startTime},
+		end_time=#{ca.endTime},purpose=#{ca.purpose},review=#{ca.review}
+		where ca_id = #{ca.caId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into car_apply (license,emp_id,apply_time,start_time,end_time,purpose,review) 
+		values (#{ca.license},#{ca.empId},#{ca.applyTime},#{ca.startTime},#{ca.endTime},#{ca.purpose},#{ca.review})
+	</insert>
+</mapper>

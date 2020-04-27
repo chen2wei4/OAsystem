@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<!--左侧导航-->
+<aside class="lyear-layout-sidebar" th:fragment="lefter">
+
+	<!-- logo -->
+	<div id="logo" class="sidebar-header">
+		<a th:href="@{/index}"><img th:src="@{/images/logo-sidebar.png}"
+			title="LightYear" alt="LightYear" /></a>
+	</div>
+	<div class="lyear-layout-sidebar-scroll">
+
+		<nav class="sidebar-main">
+			<ul class="nav nav-drawer">
+				<li class="nav-item active"><a th:href="@{/index}"><i
+						class="mdi mdi-home"></i> 后台首页</a></li>
+				<li><a
+					th:href="@{/announcement(atId=0,pageIndex=1)}" >通知公告</a>
+					</li>
+				<li class="nav-item nav-item-has-subnav"><a
+					href="javascript:void(0)"><i
+						class="mdi mdi-format-align-justify"></i> 商务管理</a>
+					<ul class="nav nav-subnav">
+						<li><a th:href="@{/business/customers}">客户信息</a></li>
+						<li><a href="lyear_forms_radio.html">我的客户</a></li>
+						<li><a href="lyear_forms_checkbox.html">订单信息</a></li>
+						<li><a href="lyear_forms_switch.html">合同信息</a></li>
+					</ul></li>
+			</ul>
+		</nav>
+
+		<div class="sidebar-footer">
+			<p class="copyright">
+				Copyright © 2020 蜗牛学院JAVA65期二组</a>
+			</p>
+		</div>
+	</div>
+
+</aside>
+<!--End 左侧导航-->
+
+<!-- 头部信息 -->
+<!-- 导航栏信息 -->
+<ul class="topbar-right" th:fragment="header">
+	<li class="dropdown dropdown-profile"><a href="javascript:void(0)"
+		data-toggle="dropdown"> <img
+			class="img-avatar img-avatar-48 m-r-10"
+			th:src="@{/images/users/avatar.jpg}" alt="笔下光年" /> <span>[[${session.emp.empName}]]<span
+				class="caret"></span></span>
+	</a>
+		<ul class="dropdown-menu dropdown-menu-right">
+			<li><a href="lyear_pages_profile.html"><i
+					class="mdi mdi-account"></i> 个人信息</a></li>
+			<li><a th:href="@{/newpwd}"><i class="mdi mdi-lock-outline"></i>
+					修改密码</a></li>
+			<li><a th:href="@{/bindaccount}"><i class="mdi mdi-lock"></i>
+					绑定账号</a></li>
+			<li><a th:href="@{/organizationchart}"><i
+					class="mdi mdi-account-circle"></i> 组织架构</a></li>
+			<li class="divider"></li>
+			<li><a th:href="@{/emp/logoff}"><i
+					class="mdi mdi-logout-variant"></i> 退出登录</a></li>
+		</ul></li>
+	<!--切换主题配色-->
+	<li class="dropdown dropdown-skin"><span data-toggle="dropdown"
+		class="icon-palette"><i class="mdi mdi-palette"></i></span>
+		<ul class="dropdown-menu dropdown-menu-right"
+			data-stopPropagation="true">
+			<li class="drop-title"><p>主题</p></li>
+			<li class="drop-skin-li clearfix"><span class="inverse">
+					<input type="radio" name="site_theme" value="default"
+					id="site_theme_1" checked> <label for="site_theme_1"></label>
+			</span> <span> <input type="radio" name="site_theme" value="dark"
+					id="site_theme_2"> <label for="site_theme_2"></label>
+			</span> <span> <input type="radio" name="site_theme"
+					value="translucent" id="site_theme_3"> <label
+					for="site_theme_3"></label>
+			</span></li>
+			<li class="drop-title"><p>LOGO</p></li>
+			<li class="drop-skin-li clearfix"><span class="inverse">
+					<input type="radio" name="logo_bg" value="default" id="logo_bg_1"
+					checked> <label for="logo_bg_1"></label>
+			</span> <span> <input type="radio" name="logo_bg" value="color_2"
+					id="logo_bg_2"> <label for="logo_bg_2"></label>
+			</span> <span> <input type="radio" name="logo_bg" value="color_3"
+					id="logo_bg_3"> <label for="logo_bg_3"></label>
+			</span> <span> <input type="radio" name="logo_bg" value="color_4"
+					id="logo_bg_4"> <label for="logo_bg_4"></label>
+			</span> <span> <input type="radio" name="logo_bg" value="color_5"
+					id="logo_bg_5"> <label for="logo_bg_5"></label>
+			</span> <span> <input type="radio" name="logo_bg" value="color_6"
+					id="logo_bg_6"> <label for="logo_bg_6"></label>
+			</span> <span> <input type="radio" name="logo_bg" value="color_7"
+					id="logo_bg_7"> <label for="logo_bg_7"></label>
+			</span> <span> <input type="radio" name="logo_bg" value="color_8"
+					id="logo_bg_8"> <label for="logo_bg_8"></label>
+			</span></li>
+			<li class="drop-title"><p>头部</p></li>
+			<li class="drop-skin-li clearfix"><span class="inverse">
+					<input type="radio" name="header_bg" value="default"
+					id="header_bg_1" checked> <label for="header_bg_1"></label>
+			</span> <span> <input type="radio" name="header_bg" value="color_2"
+					id="header_bg_2"> <label for="header_bg_2"></label>
+			</span> <span> <input type="radio" name="header_bg" value="color_3"
+					id="header_bg_3"> <label for="header_bg_3"></label>
+			</span> <span> <input type="radio" name="header_bg" value="color_4"
+					id="header_bg_4"> <label for="header_bg_4"></label>
+			</span> <span> <input type="radio" name="header_bg" value="color_5"
+					id="header_bg_5"> <label for="header_bg_5"></label>
+			</span> <span> <input type="radio" name="header_bg" value="color_6"
+					id="header_bg_6"> <label for="header_bg_6"></label>
+			</span> <span> <input type="radio" name="header_bg" value="color_7"
+					id="header_bg_7"> <label for="header_bg_7"></label>
+			</span> <span> <input type="radio" name="header_bg" value="color_8"
+					id="header_bg_8"> <label for="header_bg_8"></label>
+			</span></li>
+			<li class="drop-title"><p>侧边栏</p></li>
+			<li class="drop-skin-li clearfix"><span class="inverse">
+					<input type="radio" name="sidebar_bg" value="default"
+					id="sidebar_bg_1" checked> <label for="sidebar_bg_1"></label>
+			</span> <span> <input type="radio" name="sidebar_bg" value="color_2"
+					id="sidebar_bg_2"> <label for="sidebar_bg_2"></label>
+			</span> <span> <input type="radio" name="sidebar_bg" value="color_3"
+					id="sidebar_bg_3"> <label for="sidebar_bg_3"></label>
+			</span> <span> <input type="radio" name="sidebar_bg" value="color_4"
+					id="sidebar_bg_4"> <label for="sidebar_bg_4"></label>
+			</span> <span> <input type="radio" name="sidebar_bg" value="color_5"
+					id="sidebar_bg_5"> <label for="sidebar_bg_5"></label>
+			</span> <span> <input type="radio" name="sidebar_bg" value="color_6"
+					id="sidebar_bg_6"> <label for="sidebar_bg_6"></label>
+			</span> <span> <input type="radio" name="sidebar_bg" value="color_7"
+					id="sidebar_bg_7"> <label for="sidebar_bg_7"></label>
+			</span> <span> <input type="radio" name="sidebar_bg" value="color_8"
+					id="sidebar_bg_8"> <label for="sidebar_bg_8"></label>
+			</span></li>
+		</ul></li>
+	<!--切换主题配色-->
+</ul>
+<!-- END 头部信息 -->
+</html>

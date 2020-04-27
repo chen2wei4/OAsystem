@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.CustomerDao">
+	<!-- 查询分页客户信息 -->
+	<select id="showCustomers" resultMap="customersSelectMap">
+		select * from customer where flag=1 <include refid="customerSelectFactor"/> limit #{currentPage},10
+	</select>
+	<resultMap type="Customer" id="customersSelectMap">
+		<id column="customer_id" property="customerId"/>
+		<result column="customer_name" property="customerName"/>
+		<result column="customer_sex" property="customerSex"/>
+		<result column="customer_company" property="customerCompany"/>
+		<result column="customer_position" property="customerPosition"/>
+		<result column="customer_tel" property="customerTel"/>
+		<result column="customer_email" property="customerEmail"/>
+		<result column="customer_director" property="customerDirector"/>
+		<result column="customer_time" property="customerTime"/>
+		<result column="flag" property="flag"/>
+		<association property="customerType" javaType="CustomerType" select="selectCustomerType" column="customer_type_id"/>
+	</resultMap>
+	<!-- 根据客户类型id查询指定客户类型 -->
+	<select id="selectCustomerType" resultType="CustomerType">
+		select * from customer_type where flag=1 and customer_type_id=#{customer_type_id}
+	</select>
+	<!-- 查询所有客户类型 -->
+	<select id="selectAllCustomerType" resultType="CustomerType">
+		select * from customer_type where flag=1
+	</select>
+	<!-- 查询客户的总数据条数 -->
+	<select id="getCustomerTotalData" resultType="int">
+		select count(*) from customer where flag=1 <include refid="customerSelectFactor"/>
+	</select>
+	<!-- 根据客户信息id查询指定客户信息 -->
+	<select id="showCustomer" resultMap="customersSelectMap">
+		select * from customer where flag=1 and customer_id = #{customerId}
+	</select>
+	<!-- 查询客户信息的sql片段复用 -->
+	<sql id="customerSelectFactor">
+		<if test="customer.customerName!=null and customer.customerName!=''">
+		  and customer_name like '%' #{customer.customerName} '%'
+		</if>
+		<if test="customer.customerCompany!=null and customer.customerCompany!=''">
+		  and customer_company like '%' #{customer.customerCompany} '%'
+		</if>
+		<if test="customer.customerPosition!=null and customer.customerPosition!=''">
+		  and customer_position like '%' #{customer.customerPosition} '%'
+		</if>
+		<if test="customer.customerDirector!=null and customer.customerDirector!=''">
+		  and customer_director like '%' #{customer.customerDirector} '%'
+		</if>
+	</sql>
+	<!-- 新增一条客户信息 -->
+	<insert id="newCustomer">
+		insert into customer(customer_name,customer_sex,customer_company,customer_position,customer_tel,customer_email,
+		customer_director,customer_type_id,customer_time) values(#{customer.customerName},#{customer.customerSex},
+		#{customer.customerCompany},#{customer.customerPosition},#{customer.customerTel},#{customer.customerEmail},
+		#{customer.customerDirector},#{customerTypeId},current_timestamp)
+	</insert>
+	<!-- 更改一条客户信息 -->
+	<update id="updateCustomer">
+		update customer set customer_name=#{customer.customerName},customer_sex=#{customer.customerSex},
+		customer_company=#{customer.customerCompany},customer_position=#{customer.customerPosition},
+		customer_tel=#{customer.customerTel},customer_email=#{customer.customerEmail},customer_director=#{customer.customerDirector},
+		customer_type_id=#{customerTypeId} where customer_id=#{customer.customerId} and flag=1
+	</update>
+	<update id="deleteCustomer">
+	 	update customer set flag=0 where customer_id=#{customer.customerId}
+	</update>
+	<!-- 删除复选框选中的客户信息 -->
+	<update id="deleteCheckedCustomer">
+		update customer set flag=0 
+		<where>
+			<if test="ids!=null and ids.length>0">
+				customer_id in
+				<foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+			</if>
+		</where>
+	</update>
+  </mapper>

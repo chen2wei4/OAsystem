@@ -2,20 +2,41 @@ package com.woniuxy.oasystem.entity;
 
 import java.util.List;
 
-//定义一个泛型类封装分页数据
-public class PageBean<T> {
-	private List<T> beanList;// 当前页显示的数据，数据查询
-	private int pageSize;// 页大小,业务规则
-	private int pageIndex;// 当前页索引，用户请求
-	private int totalRecord;// 数据总条数，数据查询
-	@SuppressWarnings("unused")
-	private int totalPage;// 总页数,根据totalRecord和pageSize计算
-	private int pageBegin;// 显示的开始页码
-	private int pageEnd;// 显示的结束页码
-	private String url; // 在哪赋值：Servlet
+import org.springframework.stereotype.Component;
 
+/**
+ * 
+ * @Description  分页实体类
+ * @author  张钰平
+ * @changeLog 	1. 创建 (2020年4月23日 [张钰平])
+ *
+ */
+@Component
+public class PageBean<T> {
+	private List<T> beanList;//当前页数据
+	private Integer pageSize;//页大小
+	private Integer pageIndex;//当前页
+	private Integer totalRecord;//数据总条数
+	private Integer totalPage;//总页数
+	private Integer pageBegin;//开始页码
+	private Integer pageEnd;//结束页码
+	private String url;
+	
 	public PageBean() {
 		super();
+	}
+	
+	public PageBean(List<T> beanList, Integer pageSize, Integer pageIndex, Integer totalRecord, Integer totalPage,
+			Integer pageBegin, Integer pageEnd, String url) {
+		super();
+		this.beanList = beanList;
+		this.pageSize = pageSize;
+		this.pageIndex = pageIndex;
+		this.totalRecord = totalRecord;
+		this.totalPage = totalPage;
+		this.pageBegin = pageBegin;
+		this.pageEnd = pageEnd;
+		this.url = url;
 	}
 
 	public List<T> getBeanList() {
@@ -26,72 +47,52 @@ public class PageBean<T> {
 		this.beanList = beanList;
 	}
 
-	public int getPageSize() {
+	public Integer getPageSize() {
 		return pageSize;
 	}
 
-	public void setPageSize(int pageSize) {
+	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
 	}
 
-	public int getPageIndex() {
+	public Integer getPageIndex() {
 		return pageIndex;
 	}
 
-	public void setPageIndex(int pageIndex) {
+	public void setPageIndex(Integer pageIndex) {
 		this.pageIndex = pageIndex;
 	}
 
-	public int getTotalRecord() {
+	public Integer getTotalRecord() {
 		return totalRecord;
 	}
 
-	public void setTotalRecord(int totalRecord) {
+	public void setTotalRecord(Integer totalRecord) {
 		this.totalRecord = totalRecord;
 	}
 
-	public int getTotalPage() {
-		// 如何计算:
-		return (totalRecord % pageSize == 0) ? totalRecord / pageSize : totalRecord / pageSize + 1;
+	public Integer getTotalPage() {
+		return totalPage;
 	}
 
-	// 可以不要
-	public void setTotalPage(int totalPage) {
+	public void setTotalPage(Integer totalPage) {
 		this.totalPage = totalPage;
 	}
 
-	public int getPageBegin() {
+	public Integer getPageBegin() {
 		return pageBegin;
 	}
 
-	public void setPageBegin(int pageBegin) {
+	public void setPageBegin(Integer pageBegin) {
 		this.pageBegin = pageBegin;
 	}
 
-	public int getPageEnd() {
+	public Integer getPageEnd() {
 		return pageEnd;
 	}
 
-	public void setPageEnd(int pageEnd) {
+	public void setPageEnd(Integer pageEnd) {
 		this.pageEnd = pageEnd;
-	}
-
-	public void setPageBeginAndPageEnd() {
-		if (getTotalPage() < 10) {
-			pageBegin = 1;
-			pageEnd = getTotalPage();
-		} else {
-			pageBegin = pageIndex - 5;
-			pageEnd = pageIndex + 4;
-			if (pageBegin < 1) {
-				pageBegin = 1;
-				pageEnd = 10;
-			}
-			if (pageEnd > getTotalPage()) {
-				pageBegin = getTotalPage() - 9;
-				pageEnd = getTotalPage();
-			}
-		}
 	}
 
 	public String getUrl() {
@@ -105,8 +106,45 @@ public class PageBean<T> {
 	@Override
 	public String toString() {
 		return "PageBean [beanList=" + beanList + ", pageSize=" + pageSize + ", pageIndex=" + pageIndex
-				+ ", totalRecord=" + totalRecord + ", totalPage=" + getTotalPage() + ", pageBegin=" + pageBegin
-				+ ", pageEnd=" + pageEnd + "]";
+				+ ", totalRecord=" + totalRecord + ", totalPage=" + totalPage + ", pageBegin=" + pageBegin
+				+ ", pageEnd=" + pageEnd + ", url=" + url + "]";
 	}
 
+	public void setPageBeginAndPageEnd() {
+		if(totalPage<10) {
+			pageBegin=1;
+			pageEnd=totalPage;
+		}else {
+			pageBegin=pageIndex-5;
+			pageEnd=pageIndex+4;
+			if(pageBegin<1) {
+				pageBegin=1;
+				pageEnd=10;
+			}
+			if(pageEnd>totalPage) {
+				pageBegin=totalPage-9;
+				pageEnd=totalPage;
+			}
+		}
+	}
+	/**
+	 * 设置页码索引(起始页和结束页)
+	 * @changeLog 1.创建 (2020年4月26日 上午10:45:33 [陈一玮]
+	 *            2.
+	 */
+	public void setBeginPageAndEndPage() {
+		if(totalPage<=pageSize) {
+			pageBegin=1;
+			pageEnd=totalPage;
+		}else if(pageIndex<=6){
+			pageBegin=1;
+			pageEnd=pageSize;
+		}else if(pageIndex==totalPage) {
+			pageBegin=totalPage-pageSize;
+			pageEnd=totalPage;
+		}else {
+			pageBegin=pageIndex-5;
+			pageEnd=pageIndex+4;
+		}
+	}
 }

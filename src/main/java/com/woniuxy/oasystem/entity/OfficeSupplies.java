@@ -18,15 +18,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OfficeSupplies {
-	private Integer osId;
-	private String osName;
-	private String osNumber;
-	private String sort;
-	private Double prince;
-	private Date osTime;
-	private Integer number;
-	private String useState;
-	private String maintenance;
-	private String flag;
+	private Integer osId;//主键
+	private String osName;//办公用品名
+	private Integer osNumber;//编号
+	private String sort;//种类
+	private Double prince;//价格
+	private Date osTime;//入库时间
+	private Integer number;//数量
+	private String useState;//使用状态
+	private String maintenance;//维护情况
+	private String flag;//软删除
 	
 }
