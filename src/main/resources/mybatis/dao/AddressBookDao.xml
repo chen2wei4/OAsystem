@@ -26,9 +26,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{addrbookBoss.empId})
 	</insert>
 	
-	<delete id="deleteAddressBook">
-		delete from addressbook where addrbook_id=#{addressbookId}
-	</delete>
+	<update id="deleteAddressBook">
+		update addressbook set flag=0
+			where addrbook_id=#{addressbookId} 
+	</update>
 	
 	<update id="changeAddressBook">
 		update addressbook 
@@ -38,14 +39,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="infoCustomers" resultMap="AddressBookMap">
 		select*from addressbook
-			<where>
-				<include refid="condition"></include>
-			</where>
+			where
+			flag=1
 			limit #{current},10
 	</select>
-	
+	<select id="queryAddressBook" resultType="java.lang.Integer">
+		select count(*) from addressbook
+			where
+			flag=1
+	</select>
 	<sql id="condition">
-		<trim prefix="set" suffixOverrides=",">
+		<trim suffixOverrides=",">
 				<if test="addressBook.addrbookPeople!='' and addressBook.addrbookPeople!=null">
 					emp_id=#{addrbookPeople.empId},
 				</if> 

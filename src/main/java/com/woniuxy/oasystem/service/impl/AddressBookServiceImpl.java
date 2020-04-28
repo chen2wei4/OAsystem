@@ -40,19 +40,8 @@ public class AddressBookServiceImpl implements AddressBookService{
 	}
 
 	@Override
-	public List<AddressBook> getAddressBook(AddressBook addressBook) {
-		List<AddressBook> rets = addrDao.queryAddressBook(addressBook);
-		for(AddressBook ret:rets) {
-			if(!StringUtils.isEmpty(ret.getAddrbookPeople())){
-				Emp emp = empDao.getEmpId(ret.getAddrbookPeople().getEmpId());
-				ret.setAddrbookPeople(emp);
-			}
-			if(!StringUtils.isEmpty(ret.getAddrbookBoss())){
-				Emp emp = empDao.getEmpId(ret.getAddrbookBoss().getEmpId());
-				ret.setAddrbookBoss(emp);
-			}
-		}
-		return rets;
+	public Integer getAddressBook(AddressBook addressBook) {
+		return addrDao.queryAddressBook(addressBook);
 	}
 
 	@Override
@@ -69,17 +58,12 @@ public class AddressBookServiceImpl implements AddressBookService{
 			}
 		}
 		Integer total = rets.size();
-		//查询到的客户信息
 		pb.setBeanList(rets);
-		//设置分页大小
 		pb.setPageSize(10);
-		//设置当前页码
 		pb.setPageIndex(current);
-		//设置数据总条数
-		pb.setTotalRecord(total);
-		//设置总页码
-		pb.setTotalPage((total%10==0)?(total/10):(total/10+1));
-		//设置起始页码和结束页码
+		pb.setTotalRecord(getAddressBook(addressBook));
+		pb.setTotalPage((pb.getTotalRecord()%10==0)?(pb.getTotalRecord()/10):(pb.getTotalRecord()/10+1));
+		pb.setUrl("/info");
 		pb.setBeginPageAndEndPage();
 		return pb;
 	}

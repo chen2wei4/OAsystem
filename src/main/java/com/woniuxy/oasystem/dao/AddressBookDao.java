@@ -9,5 +9,5 @@ public interface AddressBookDao {
     void addAddressBook(AddressBook addressBook);
 	void deleteAddressBook(AddressBook addressBook);
 	void changeAddressBook(AddressBook addressBook);
-	List<AddressBook> queryAddressBook(AddressBook addressBook);
+	Integer queryAddressBook(AddressBook addressBook);
 }
