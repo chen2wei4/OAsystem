@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 车辆管理 -->
+<mapper namespace="com.woniuxy.oasystem.dao.CarDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultType="Car">
+		select * from car where flag = 1
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(*) from car 
+		where flag = 1
+		<include refid="conditionSql"/>
+	</select>
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="car.license!= null and car.license!=''">
+				and license like '%' #{car.license} '%'
+			</if>
+			<if test="car.maintenance!= null and car.maintenance!=''">
+				and maintenance like '%' #{car.maintenance} '%'
+			</if>
+			<if test="car.useState!= null and car.useState!=''">
+				and use_state like '%' #{car.useState} '%'
+			</if>
+			<if test="car.parkingSpace!= null and car.parkingSpace!=''">
+				and parking_space like '%' #{car.parkingSpace} '%'
+			</if>
+	</sql>
+	<!-- 根据carId删除 -->
+	<update id="deleteByCarId">
+		update car set flag = 0 where car_id = #{carId}
+	</update>
+	<!-- 根据carId修改 -->
+	<update id="updateByCarId">
+		update car set 
+		license=#{car.license},maintenance=#{car.maintenance},use_state=#{car.useState},parking_space=#{car.parkingSpace}
+		where car_id = #{car.carId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into car (license,maintenance,use_state,parking_space) 
+		values (#{car.license},#{car.maintenance},#{car.useState},#{car.parkingSpace})
+	</insert>
+</mapper>

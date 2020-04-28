@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：映射文件，命名空间必须用接口全限定名 -->
+<mapper namespace="com.woniuxy.oasystem.dao.AnnouncementDao">
+	<!-- 通过公告类别查询公告 -->
+	<select id="selectAnnouncementByType"
+		resultMap="AnnouncementMapper">
+		select * from announcement_type,announcement,emp where
+		emp.emp_id=announcement.an_emp_id and
+		announcement_type.at_id=announcement.an_type 
+		and an_flag=1 
+		<if test="antype!=0">
+		and at_id=#{antype}
+		</if>
+		limit #{pagelimit},#{pageSize}
+	</select>
+	<resultMap type="Announcement" id="AnnouncementMapper">
+		<id column="an_id" property="anId" />
+		<result column="an_emp_id" property="anEmpId" />
+		<result column="an_type" property="anType" />
+		<result column="an_name" property="anName" />
+		<result column="an_content" property="anContent" />
+		<result column="an_time" property="anTime" />
+		<result column="an_flag" property="anFlag" />
+		<collection property="atype" ofType="AnnouncementType">
+			<id column="at_id" property="atId" />
+			<result column="at_name" property="atName" />
+			<result column="at_flag" property="atFlag" />
+			<result column="at_description" property="atDescription" />
+		</collection>
+		<collection property="emp" ofType="Emp">
+			<id column="emp_id" property="empId" />
+			<result column="emp_name" property="empName" />
+		</collection>
+	</resultMap>
+	<!-- 通过Id查看公告 -->
+	<select id="selectAnnouncementById"
+		resultMap="AnnouncementMapper">
+		select * from announcement_type,announcement,emp where
+		emp.emp_id=announcement.an_emp_id and
+		announcement_type.at_id=announcement.an_type 
+		and an_id=#{anId} and an_flag=1
+	</select>
+	<!-- 插入新公告 -->
+	<insert id="insertAnnouncement">
+	insert into announcement(an_emp_id,an_type,an_name,an_content,an_time,an_flag) values(#{anEmpId},#{anType},#{anName},#{anContent},#{anTime},#{anFlag})
+	</insert>
+	<!-- 通过用户Id查看公告 -->
+	<select id="selectAnnouncementByEmp"
+		resultMap="AnnouncementMapper">
+		select * from announcement_type,announcement,emp where
+		emp.emp_id=announcement.an_emp_id and
+		announcement_type.at_id=announcement.an_type 
+		and an_emp_id=#{anEmpId} and an_flag=1 limit #{pagelimit},#{pageSize}
+	</select>
+	<!-- 软删除公告 -->
+	<update id="deleteAn">
+		update announcement set an_flag=0 where an_Id=#{anId}
+	</update>
+	<!-- 修改公告 -->
+	<update id="updateAnnouncementById">
+		update announcement set an_name=#{anName} , an_content=#{anContent} , an_type=#{anType} where an_Id=#{anId}
+	</update>
+	<!-- 通过公告类别查询公告数量 -->
+	<select id="selectAnnouncementCount"
+		resultType="Integer">
+		select count(*) from announcement where an_flag=1
+		<if test="antype!=0">
+		and an_type=#{antype}
+		</if> 
+	</select>
+	<!-- 通过用户Id查看公告数量 -->
+	<select id="selectAnnouncementCountByEmp"
+		resultType="Integer">
+		select count(*) from announcement where an_emp_id=#{anEmpId} and an_flag=1
+	</select>
+</mapper>

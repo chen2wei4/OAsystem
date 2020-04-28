@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 办公用品管理 -->
+<mapper namespace="com.woniuxy.oasystem.dao.OfficeSuppliesDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultType="OfficeSupplies">
+		select * from office_supplies where flag = 1
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(*) from office_supplies 
+		where flag = 1
+		<include refid="conditionSql"/>
+	</select>
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="os.osName!= null and os.osName!=''">
+				and os_name like '%' #{os.osName} '%'
+			</if>
+			<if test="os.sort!= null and os.sort!=''">
+				and sort like '%' #{os.sort} '%'
+			</if>
+			<if test="os.osNumber!= null and os.osNumber!=''">
+				and os_number like concat('%',#{os.osNumber},'%')
+				
+			</if>
+	</sql>
+	<!-- 根据osid删除 -->
+	<update id="deleteByOsId">
+		update office_supplies set flag = 0 where os_id = #{osId}
+	</update>
+	<!-- 根据osid修改 -->
+	<update id="updateByOsId">
+		update office_supplies set 
+		os_name=#{os.osName},os_number=#{os.osNumber},sort=#{os.sort},prince=#{os.prince},os_time=#{os.osTime},
+		number=#{os.number},use_state=#{os.useState},maintenance=#{os.maintenance}
+		where os_id = #{os.osId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into office_supplies (os_name,os_number,sort,prince,os_time,number,use_state,maintenance) 
+		values (#{os.osName},#{os.osNumber},#{os.sort},#{os.prince},#{os.osTime},#{os.number},#{os.useState},#{os.maintenance})
+	</insert>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.ReportsDao">
+	<!-- 根据reportId查询 -->
+	<select id="selectByReportId" resultMap="reportsMapper">
+		SELECT * FROM reports
+		r,report_type t WHERE r.type_id=t.type_id AND r.report_id=#{reportId}
+		AND r.flag = 1
+	</select>
+	<resultMap type="Reports" id="reportsMapper">
+		<id column="report_Id" property="reportId" />
+		<result column="report_Name" property="reportName" />
+		<result column="report_Date" property="reportDate" />
+		<result column="report_Content" property="reportContent" />
+		<result column="report_Trouble" property="reportTrouble" />
+		<collection property="typeId" ofType="ReportType">
+			<id column="type_Id" property="typeId" />
+			<result column="type_Name" property="typeName" />
+		</collection>
+	</resultMap>
+	<!-- 分页查询 -->
+	<select id="selectAllReportsByConditionPage"
+		resultMap="reportsMapper">
+		SELECT * FROM reports r,report_type t WHERE
+		r.type_id=t.type_id AND r.flag = 1 limit #{pageIndex},#{pageSize}
+	</select>
+	<select id="selectReportsByConditionPageCount" resultType="int">
+		select count(*) from reports
+	</select>
+	<!-- 查询所有 -->
+	<select id="selectAll" resultMap="reportsMapper">
+		SELECT * FROM reports
+		r,report_type t WHERE r.type_id=t.type_id AND r.flag = 1
+	</select>
+	<!-- 新增 -->
+	<insert id="insertReports">
+		insert into Reports(report_name,report_date)
+		values(#{reportName},#{reportDate});
+	</insert>
+	<!-- 假性删除，修改flag值为0 -->
+	<delete id="deleteReportsByReportId">
+		UPDATE reports SET flag = 0 WHERE report_id =
+		#{reportId}
+	</delete>
+	<!-- 修改 -->
+	<update id="updateReportsByReportId">
+		UPDATE reports SET
+		report_name=#{reportName},report_date=#{reportDate} WHERE report_id
+		=#{reportId}
+	</update>
+</mapper>
+

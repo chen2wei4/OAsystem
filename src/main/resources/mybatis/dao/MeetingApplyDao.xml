@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 会议申请管理 -->
+<mapper namespace="com.woniuxy.oasystem.dao.MeetingApplyDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultType="MeetingApply">
+		select * from meeting_apply where flag = 1
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(*) from meeting_apply 
+		where flag = 1
+		<include refid="conditionSql"/>
+	</select>
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="ma.empId!= null and ma.empId!=''">
+				and emp_id like '%' #{ma.empId} '%'
+			</if>
+			<if test="ma.applyTime!= null and ma.applyTime!=''">
+				and apply_time like '%' #{ma.applyTime} '%'
+			</if>
+			<if test="ma.startTime!= null and ma.startTime!=''">
+				and start_time like '%' #{ma.startTime} '%'
+			</if>
+			<if test="ma.endTime!= null and ma.endTime!=''">
+				and end_time like '%' #{ma.endTime} '%'
+			</if>
+			<if test="ma.purpose!= null and ma.purpose!=''">
+				and purpose like '%' #{ma.purpose} '%'
+			</if>
+			<if test="ma.boardroomId!= null and ma.boardroomId!=''">
+				and boardroom_id like '%' #{ma.boardroomId} '%'
+			</if>
+			<if test="ma.review!= null and ma.review!=''">
+				and review like '%' #{ma.review} '%'
+			</if>
+			
+	</sql>
+	<!-- 根据MaId删除 -->
+	<update id="deleteByMaId">
+		update meeting_apply set flag = 0 where ma_id = #{maId}
+	</update>
+	<!-- 根据MaId修改 -->
+	<update id="updateByMaId">
+		update meeting_apply set 
+		emp_id=#{ma.empId},apply_time=#{ma.applyTime},start_time=#{ma.startTime},
+		end_time=#{ma.endTime},purpose=#{ma.purpose},boardroom_id=#{ma.boardroomId},review=#{ma.review}
+		where ma_id = #{ma.maId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into meeting_apply (emp_id,apply_time,start_time,end_time,purpose,boardroom_id,review) 
+		values (#{ma.empId},#{ma.applyTime},#{ma.startTime},#{ma.endTime},#{ma.purpose},#{ma.boardroomId},#{ma.review})
+	</insert>
+</mapper>

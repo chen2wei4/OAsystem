@@ -1,7 +1,6 @@
 package com.woniuxy.oasystem.entity;
 
 import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 /**
@@ -111,9 +110,9 @@ public class PageBean<T> {
 	}
 
 	public void setPageBeginAndPageEnd() {
-		if(getTotalPage()<10) {
+		if(totalPage<10) {
 			pageBegin=1;
-			pageEnd=getTotalPage();
+			pageEnd=totalPage;
 		}else {
 			pageBegin=pageIndex-5;
 			pageEnd=pageIndex+4;
@@ -121,9 +120,9 @@ public class PageBean<T> {
 				pageBegin=1;
 				pageEnd=10;
 			}
-			if(pageEnd>getTotalPage()) {
-				pageBegin=getTotalPage()-9;
-				pageEnd=getTotalPage();
+			if(pageEnd>totalPage) {
+				pageBegin=totalPage-9;
+				pageEnd=totalPage;
 			}
 		}
 	}
