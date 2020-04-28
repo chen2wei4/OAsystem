@@ -4,18 +4,66 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace：映射文件，命名空间必须用接口全限定名 -->
 <mapper namespace="com.woniuxy.oasystem.dao.AnnouncementDao">
-	<!-- 通过公告类别查询公告 -->
-	<select id="selectAnnouncementByType"
+	<!-- 修改公告 -->
+	<update id="updateAnnouncementById">
+		update announcement set an_name=#{anName} ,
+		an_content=#{anContent} , an_type=#{anType} where an_Id=#{anId}
+	</update>
+	<!-- 插入新公告 -->
+	<insert id="insertAnnouncement">
+		insert into
+		announcement(an_emp_id,an_type,an_name,an_content,an_time,an_flag)
+		values(#{anEmpId},#{anType},#{anName},#{anContent},#{anTime},#{anFlag})
+		<selectKey keyProperty="anId" resultType="Integer" order="AFTER">
+			select @@identity
+		</selectKey>
+	</insert>
+
+	<!-- 软删除公告 -->
+	<update id="deleteAn">
+		update announcement set an_flag=0 where an_Id=#{anId}
+	</update>
+	<!-- 通过条件查看公告数量 -->
+	<select id="selectAnnouncementCountByCondition"
+		resultType="Integer">
+		select count(*) from announcement_type,announcement,emp
+		where
+		emp.emp_id=announcement.an_emp_id
+		and
+		announcement_type.at_id=announcement.an_type
+		and an_flag=1
+		<include refid="condition" />
+	</select>
+	<!-- 通过条件查询公告 -->
+	<select id="selectAnnouncementByCondition"
 		resultMap="AnnouncementMapper">
-		select * from announcement_type,announcement,emp where
-		emp.emp_id=announcement.an_emp_id and
-		announcement_type.at_id=announcement.an_type 
-		and an_flag=1 
-		<if test="antype!=0">
-		and at_id=#{antype}
-		</if>
+		select * from announcement_type,announcement,emp
+		where
+		emp.emp_id=announcement.an_emp_id
+		and
+		announcement_type.at_id=announcement.an_type
+		and an_flag=1
+		<include refid="condition" />
 		limit #{pagelimit},#{pageSize}
 	</select>
+	<!-- 条件查询公用语句 -->
+	<sql id="condition">
+		<if test="an!=null">
+			<if test="an.anId!=null and an.anId!=''">
+				and an_id=#{an.anId}
+			</if>
+			<if test="an.anType!=null and an.anType!=''">
+				and an_type=#{an.anType}
+			</if>
+			<if test="an.anName!=null and an.anName!=''">
+				and an_name like '%' #{an.anName} '%'
+			</if>
+			<if test="an.anEmpId!=null and an.anEmpId!=''">
+				and an_emp_id=#{an.anEmpId}
+			</if>
+		</if>
+	</sql>
+	<!-- 查询resultmap -->
 	<resultMap type="Announcement" id="AnnouncementMapper">
 		<id column="an_id" property="anId" />
 		<result column="an_emp_id" property="anEmpId" />
@@ -35,45 +83,4 @@
 			<result column="emp_name" property="empName" />
 		</collection>
 	</resultMap>
-	<!-- 通过Id查看公告 -->
-	<select id="selectAnnouncementById"
-		resultMap="AnnouncementMapper">
-		select * from announcement_type,announcement,emp where
-		emp.emp_id=announcement.an_emp_id and
-		announcement_type.at_id=announcement.an_type 
-		and an_id=#{anId} and an_flag=1
-	</select>
-	<!-- 插入新公告 -->
-	<insert id="insertAnnouncement">
-	insert into announcement(an_emp_id,an_type,an_name,an_content,an_time,an_flag) values(#{anEmpId},#{anType},#{anName},#{anContent},#{anTime},#{anFlag})
-	</insert>
-	<!-- 通过用户Id查看公告 -->
-	<select id="selectAnnouncementByEmp"
-		resultMap="AnnouncementMapper">
-		select * from announcement_type,announcement,emp where
-		emp.emp_id=announcement.an_emp_id and
-		announcement_type.at_id=announcement.an_type 
-		and an_emp_id=#{anEmpId} and an_flag=1 limit #{pagelimit},#{pageSize}
-	</select>
-	<!-- 软删除公告 -->
-	<update id="deleteAn">
-		update announcement set an_flag=0 where an_Id=#{anId}
-	</update>
-	<!-- 修改公告 -->
-	<update id="updateAnnouncementById">
-		update announcement set an_name=#{anName} , an_content=#{anContent} , an_type=#{anType} where an_Id=#{anId}
-	</update>
-	<!-- 通过公告类别查询公告数量 -->
-	<select id="selectAnnouncementCount"
-		resultType="Integer">
-		select count(*) from announcement where an_flag=1
-		<if test="antype!=0">
-		and an_type=#{antype}
-		</if> 
-	</select>
-	<!-- 通过用户Id查看公告数量 -->
-	<select id="selectAnnouncementCountByEmp"
-		resultType="Integer">
-		select count(*) from announcement where an_emp_id=#{anEmpId} and an_flag=1
-	</select>
 </mapper>
