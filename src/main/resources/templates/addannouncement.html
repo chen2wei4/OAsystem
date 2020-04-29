@@ -22,32 +22,28 @@
 <body>
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
-		   <!--左侧导航-->
-    <div th:replace="common :: lefter"></div>
-    <!--End 左侧导航-->
-    
-    <!--头部信息-->
-    <header class="lyear-layout-header">
-      
-      <nav class="navbar navbar-default">
-        <div class="topbar">
-          
-          <div class="topbar-left">
-            <div class="lyear-aside-toggler">
-              <span class="lyear-toggler-bar"></span>
-              <span class="lyear-toggler-bar"></span>
-              <span class="lyear-toggler-bar"></span>
-            </div>
-            <span class="navbar-page-title"> 后台首页 </span>
-          </div>
-          <!-- 导航栏信息 -->
-          <ul class="topbar-right" th:replace="common :: header"></ul>
-          
-        </div>
-      </nav>
-      
-    </header>
-    <!--End 头部信息-->
+			<!--左侧导航-->
+			<div th:replace="common :: lefter"></div>
+			<!--End 左侧导航-->
+			<!--头部信息-->
+			<header class="lyear-layout-header">
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 后台首页 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header">
+						</ul>
+					</div>
+				</nav>
+			</header>
+			<!--End 头部信息-->
 			<!--页面主要内容-->
 			<main class="lyear-layout-content">
 			<div class="container-fluid">
@@ -57,8 +53,8 @@
 						<div class="card">
 							<div class="card-body">
 
-								<form th:action="@{/announcement}" method="post"
-									class="row">
+								<form th:action="@{/addannouncement}" method="post" class="row"
+									enctype="multipart/form-data">
 									<input type="hidden" name="anEmpId" value="1">
 									<div class="form-group col-md-12">
 										<label for="title">公告类别</label> <select name="anType"
@@ -76,6 +72,11 @@
 										<label for="seo_description">正文</label>
 										<textarea class="form-control" id="seo_description"
 											name="anContent" rows="5" value="" placeholder="描述"></textarea>
+									</div>
+									<div class="form-group col-md-12">
+										<label for="example-file-multiple-input">多文件上传</label>
+										<input type="file" id="example-file-multiple-input" multiple="multiple" 
+											name="files">
 									</div>
 									<div class="form-group col-md-12">
 										<button type="submit" class="btn btn-primary ajax-post"

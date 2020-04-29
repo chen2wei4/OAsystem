@@ -22,6 +22,28 @@
 <body>
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
+		<!--左侧导航-->
+			<div th:replace="common :: lefter"></div>
+			<!--End 左侧导航-->
+			<!--头部信息-->
+			<header class="lyear-layout-header">
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 后台首页 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header">
+						</ul>
+					</div>
+				</nav>
+			</header>
+			<!--End 头部信息-->
 			<!--页面主要内容-->
 			<main class="lyear-layout-content">
 			<div class="container-fluid">

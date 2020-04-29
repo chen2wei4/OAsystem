@@ -43,6 +43,12 @@ public class WebMvcConfig {
 				registry.addViewController("/anmanagetype").setViewName("announcementtypemanage");
 				//行政管理相关
 				registry.addViewController("/car.html").setViewName("car");
+				//事务模块
+				registry.addViewController("/information").setViewName("information");
+				registry.addViewController("/apply_add").setViewName("apply_add");
+				registry.addViewController("/reception_add").setViewName("reception_add");
+				registry.addViewController("/patchcard_add").setViewName("patchcard_add");
+				
 			}
 		};
 	}

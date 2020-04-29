@@ -60,4 +60,7 @@ public interface EmpDao {
 	 * @changeLog 1.创建 (2020年4月23日 下午8:23:07 [陈一玮]
 	 */
 	void bindEmail(Integer empId,String bindEmail);
+	
+	//查询群体员工
+     List<Emp> getEmps();
 }

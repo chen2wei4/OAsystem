@@ -95,7 +95,17 @@
 							<div class="card-body">
 								<div class="row">
 									<div class="col-md-4">
-										<p class="lead">[[${ancontent.anContent}]]</p>
+									<span th:if="${not #lists.isEmpty(files)}">
+									<ul th:each="file:${files}">
+										<li>[[${file.afName}]]
+										<button class="btn btn-xs btn-primary" th:onclick="exportFile([[${file.afName}]],[[${file.afAddress}]])">下载</button>
+										</li>
+									</ul>	
+									</span>
+									<span th:if="${#lists.isEmpty(files)}">
+									无	
+									</span>			
+
 									</div>
 								</div>
 
@@ -138,5 +148,31 @@
 	<!--标签插件-->
 	<script src="js/jquery-tags-input/jquery.tagsinput.min.js"></script>
 	<script type="text/javascript" src="js/main.min.js"></script>
+	<script type="text/javascript">
+	function exportFile(afName,afAddress){ 
+		alert(afName);
+		alert(afAddress);
+			if(confirm="确认下载？"){       
+		var tempForm = document.createElement("form");  
+					  	tempForm.id="download";  
+					  	tempForm.method="post";  
+					  	tempForm.action="[[@{/downloadFile}]]";  
+					  	tempForm.target="";  
+					 		var hideInput = document.createElement("input");  
+					 		hideInput.type="hidden";  
+					 		hideInput.name= "afAddress";
+					 		hideInput.value= afAddress;
+					 		tempForm.appendChild(hideInput);   
+					 		hideInput = document.createElement("input");  
+					 		hideInput.type="hidden";  
+					 		hideInput.name="afName";
+					 		hideInput.value=afName;
+					 		tempForm.appendChild(hideInput);   
+					 		document.body.appendChild(tempForm);  
+					 		tempForm.submit();
+						  document.body.removeChild(tempForm);
+			}     
+		   }
+</script>
 </body>
 </html>
