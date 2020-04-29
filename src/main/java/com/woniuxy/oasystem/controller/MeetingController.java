@@ -48,7 +48,7 @@ public class MeetingController {
 		if (pageIndex == null) {
 			pageIndex = 1;
 		}
-		int pageSize = 10;
+		int pageSize = 3;
 		try {
 			PageBean<Meeting> pb = meetingService.findAllByPage(meeting, pageIndex, pageSize);
 			return new CommonResult<PageBean<Meeting>>(200,"ok",pb);

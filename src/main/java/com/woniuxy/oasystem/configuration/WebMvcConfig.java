@@ -41,6 +41,8 @@ public class WebMvcConfig {
 				registry.addViewController("/addaantype").setViewName("addantype");
 				registry.addViewController("/anmanage").setViewName("announcementmanage");
 				registry.addViewController("/anmanagetype").setViewName("announcementtypemanage");
+				//行政管理相关
+				registry.addViewController("/car.html").setViewName("car");
 			}
 		};
 	}

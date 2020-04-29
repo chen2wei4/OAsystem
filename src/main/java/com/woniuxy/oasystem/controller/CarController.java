@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.woniuxy.oasystem.entity.Car;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.PageBean;
+import com.woniuxy.oasystem.entity.Vo;
 import com.woniuxy.oasystem.service.CarService;
 import com.woniuxy.oasystem.service.OfficeSuppliesService;
 import com.woniuxy.oasystem.util.CommonResult;
@@ -39,19 +40,23 @@ public class CarController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	public CommonResult<PageBean<Car>> findAll(@RequestBody Car car,Integer pageIndex) {
-		System.out.println(car);
-		if (pageIndex == null) {
-			pageIndex = 1;
+	public CommonResult<PageBean<Car>> findAll(@RequestBody Vo<Car> vo) {
+		System.out.println(vo.t);
+		if(vo.t==null) {
+			vo.t = new Car();
 		}
-		int pageSize = 10;
+		if (vo.pageIndex == null) {
+			vo.pageIndex = 1;
+		}
+		int pageSize = 3;
 		try {
-			PageBean<Car> pb = carService.findAllByPage(car, pageIndex, pageSize);
+			PageBean<Car> pb = carService.findAllByPage(vo.t, vo.pageIndex, pageSize);
 			return new CommonResult<PageBean<Car>>(200,"ok",pb);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new CommonResult<PageBean<Car>>(500,"error",null);
 		}
+		
 	}
 	/**
 	 * 
@@ -109,3 +114,8 @@ public class CarController {
 	
 	
 }
+class Param {
+	public Car car;
+	public Integer pageIndex;
+}
+
