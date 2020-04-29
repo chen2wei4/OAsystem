@@ -41,6 +41,12 @@ public class WebMvcConfig {
 				registry.addViewController("/addaantype").setViewName("addantype");
 				registry.addViewController("/anmanage").setViewName("announcementmanage");
 				registry.addViewController("/anmanagetype").setViewName("announcementtypemanage");
+				//事务模块
+				registry.addViewController("/information").setViewName("information");
+				registry.addViewController("/apply_add").setViewName("apply_add");
+				registry.addViewController("/reception_add").setViewName("reception_add");
+				registry.addViewController("/patchcard_add").setViewName("patchcard_add");
+				
 			}
 		};
 	}
