@@ -56,4 +56,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   	<update id="bindEmail">
   	update emp set emp_email=#{bindEmail} where flag=1 and emp_id=#{empId}
   	</update>
+  		
+  	<!-- 查询群体员工信息 -->
+  	<select id="getEmps" resultMap="EmpSelectMap">
+  		select * from emp where  flag=1
+  	</select>
   </mapper>

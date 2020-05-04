@@ -9,14 +9,14 @@
 		insert into announcement_type
 		values(null,#{atName},#{atFlag},#{atDescription})
 	</insert>
-	<!-- 查询所有公告类别 -->
-	<select id="selectAllAnnouncementType"
-		resultType="AnnouncementType">
-		select * from announcement_type where at_flag=1
-	</select>
 	<!-- 修改公告类别 -->
 	<update id="updateAnnouncementTypeById">
 		update announcement_type set at_name=#{atName} , at_description=#{atDescription} where
+		at_id=#{atId}
+	</update>
+	<!-- 启用 -->
+	<update id="StartAnnouncementType">
+		update announcement_type set at_flag=1 where
 		at_id=#{atId}
 	</update>
 	<!-- 软删除 -->
@@ -24,30 +24,42 @@
 		update announcement_type set at_flag=0 where
 		at_id=#{atId}
 	</update>
-	<!-- 通过ID查询公告类别 -->
-	<select id="selectAnnouncementTypeById"
-		resultMap="AnnouncementMapper">
-		select * from announcement_type,announcement where
-		announcement_type.at_id=announcement.an_type and at_id=#{id} and at_flag=1
-	</select>
-	<resultMap type="AnnouncementType" id="AnnouncementMapper">
-		<id column="at_id" property="atId" />
-		<result column="at_name" property="atName" />
-		<result column="at_flag" property="atFlag" />
-		<result column="at_description" property="atDescription"/>
-		<collection property="ans" ofType="Announcement">
-			<id column="an_id" property="anId" />
-			<result column="an_emp_id" property="anEmpId" />
-			<result column="an_type" property="anType" />
-			<result column="an_name" property="anName" />
-			<result column="an_content" property="anContent" />
-			<result column="an_time" property="anTime" />
-			<result column="an_flag" property="anFlag" />
-		</collection>
-	</resultMap>
-	<!-- 查询所有公告类别数量 -->
-	<select id="selectAnnouncementTypeCount"
+	<!-- 通过条件查看公告类型数量 -->
+	<select id="selectAnnouncementCountByCondition"
 		resultType="Integer">
-		select count(*) from announcement_type where at_flag=1
+		select count(*) from announcement_type
+		where 1=1
+		<include refid="condition" />
 	</select>
+	<!-- 通过条件查询公告 -->
+	<select id="selectAnnouncementTypeByType"
+		resultType="AnnouncementType">
+		select * from announcement_type
+		where
+		1=1
+		<include refid="condition" />
+		limit #{pagelimit},#{pageSize}
+	</select>
+	<!-- 条件查询公用语句 -->
+	<sql id="condition">
+		<if test="antype!=null">
+			<if test="antype.atId!=null and antype.atId!=''">
+				and at_id=#{antype.atId}
+			</if>
+			<if test="antype.atName!=null and antype.atName!=''">
+				and at_name like '%' #{antype.atName} '%'
+			</if>
+			<if test="antype.atFlag!=null and antype.atFlag!=''">
+				and at_flag=#{antype.atFlag}
+			</if>
+		</if>
+	</sql>
+			<!-- 查询所有启用的type -->
+		<select id="selectAnnouncementType"
+		resultType="AnnouncementType">
+		select * from announcement_type
+		where
+		at_flag=1
+	</select>
+	
 </mapper>

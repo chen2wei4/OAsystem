@@ -54,27 +54,16 @@
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-toolbar clearfix">
-								<form class="pull-right search-bar" method="get" action="#!"
-									role="form">
-									<div class="input-group">
-										<div class="input-group-btn">
-											<input type="hidden" name="search_field" id="search-field"
-												value="title">
-											<button class="btn btn-default dropdown-toggle"
-												id="search-btn" data-toggle="dropdown" type="button"
-												aria-haspopup="true" aria-expanded="false">
-												标题 <span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu">
-												<li><a tabindex="-1" href="javascript:void(0)"
-													data-field="title">标题</a></li>
-												<li><a tabindex="-1" href="javascript:void(0)"
-													data-field="cat_name">栏目</a></li>
-											</ul>
-										</div>
-										<input type="text" class="form-control" value=""
-											name="keyword" placeholder="请输入名称">
-									</div>
+								<form class="pull-right search-bar" method="get"
+									th:action="@{/announcement}" role="form">
+									<input type="hidden" name="pageIndex" value="1">
+											<select name="anType" size="1" class="form-control" id="example-select">
+												<option th:value="null" selected="selected" th:selected="${condition.anType==null}">全部分类</option>
+												<option th:each="type:${types}" th:value="${type.atId}" th:selected="${condition.anType==type.atId}">[[${type.atName}]]</option>
+											</select>
+										<input type="text" class="form-control" th:value="${condition.anName}" name="anName"
+											placeholder="请输入公告名称" />
+									 <button class="btn btn-label btn-primary" type="submit"><label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认查询</button>		
 								</form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-warning m-r-5"
@@ -92,7 +81,6 @@
 												<th>公告标题</th>
 												<th>发布时间</th>
 												<th>发布人</th>
-												<th>阅读量</th>
 												<th>状态</th>
 												<th>操作</th>
 											</tr>
@@ -103,12 +91,14 @@
 												<td>[[${pagean.anName}]]</td>
 												<td>[[${#dates.format(pagean.anTime,"yyyy--MM--dd")}]]</td>
 												<td>[[${pagean.emp.empName}]]</td>
-												<td></td>
-												<td><font class="text-success"></font></td>
+												<td>
+												<font class="text-success" th:if="${pagean.iswatched}">已读</font>
+												<font class="alert-link" th:if="${not pagean.iswatched}">未读</font>
+												</td>
 												<td>
 													<div class="btn-group">
 														<a class="btn btn-xs btn-default"
-															th:href="@{/ancontent/}+${pagean.anId}" title="阅读"
+															th:href="@{/ancontent(anId=${pagean.anId})}" title="阅读"
 															data-toggle="tooltip"><i
 															class="mdi mdi-message-bulleted"></i></a>
 													</div>
@@ -128,27 +118,28 @@
 											<ul class="pagination">
 												<!-- 首页 -->
 												<li th:if="${page.pageIndex!=1}"><a
-													th:href="@{/announcement(atId=${atId},pageIndex=${page.pageBegin})}">首页</a>
+													th:href="@{/announcement(anType=${atId},pageIndex=1)}">首页</a>
 												</li>
 												<!-- 上一页 -->
 												<li th:if="${page.pageIndex!=1}"><a
-													th:href="@{/announcement(atId=${atId},pageIndex=${page.pageIndex-1})}"
+													th:href="@{/announcement(anType=${atId},pageIndex=${page.pageIndex-1})}"
 													aria-label="Previous">«</a></li>
 												<!--循环遍历连续显示的页面，若是当前页就高亮显示，并且没有链接-->
 												<li
 													th:each="i:${#numbers.sequence(page.pageBegin,page.pageEnd)}">
-													<a th:href="@{/announcement(atId=${atId},pageIndex=${i})}"
+													<a
+													th:href="@{/announcement(anType=${atId},pageIndex=${i})}"
 													th:text="${i}" th:if="${page.PageIndex!=i}"></a> <span
 													th:if="${page.PageIndex==i}" th:text="${i}"
 													aria-hidden="true" style="background-color: #C0C0C0"></span>
 												</li>
 												<!--下一页-->
 												<li th:if="${page.pageIndex!=page.pageEnd}"><a
-													th:href="@{/announcement(atId=${atId},pageIndex=${page.pageIndex+1})}">»</a>
+													th:href="@{/announcement(anType=${atId},pageIndex=${page.pageIndex+1})}">»</a>
 												</li>
 												<!-- 尾页 -->
 												<li th:if="${page.pageIndex!=page.pageEnd}"><a
-													th:href="@{/announcement(atId=${atId},pageIndex=${page.pageEnd})}">尾页</a>
+													th:href="@{/announcement(anType=${atId},pageIndex=${page.totalPage})}">尾页</a>
 												</li>
 											</ul>
 										</nav>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：映射文件，命名空间必须用接口全限定名 -->
+<mapper namespace="com.woniuxy.oasystem.dao.AnnouncementWatchedDao">
+	
+	<!-- 插入新公告观看人信息 -->
+	<insert id="insertmessage">
+		insert into
+		announcement_watched(aw_emp_id,aw_an_id,aw_time)
+		values(#{empId},#{anId},#{date})
+	</insert>
+
+<!-- 通过条件查询公告观看人员 -->
+	<select id="selectWatchedByCondition"
+		resultMap="AnnouncementWatchedMapper">
+		select * from announcement_watched,emp
+		where
+		emp.emp_id=announcement_watched.aw_emp_id
+		<include refid="condition" />
+	</select>
+
+
+	<!-- 通过条件查询数量 -->
+	<select id="selectWatchedCountByCondition"
+		resultType="Integer">
+		select count(*) from announcement_watched
+		where 1=1
+		<include refid="condition" />
+	</select>
+	<!-- 条件查询公用语句 -->
+	<sql id="condition">
+			<if test=" anId!=null and  anId!=''">
+				and aw_an_id=#{anId}
+			</if>
+			<if test="empId !=null and empId !=''">
+				and aw_emp_id=#{empId}
+			</if>
+	</sql>
+	<!-- 查询resultmap -->
+	<resultMap type="AnnouncementWatched" id="AnnouncementWatchedMapper">
+		<id column="aw_id" property="awId" />
+		<result column="aw_time" property="awTime" />
+		<collection property="emp" ofType="Emp">
+			<id column="emp_id" property="empId" />
+			<result column="emp_name" property="empName" />
+		</collection>
+	</resultMap>
+</mapper>
