@@ -20,11 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.woniuxy.oasystem.entity.Announcement;
 import com.woniuxy.oasystem.entity.AnnouncementFile;
+import com.woniuxy.oasystem.entity.AnnouncementMessage;
 import com.woniuxy.oasystem.entity.AnnouncementType;
 import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.PageBean;
 import com.woniuxy.oasystem.service.AnnouncementFileService;
+import com.woniuxy.oasystem.service.AnnouncementMessageService;
 import com.woniuxy.oasystem.service.AnnouncementService;
+import com.woniuxy.oasystem.service.AnnouncementWatchedService;
 import com.woniuxy.oasystem.service.AnnountcementTypeService;
 import com.woniuxy.oasystem.util.FileUtil;
 
@@ -36,7 +39,10 @@ public class AnnouncementController {
 	AnnountcementTypeService annountcementTypeService;
 	@Autowired
 	AnnouncementFileService announcementFileService;
-	
+	@Autowired
+	AnnouncementWatchedService announcementWatchedService;
+	@Autowired
+	AnnouncementMessageService announcementMessageService;
 	// 固定每页展示5行数据
 	Integer PAGESIZE = 10;
 
@@ -44,19 +50,24 @@ public class AnnouncementController {
 	 * 通过条件查询当前类别所有公告
 	 */
 	@RequestMapping("/announcement")
-	public String ShowanByType(Announcement an, Integer pageIndex, Model model) {
+	public String ShowanByType(HttpServletRequest req, Announcement an, Integer pageIndex, Model model) {
 		if (pageIndex == null) {
 			pageIndex = 1;
 		}
-		// 首页点击默认为第一页
-		PageBean<Announcement> pageInfo = announcementService.ShowAnnouncementsByCondition(pageIndex, PAGESIZE, an);
+		// 获取读取的人的信息
+		Emp emp = (Emp) req.getSession().getAttribute("emp");
+		// 分页查询所有公告，同时可以查看是否已经观看
+		PageBean<Announcement> pageInfo = announcementService.ShowAnnouncementsByCondition(pageIndex, PAGESIZE, an,
+				emp.getEmpId());
 		if (pageInfo.getTotalPage() == 0) {
 			pageInfo.setPageIndex(0);
 		}
 		// 将分页信息打到展示页面
 		model.addAttribute("page", pageInfo);
 		// 查询所有的公告分类
-		List<AnnouncementType> list = annountcementTypeService.ShowAllAnnountcementType();
+		List<AnnouncementType> list = annountcementTypeService.ShowAllAnnountcementTypes();
+		// 将查询的条件返回页面
+		model.addAttribute("condition", an);
 		// 将类别也传到页面
 		model.addAttribute("types", list);
 		return "announcementpages";
@@ -66,14 +77,22 @@ public class AnnouncementController {
 	 * 通过Id查公告详细内容
 	 */
 	@RequestMapping("/ancontent")
-	public String announcementContent(Announcement an, Model model) {
+	public String announcementContent(HttpServletRequest req, Announcement an, Model model) {
 		// 通过Id查询详细公告内容
 		Announcement announcement = announcementService.ShowContentById(an);
-		//通过Id查询公告中是否含有附件
-		List<AnnouncementFile> files=announcementFileService.ShowFiles(an.getAnId());
-		//展示信息
-		model.addAttribute("files",files);
+		// 通过Id查询公告中是否含有附件
+		List<AnnouncementFile> files = announcementFileService.ShowFiles(an.getAnId());
+		// 获取读取的人的信息
+		Emp emp = (Emp) req.getSession().getAttribute("emp");
+		// 添加用户阅读过的信息
+		announcementWatchedService.addWatchedMessage(an.getAnId(), emp.getEmpId(), new Date());
+		// 查看当前公告的留言板
+		List<AnnouncementMessage> messages = announcementMessageService.ShowAnnouncementMessage(an.getAnId());
+		System.out.println(messages);
+		// 展示信息
+		model.addAttribute("files", files);
 		model.addAttribute("ancontent", announcement);
+		model.addAttribute("messages", messages);
 		return "announcementcontent";
 
 	}
@@ -83,16 +102,21 @@ public class AnnouncementController {
 	 */
 	@RequestMapping("/anmanage")
 	public String announcementByEmp(Announcement an, Integer pageIndex, HttpServletRequest req, Model model) {
+		Emp emp = (Emp) req.getSession().getAttribute("emp");
+		an.setAnEmpId(emp.getEmpId());
 		if (pageIndex == null) {
 			pageIndex = 1;
 		}
-		PageBean<Announcement> pageInfo = announcementService.ShowAnnouncementsByCondition(pageIndex, PAGESIZE, an);
+		PageBean<Announcement> pageInfo = announcementService.ShowAnnouncementsByCondition(pageIndex, PAGESIZE, an,
+				null);
 		if (pageInfo.getTotalPage() == 0) {
 			pageInfo.setPageIndex(0);
 		}
 		model.addAttribute("page", pageInfo);
 		// 查询所有的公告分类
-		List<AnnouncementType> list = annountcementTypeService.ShowAllAnnountcementType();
+		List<AnnouncementType> list = annountcementTypeService.ShowAllAnnountcementTypes();
+		// 将查询的条件返回页面
+		model.addAttribute("condition", an);
 		// 将类别也传到页面
 		model.addAttribute("types", list);
 		return "announcementmanage";
@@ -108,65 +132,104 @@ public class AnnouncementController {
 		announcementService.delAn(anId);
 		return "redirect:/anmanage";
 	}
+
 	// 添加公告
-		@RequestMapping("/addannouncement")
-		public String addannouncement(@RequestParam(value="files",required=false) MultipartFile[] files,HttpServletRequest req,Announcement ann, Model model) {
-			//添加公告信息到数据库中,同时查出自增列
-			ann.setAnFlag(true);
-			ann.setAnTime(new Date());
-			Emp emp = (Emp) req.getSession().getAttribute("emp");
-			ann.setAnEmpId(emp.getEmpId());
-			Integer afAnId = announcementService.addAnnouncement(ann);
-			//判断有无文件上传，有则上传文件。并且把文件的信息添加到数据库，没有则直接返回
-			if(files.length>0) {
-				for(MultipartFile file:files) {
-					//获取文件名
+	@RequestMapping("/addannouncement")
+	public String addannouncement(@RequestParam(value = "files", required = false) MultipartFile[] files,
+			HttpServletRequest req, Announcement ann, Model model) {
+		// 添加公告信息到数据库中,同时查出自增列
+		ann.setAnFlag(true);
+		ann.setAnTime(new Date());
+		Emp emp = (Emp) req.getSession().getAttribute("emp");
+		ann.setAnEmpId(emp.getEmpId());
+		Integer afAnId = announcementService.addAnnouncement(ann);
+		// 判断有无文件上传，有则上传文件。并且把文件的信息添加到数据库，没有则直接返回
+		if (files.length > 0) {
+			for (MultipartFile file : files) {
+				try {
+					// 文件上传并且获取文件路径
+					String filePath = FileUtil.uploadFile(file, "D:/springbootZHSH");
+					// 文件名
 					String fileName = file.getOriginalFilename();
-					//设置文件路径
-					String filePath =UUID.randomUUID()+ req.getSession().getServletContext().getRealPath("files/");
-					//文件上传
-					 try {
-				          FileUtil.uploadFile(file.getBytes(), filePath, fileName);
-				        } catch (Exception e) {
-				            // TODO: handle exception
-				        }
-					 //上传成功把文件的信息存入数据库
-					 AnnouncementFile announcementFile = new AnnouncementFile();
-					 announcementFile.setAfAddress(filePath);
-					 announcementFile.setAfFlag(true);
-					 announcementFile.setAfName(fileName);
-					 announcementFile.setAfAnId(afAnId);
-					 announcementFileService.addAnnouncementFile(announcementFile);
+					// 上传成功把文件的信息存入数据库
+					AnnouncementFile announcementFile = new AnnouncementFile();
+					announcementFile.setAfAddress(filePath);
+					announcementFile.setAfFlag(true);
+					announcementFile.setAfName(fileName);
+					announcementFile.setAfAnId(afAnId);
+					announcementFileService.addAnnouncementFile(announcementFile);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			}
-			return "redirect:/anmanage";
 
+			}
 		}
-//	 	修改公告前的查询
-			@GetMapping("/updatean/{anId}")
-			public String updateShowAnById(@PathVariable("anId") Integer anId, Model model) {
-				//查询公告信息
-				
-				Announcement an=new Announcement();
-				an.setAnId(anId);
-				Announcement announcement = announcementService.ShowContentById(an);
-				List<AnnouncementType> types = annountcementTypeService.ShowAllAnnountcementType();
-				//把公告类别和详细的公告信息返回页面
-				model.addAttribute("antypes", types);
-				model.addAttribute("anInfo", announcement);
-				return "updateannouncement";
-			}
-			//修改公告
-			@PutMapping("/announcement")
-			public String updateAnnouncement(Announcement ann) {
-				//修改公告
-				announcementService.updateAnnouncement(ann);
-				return "redirect:/anmanage";
-			}
+		return "redirect:/anmanage";
 
+	}
 
-	       
-	        
-	       
-	       
+	/*
+	 * // 修改公告前的查询
+	 */
+	@RequestMapping("/updatean")
+	public String updateShowAnById(Announcement an, Model model) { // 查询公告信息 Announcement announcement =
+		Announcement announcement = announcementService.ShowContentById(an);
+		List<AnnouncementType> types = annountcementTypeService.ShowAllAnnountcementTypes(); // 查看当前公告的留言板
+		List<AnnouncementMessage> messages = announcementMessageService.ShowAnnouncementMessage(an.getAnId());
+		// 通过Id查询公告中是否含有附件
+		List<AnnouncementFile> files = announcementFileService.ShowFiles(an.getAnId());
+		model.addAttribute("files", files);
+		model.addAttribute("antypes", types);
+		model.addAttribute("anInfo", announcement);
+		model.addAttribute("messages", messages);
+		return "updateannouncement";
+	}
+
+// 	添加公告前的查询
+	@RequestMapping("/addan")
+	public String addShowAnById(Model model) {
+		// 查询公告类别信息
+		List<AnnouncementType> types = annountcementTypeService.ShowAllAnnountcementTypes();
+		// 把公告类别返回页面
+		model.addAttribute("antypes", types);
+		return "addannouncement";
+	}
+
+	/*
+	 * 修改公告
+	 */
+	@RequestMapping("/updateannouncement")
+	public String updateAnnouncement(@RequestParam(value = "files", required = false) MultipartFile[] files,
+			Announcement ann) {
+		System.out.println(ann);
+		// 修改公告本身的内容
+		announcementService.updateAnnouncement(ann);
+		// 判断有无文件上传，有则上传文件。并且把文件的信息添加到数据库，没有则直接返回
+		System.out.println(files.length);
+		System.out.println(111111111);
+		if (files.length > 0) {
+			System.out.println(2323);
+			for (MultipartFile file : files) {
+				try {
+					// 文件上传并且获取文件路径
+					String filePath = FileUtil.uploadFile(file, "D:/springbootZHSH");
+					// 文件名
+					String fileName = file.getOriginalFilename();
+					// 上传成功把文件的信息存入数据库
+					AnnouncementFile announcementFile = new AnnouncementFile();
+					announcementFile.setAfAddress(filePath);
+					announcementFile.setAfFlag(true);
+					announcementFile.setAfName(fileName);
+					announcementFile.setAfAnId(ann.getAnId());
+					announcementFileService.addAnnouncementFile(announcementFile);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+
+		return "redirect:/anmanage";
+	}
+
 }

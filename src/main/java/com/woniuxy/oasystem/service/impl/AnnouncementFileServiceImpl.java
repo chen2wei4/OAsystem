@@ -38,4 +38,12 @@ public class AnnouncementFileServiceImpl implements AnnouncementFileService {
 		return files;
 	}
 
+	/* 
+	 * 软删除文件
+	 */
+	@Override
+	public void deleteFileById(Integer afId) {
+		announcementFileDao.deleteFileById(afId);
+	}
+
 }

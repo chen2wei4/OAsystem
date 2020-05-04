@@ -1,6 +1,7 @@
 package com.woniuxy.oasystem.service;
 
 import com.woniuxy.oasystem.entity.Announcement;
+import com.woniuxy.oasystem.entity.AnnouncementType;
 import com.woniuxy.oasystem.entity.PageBean;
 
 public interface AnnouncementService {
@@ -27,11 +28,12 @@ public interface AnnouncementService {
 	 * 
 	 * @param annoucement
 	 * @param pageIndex
+	 * @param empId 
 	 * @param pAGESIZE
 	 * @return
 	 * @changeLog 1. 创建 (2020年4月24日 下午7:21:26 [liuwenpeng]) 2.通过条件查询所有公告
 	 */
-	public PageBean<Announcement> ShowAnnouncementsByCondition(Integer pageIndex, Integer pageSize, Announcement an);
+	public PageBean<Announcement> ShowAnnouncementsByCondition(Integer pageIndex, Integer pageSize, Announcement an, Integer empId);
 
 	/**
 	 * TODO
