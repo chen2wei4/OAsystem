@@ -35,19 +35,19 @@ public class AnnouncementController {
 
 	// 通过类别ID查询当前类别所有公告
 	@RequestMapping("/announcement")
-	public String ShowanByType(Integer atId,Integer pageIndex, Model model) {
-		if(pageIndex==null) {
-			pageIndex=1;
-		} 
+	public String ShowanByType(Integer atId, Integer pageIndex, Model model) {
+		if (pageIndex == null) {
+			pageIndex = 1;
+		}
 		// 首页点击默认为第一页
 		PageBean<Announcement> pageInfo = announcementService.ShowAnnouncementsByType(pageIndex, PAGESIZE, atId);
-		if(pageInfo.getTotalPage()==0) {
+		if (pageInfo.getTotalPage() == 0) {
 			pageInfo.setPageIndex(0);
 		}
 		// 将分页信息打到展示页面
 		model.addAttribute("page", pageInfo);
-		//将类别也传到页面
-		model.addAttribute("atId",atId);
+		// 将类别也传到页面
+		model.addAttribute("atId", atId);
 		return "announcementpages";
 	}
 
@@ -64,7 +64,7 @@ public class AnnouncementController {
 
 	// 添加公告
 	@PostMapping("/announcement")
-	public String addannouncement(HttpServletRequest req,Announcement ann, Model model) {
+	public String addannouncement(HttpServletRequest req, Announcement ann, Model model) {
 		System.out.println(ann);
 		// 設置添加時的屬性
 		Emp emp = (Emp) req.getSession().getAttribute("emp");
@@ -78,13 +78,14 @@ public class AnnouncementController {
 
 	// 通过角色ID查询所有公告
 	@RequestMapping("/anmanage")
-	public String announcementByEmp(Integer pageIndex,HttpServletRequest req,Model model) {
-		if(pageIndex==null) {
-			pageIndex=1;
+	public String announcementByEmp(Integer pageIndex, HttpServletRequest req, Model model) {
+		if (pageIndex == null) {
+			pageIndex = 1;
 		}
 		Emp emp = (Emp) req.getSession().getAttribute("emp");
-		PageBean<Announcement> pageInfo = announcementService.showannouncementByEmp(pageIndex, PAGESIZE,emp.getEmpId());
-		if(pageInfo.getTotalPage()==0) {
+		PageBean<Announcement> pageInfo = announcementService.showannouncementByEmp(pageIndex, PAGESIZE,
+				emp.getEmpId());
+		if (pageInfo.getTotalPage() == 0) {
 			pageInfo.setPageIndex(0);
 		}
 		// 将分页信息打到展示页面
@@ -94,29 +95,32 @@ public class AnnouncementController {
 		return "announcementmanage";
 
 	}
-	// 	软删除公告
-		@RequestMapping("/delan")
-		public String delAnnouncement(HttpServletRequest req,Integer anId, Model model) {
-				System.out.println(anId);
-				announcementService.delAn(anId);
-				return "redirect:/anmanage";
-		}
+
+	// 软删除公告
+	@RequestMapping("/delan")
+	public String delAnnouncement(HttpServletRequest req, Integer anId, Model model) {
+		System.out.println(anId);
+		announcementService.delAn(anId);
+		return "redirect:/anmanage";
+	}
+
 //	 	修改公告前的查询
-			@GetMapping("/updatean/{anId}")
-			public String updateShowAnById(@PathVariable("anId") Integer anId, Model model) {
-				//查询公告信息
-				Announcement announcement = announcementService.ShowContentById(anId);
-				List<AnnouncementType> types = annountcementTypeService.ShowAllAnnountcementType();
-				//把公告类别和详细的公告信息返回页面
-				model.addAttribute("antypes", types);
-				model.addAttribute("anInfo", announcement);
-				return "updateannouncement";
-			}
-			//修改公告
-			@PutMapping("/announcement")
-			public String updateAnnouncement(Announcement ann) {
-				//修改公告
-				announcementService.updateAnnouncement(ann);
-				return "redirect:/anmanage";
-			}
+	@GetMapping("/updatean/{anId}")
+	public String updateShowAnById(@PathVariable("anId") Integer anId, Model model) {
+		// 查询公告信息
+		Announcement announcement = announcementService.ShowContentById(anId);
+		List<AnnouncementType> types = annountcementTypeService.ShowAllAnnountcementType();
+		// 把公告类别和详细的公告信息返回页面
+		model.addAttribute("antypes", types);
+		model.addAttribute("anInfo", announcement);
+		return "updateannouncement";
+	}
+
+	// 修改公告
+	@PutMapping("/announcement")
+	public String updateAnnouncement(Announcement ann) {
+		// 修改公告
+		announcementService.updateAnnouncement(ann);
+		return "redirect:/anmanage";
+	}
 }

@@ -1,14 +1,19 @@
 package com.woniuxy.oasystem.controller;
 
 import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.PageBean;
+import com.woniuxy.oasystem.entity.ReportType;
 import com.woniuxy.oasystem.entity.Reports;
+import com.woniuxy.oasystem.service.ReportTypeService;
 import com.woniuxy.oasystem.service.ReportsService;
 
 @Controller
@@ -17,44 +22,103 @@ public class ReportsController {
 	@Autowired
 	ReportsService reportsService;
 
-	// 分页查看所有
-	@GetMapping(value = "/allReports")
-	public String getAllReports(Model model, Reports reports, Integer pageIndex) {
+	@Autowired
+	ReportTypeService reportTypeService;
+
+	// 根据report_from分页查询
+	@GetMapping(value = "/reportByReportFrom")
+	public String reportByEmp(HttpServletRequest req, Model model, Reports reports, Integer pageIndex) {
+		Emp emp = (Emp) req.getSession().getAttribute("emp");
+		reports.setReportFrom(emp);
+		reports.setReportFromId(emp.getEmpId());
 		if (pageIndex == null) {
 			pageIndex = 1;
 		}
 		int pagesize = 10;
-		PageBean<Reports> pb = reportsService.getReportsByConditionPage(reports, pageIndex, pagesize);
+		PageBean<Reports> pb = reportsService.selectReportsByReportFromAndConditionPage(reports, pageIndex, pagesize);
 		model.addAttribute("pb", pb);
-		return "lyear_pages_reoprts.html";
+		return "reoprt_list.html";
+	}
+
+	// 分页查所有
+	@GetMapping(value = "/allReports")
+	public String allReports(HttpServletRequest req, Model model, Reports reports, Integer pageIndex) {
+		if (pageIndex == null) {
+			pageIndex = 1;
+		}
+		int pagesize = 10;
+		PageBean<Reports> allpb = reportsService.selectAllReportsByConditionPage(reports, pageIndex, pagesize);
+		model.addAttribute("allpb", allpb);
+		return "reoprt_alllist.html";
 	}
 
 	// 软删除
 	@GetMapping(value = "/deleteReport")
-	public String deleteReport(Model model, Reports reports, Integer pageIndex, int reportId) {
+	public String deleteReport(HttpServletRequest req, Model model, Reports reports, Integer pageIndex, int reportId) {
+		Emp emp = (Emp) req.getSession().getAttribute("emp");
+		reports.setReportFrom(emp);
+		reports.setReportFromId(emp.getEmpId());
 		reportsService.deleteReportsByReportId(reportId);
 		if (pageIndex == null) {
 			pageIndex = 1;
 		}
 		int pagesize = 10;
-		PageBean<Reports> pb = reportsService.getReportsByConditionPage(reports, pageIndex, pagesize);
+		PageBean<Reports> pb = reportsService.selectReportsByReportFromAndConditionPage(reports, pageIndex, pagesize);
 		model.addAttribute("pb", pb);
-		return "lyear_pages_reoprts.html";
+		return "reoprt_list.html";
+	}
+
+	// 修改报表页面跳转
+	@GetMapping(value = "/updateReportPageJumps")
+	public String updateReportPageJumps(Model model, Integer reportId) {
+		List<ReportType> allReportType = reportTypeService.selectAllReportType();
+		model.addAttribute("reportType", allReportType);
+		Reports updateReport = reportsService.selectByReportId(reportId);
+		model.addAttribute("updateReport", updateReport);
+		return "reoprt_update.html";
+	}
+
+	// 修改报表
+	@PostMapping(value = "/updateReport")
+	public String updateReport(HttpServletRequest req, @ModelAttribute Reports reports, Model model) {
+		Date date = new Date();
+		Emp emp = (Emp) req.getSession().getAttribute("emp");
+		reports.setReportFromId(emp.getEmpId());
+		reports.setReportDate(date);
+		reportsService.updateReportsByReportId(reports);
+		// 通过时间查到刚修改的报表跳转到报表详情页
+		Reports reportDetail = reportsService.selectByReportDate(date);
+		model.addAttribute("reportDetail", reportDetail);
+		return "report_detail";
 	}
 
 	// 新增报表页面跳转
-	@GetMapping(value = "/reportDetailsPageJumps")
-	public String reportDetailsPageJumps() {
-		return "lyear_pages_add_reoprts.html";
+	@GetMapping(value = "/addReportPageJumps")
+	public String addReportPageJumps(Model model) {
+		List<ReportType> allReportType = reportTypeService.selectAllReportType();
+		model.addAttribute("reportType", allReportType);
+		return "reoprt_add.html";
 	}
 
 	// 新增报表
-	@PostMapping(value = "/reportDetails")
-	public String reportDetails(@ModelAttribute Reports reports) {
-//		Date reportDate = new Date();
-//		reports.setReportDate(reportDate);
-//		reports.setReportName("测试");
-//		reportsService.insertReports(reports);
-		return "lyear_pages_add_reports.html";
+	@PostMapping(value = "/addReport")
+	public String addReport(HttpServletRequest req, @ModelAttribute Reports reports, Model model) {
+		Date date = new Date();
+		Emp emp = (Emp) req.getSession().getAttribute("emp");
+		reports.setReportFromId(emp.getEmpId());
+		reports.setReportDate(date);
+		reportsService.insertReports(reports);
+		// 通过时间查到刚添加的报表跳转到报表详情页
+		Reports reportDetail = reportsService.selectByReportDate(date);
+		model.addAttribute("reportDetail", reportDetail);
+		return "report_detail";
+	}
+
+	// 通过Id查详细报表
+	@GetMapping("/reportDetail")
+	public String reportDetail(Integer reportId, Model model) {
+		Reports reportDetail = reportsService.selectByReportId(reportId);
+		model.addAttribute("reportDetail", reportDetail);
+		return "report_detail";
 	}
 }

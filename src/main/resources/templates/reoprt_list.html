@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>文档列表 - 光年(Light Year Admin)后台管理系统模板</title>
+<title>报表展示</title>
 <link rel="icon" href="favicon.ico" type="image/ico">
 <meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
 <meta name="description"
@@ -14,20 +14,16 @@
 <link href="css/materialdesignicons.min.css" rel="stylesheet">
 <link href="css/style.min.css" rel="stylesheet">
 </head>
-
 <body>
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
 			<!--左侧导航-->
 			<div th:replace="common :: lefter"></div>
 			<!--End 左侧导航-->
-
 			<!--头部信息-->
 			<header class="lyear-layout-header">
-
 				<nav class="navbar navbar-default">
 					<div class="topbar">
-
 						<div class="topbar-left">
 							<div class="lyear-aside-toggler">
 								<span class="lyear-toggler-bar"></span> <span
@@ -38,18 +34,13 @@
 						</div>
 						<!-- 导航栏信息 -->
 						<ul class="topbar-right" th:replace="common :: header"></ul>
-
 					</div>
 				</nav>
-
 			</header>
 			<!--End 头部信息-->
-
 			<!--页面主要内容-->
 			<main class="lyear-layout-content">
-
 			<div class="container-fluid">
-
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="card">
@@ -63,7 +54,7 @@
 											<button class="btn btn-default dropdown-toggle"
 												id="search-btn" data-toggle="dropdown" type="button"
 												aria-haspopup="true" aria-expanded="false">
-												标题 <span class="caret"></span>
+												类型 <span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu">
 												<li><a tabindex="-1" href="javascript:void(0)"
@@ -78,13 +69,14 @@
 								</form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5"
-										th:href="@{/reportDetailsPageJumps}"><i
-										class="mdi mdi-plus"></i> 新增报表</a> <a class="btn btn-danger"
-										href="#!"><i class="mdi mdi-window-close"></i> 删除所选</a>
+										th:href="@{/addReportPageJumps}"><i class="mdi mdi-plus"></i>
+										新增报表</a> <a class="btn btn-danger" href="#!"><i
+										class="mdi mdi-window-close"></i> 删除所选</a> <a
+										class="btn btn-primary m-r-5" th:href="@{/allReports}"><i
+										class="mdi mdi-plus"></i> 查看所有报表</a>
 								</div>
 							</div>
 							<div class="card-body">
-
 								<div class="table-responsive">
 									<table class="table table-bordered">
 										<thead>
@@ -108,18 +100,22 @@
 												</label></td>
 												<td th:text="${report.reportId}"></td>
 												<td>[[${report.reportName}]]</td>
-												<td>[[${report.typeId.typeName}]]</td>
-												<td>张三</td>
+												<td>[[${report.reportType.typeName}]]</td>
+												<td>[[${report.reportFrom.empName}]]</td>
 												<td>李四</td>
 												<td><font class="text-success">[[${#dates.format(report.reportDate,"yyyy-MM-dd")}]]</font>
 												</td>
 												<td>
 													<div class="btn-group">
-														<a class="btn btn-xs btn-default" href="#!" title="查看"
-															data-toggle="tooltip"><i class="mdi mdi-check"></i></a> <a
-															class="btn btn-xs btn-default" href="#!" title="编辑"
-															data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
 														<a class="btn btn-xs btn-default"
+															th:href="@{/reportDetail?(reportId=${report.reportId })}"
+															title="查看" data-toggle="tooltip"><i
+															class="mdi mdi-message-bulleted"></i></a> <a
+															class="btn btn-xs btn-default"
+															th:href="@{/updateReportPageJumps?(reportId=${report.reportId })}"
+															title="编辑" data-toggle="tooltip"><i
+															class="mdi mdi-pencil"></i></a> <a
+															class="btn btn-xs btn-default"
 															th:href="@{/deleteReport?(reportId=${report.reportId },pageIndex=${pb.pageIndex })}"
 															title="删除" data-toggle="tooltip"><i
 															class="mdi mdi-window-close"></i></a>
@@ -131,33 +127,19 @@
 								</div>
 								<ul class="pagination">
 									<li th:if="${pb.pageIndex>1 }" class="disabled"><span><a
-											th:href="@{/allReports?pageIndex=1}">«首页</a></span></li>
+											th:href="@{/reportByReportFrom?pageIndex=1}">«首页</a></span></li>
 									<li th:if="${pb.pageIndex>1 }" class="disabled"><span><a
-											th:href="@{/allReports?pageIndex=}+${pb.pageIndex-1 }">上一页</a></span></li>
-
-
-									<!-- <c:forEach var="i" begin="${pb.pageBegin }" end="${pb.pageEnd }">
-										<c:choose>
-											<c:when test="${pb.pageIndex==i }">
-												<li class="active">${i }</li>
-											</c:when>
-											<c:otherwise>
-												<li><a href="<c:url value='/customer/get.do?pageIndex=${i }'/>">${ i}</a></li>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach> -->
-									<!-- <li th:each="i: ${#numbers.sequence(${pb.pageBeagin },${pb.pageEnd })}"><a th:href="@{/allReports?pageIndex=}+${i }">[[${i}]]</a></li> -->
-									<!-- <li class="active"><span>1</span></li>
-									<li><a href="#1">2</a></li>
-									<li class="disabled"><span>...</span></li> -->
-
-
+											th:href="@{/reportByReportFrom?pageIndex=}+${pb.pageIndex-1 }">上一页</a></span></li>
+									<li th:each="i:${#numbers.sequence(pb.pageBegin,pb.pageEnd)}">
+										<a th:href="@{/reportByReportFrom(pageIndex=${i})}"
+										th:text="${i}" th:if="${pb.pageIndex!=i}"></a> <span
+										th:if="${pb.pageIndex==i}" th:text="${i}" aria-hidden="true"
+										style="background-color: #33CABB"></span>
+									</li>
 									<li th:if="${pb.pageIndex<pb.totalPage }" class="disabled"><span><a
-											th:href="@{/allReports?pageIndex=}+${pb.pageIndex+1 }">下一页</a></span></li>
+											th:href="@{/reportByReportFrom?pageIndex=}+${pb.pageIndex+1 }">下一页</a></span></li>
 									<li th:if="${pb.pageIndex<pb.totalPage }" class="disabled"><span><a
-											th:href="@{/allReports?pageIndex=}+${pb.totalPage }">末页»</a></span></li>
-								</ul>
-								<ul class="pagination">
+											th:href="@{/reportByReportFrom?pageIndex=}+${pb.totalPage }">末页»</a></span></li>
 									<li class="disabled"><span>共[[${pb.totalPage }]]页</span></li>
 									<li class="disabled"><span>第[[${pb.pageIndex }]]页</span></li>
 									<li class="disabled"><span>共[[${pb.totalRecord }]]条</span></li>
@@ -165,16 +147,12 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
-
 			</div>
-
 			</main>
 			<!--End 页面主要内容-->
 		</div>
 	</div>
-
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
