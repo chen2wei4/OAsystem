@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.woniuxy.oasystem.dao.MeetingDao">
 	<!-- 分页查询 -->
 	<select id="findAllByPage" resultMap="meetingMap">
-		select m.meeting_id,principal,recorder,topic,boardroom_id,start_time,end_time,file,
+		select m.meeting_id,m.emp_id,principal,recorder,topic,boardroom_id,start_time,end_time,file,
 		p.participant_id,p.meeting_id,p.meeting_id,p.emp_id pemp_id
 		from meeting m,participant p where m.meeting_id=p.meeting_id and m.flag = 1 and p.flag = 1
 		<include refid="conditionSql"/>

@@ -5,8 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.woniuxy.oasystem.entity.Car;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.PageBean;
+import com.woniuxy.oasystem.entity.Vo;
 import com.woniuxy.oasystem.service.OfficeSuppliesService;
 import com.woniuxy.oasystem.util.CommonResult;
 /**
@@ -30,14 +33,17 @@ public class OfficeSuppliesController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	public CommonResult<PageBean<OfficeSupplies>> findAll(@RequestBody OfficeSupplies officeSupplies,Integer pageIndex) {
-		System.out.println(officeSupplies);
-		if (pageIndex == null) {
-			pageIndex = 1;
+	public CommonResult<PageBean<OfficeSupplies>> findAll(@RequestBody Vo<OfficeSupplies> vo) {
+		System.out.println(vo.t);
+		if(vo.t==null) {
+			vo.t = new OfficeSupplies();
+		}
+		if (vo.pageIndex == null) {
+			vo.pageIndex = 1;
 		}
 		int pageSize = 3;
 		try {
-			PageBean<OfficeSupplies> pb = officeSuppliesService.findAllByPage(officeSupplies, pageIndex, pageSize);
+			PageBean<OfficeSupplies> pb = officeSuppliesService.findAllByPage(vo.t, vo.pageIndex, pageSize);
 			return new CommonResult<PageBean<OfficeSupplies>>(200,"ok",pb);
 		} catch (Exception e) {
 			e.printStackTrace();

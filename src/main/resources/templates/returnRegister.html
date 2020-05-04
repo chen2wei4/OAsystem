@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>车辆管理</title>
+<title>车辆返回登记管理</title>
 <link rel="icon" href="favicon.ico" type="image/ico">
 <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
@@ -39,17 +39,18 @@
 				                    <div class="input-group-btn">
 				                      
 				                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" 
-				                      	aria-haspopup="true" aria-expanded="false" data-field="license">
-				                      		车牌 <span class="caret"></span>
+				                      	aria-haspopup="true" aria-expanded="false" data-field="empId">
+				                      		职工 <span class="caret"></span>
 				                      </button>
 				                      <ul class="dropdown-menu" @click="turn()">
-				                        <li> <a tabindex="-1" href="#" data-field="license">车牌</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="empId">职工</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="license">车牌号</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="returnTime">归还时间</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="maintenance">维护状态</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="useState">使用状态</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="parkingSpace">停车位</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="place">地点</a> </li>
 				                      </ul>
 				                    </div>
-				                    <input type="text" class="form-control" id="condition" data-field="license" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
+				                    <input type="text" class="form-control" id="condition" data-field="empId" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
 				                  </div>
 				                </form>
 								<div class="toolbar-btn-action">
@@ -68,9 +69,13 @@
 												<th><label class="lyear-checkbox checkbox-primary">
 														<input type="checkbox" id="check-all"><span></span>
 												</label></th>
-												<th>车牌</th>
+												<th>职工</th>
+												<th>车牌号</th>
+												<th>归还时间</th>
 												<th>维护状态</th>
-												<th>使用状态</th>
+												<th>地点</th>
+												<th>里程</th>
+												<th>油耗</th>
 												<th>停车位</th>
 												<th>操作</th>
 											</tr>
@@ -80,16 +85,20 @@
 												<td><label class="lyear-checkbox checkbox-primary">
 														<input type="checkbox" name="ids[]" value="item.carId"><span></span>
 												</label></td>
+												<td>{{item.empId}}</td>
 												<td>{{item.license}}</td>
+												<td>{{item.returnTime}}</td>
 												<td>{{item.maintenance}}</td>
-												<td>{{item.useState}}</td>
-												<td>{{item.parkingSpace}}</td>
+												<td>{{item.place}}</td>
+												<td>{{item.mileage}}</td>
+												<td>{{item.oil}}</td>
+												<td>{{item.packingPace}}</td>
 												<td>
 													<div class="btn-group">
 														<a class="btn btn-xs btn-default " href="#!"
 															title="编辑" data-toggle="tooltip" @click="update(item,pb.pageIndex)"><i class="mdi mdi-pencil"></i></a>
 														<a class="btn btn-xs btn-default " href="#!" title="删除"
-															data-toggle="tooltip" @click="del(item.carId,pb.pageIndex)">
+															data-toggle="tooltip" @click="del(item.rrId,pb.pageIndex)">
 														<i class="mdi mdi-window-close"></i></a>
 													</div>
 												</td>
@@ -138,21 +147,23 @@
 		    	  //获取查询条件
 		    	  var sort = $("#condition").attr('data-field');
 			  	  var param = $("#condition").val();
-			  	  var license,maintenance,useState,parkingSpace;
+			  	  var empId,license,returnTime,maintenance,place;
+			  	  if(sort=="empId"){empId=param};
 			  	  if(sort=="license"){license=param};
+			  	  if(sort=="returnTime"){returnTime=param};
 			  	  if(sort=="maintenance"){maintenance=param};
-			  	  if(sort=="useState"){useState=param};
-			  	  if(sort=="parkingSpace"){parkingSpace=param};
+			  	if(sort=="place"){place=param};
 			  	//发送查询请求 
 	            axios({
-				        	url:'[[@{/car/list}]]',
+				        	url:'[[@{/returnRegister/list}]]',
 				        	method:'post',
 				        	data:{
 				        			"t":{
-				        				"license":license,
+				        				"empId":empId,
+					        			"license":license,
+					        			"returnTime":returnTime,
 					        			"maintenance":maintenance,
-					        			"useState":useState,
-					        			"parkingSpace":parkingSpace
+					        			"place":place
 				        			},
 				        			"pageIndex":pageIndex
 				        		}
@@ -162,7 +173,7 @@
 				        })	 
 	      },
 	      //根据ID删除
-	      del(carId,pageIndex){
+	      del(rrId,pageIndex){
 	    		var that=this;    
 	    	  	//弹出确认框
 	    		$.alert({
@@ -175,7 +186,7 @@
 	    						action: function(){
 	    							//发送删除请求 
 	    							axios({
-	    						        	url:'[[@{/car/deleteByCarId?carId=}]]'+carId,
+	    						        	url:'[[@{/returnRegister/deleteByRrId?rrId=}]]'+rrId,
 	    						        	method:'post'
 	    						        }).then(res=>{
 	    						        	alert(res.data.message);
@@ -200,14 +211,22 @@
 	    	        content: '' +
 	    	        '<form action="" class="formName">' +
 	    	        '<div class="form-group">' +
+	    	        '<label> 职工 </label>' +
+	    	        '<input id="empId" type="text" value="'+item.empId+'" class="name form-control" required />' +
 	    	        '<label> 车牌号 </label>' +
 	    	        '<input id="license" type="text" value="'+item.license+'" class="name form-control" required />' +
+	    	        '<label> 归还时间 </label>' +
+	    	        '<input id="returnTime" type="text" value="'+item.returnTime+'" class="name form-control" required />' +
 	    	        '<label> 维护状态 </label>' +
 	    	        '<input id="maintenance" type="text" value="'+item.maintenance+'" class="name form-control" required />' +
-	    	        '<label> 使用状态 </label>' +
-	    	        '<input id="useState" type="text" value="'+item.useState+'" class="name form-control" required />' +
+	    	        '<label> 地点 </label>' +
+	    	        '<input id="place" type="text" value="'+item.place+'" class="name form-control" required />' +
+	    	        '<label> 里程 </label>' +
+	    	        '<input id="mileage" type="text" value="'+item.mileage+'" class="name form-control" required />' +
+	    	        '<label> 油耗 </label>' +
+	    	        '<input id="oil" type="text" value="'+item.oil+'" class="name form-control" required />' +
 	    	        '<label> 停车位 </label>' +
-	    	        '<input id="parkingSpace" type="text" value="'+item.parkingSpace+'" class="name form-control" required />' +
+	    	        '<input id="parkingPlace" type="text" value="'+item.parkingPlace+'" class="name form-control" required />' +
 	    	        '</div>' +
 	    	        '</form>',
 	    	        buttons: {
@@ -215,25 +234,33 @@
 	    	                text: '提交',
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
+	    	                	var empId=$("#empId").val();
 	    	                	var license=$("#license").val();
+	    	                	var returnTime=$("#returnTime").val();
     							var maintenance=$("#maintenance").val();
-    							var useState=$("#useState").val();
-    							var parkingSpace=$("#parkingSpace").val();
-	    	                    if(!license||!maintenance||!useState||!parkingSpace){
+    							var place=$("#place").val();
+    							var mileage=$("#mileage").val();
+    							var oil=$("#oil").val();
+    							var parkingPlace=$("#parkingPlace").val();
+	    	                    if(!empId||!license||!returnTime||!maintenance||!place||!mileage||!oil||!parkingPlace){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
 	    	                  //发送编辑请求 
     						
 	    	                  axios({
-    						        	url:'[[@{/car/updateByCarId}]]',
+    						        	url:'[[@{/returnRegister/updateByRrId}]]',
     						        	method:'post',
     						        	data:{
-    						        			"carId":item.carId,
+    						        			"rrId":item.rrId,
+    						        			"empId":empId,
     						        			"license":license,
+    						        			"returnTime":returnTime,
     						        			"maintenance":maintenance,
-    						        			"useState":useState,
-    						        			"parkingSpace":parkingSpace
+    						        			"place":place,
+    						        			"mileage":mileage,
+    						        			"oil":oil,
+    						        			"parkingPlace":parkingPlace
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);
@@ -255,14 +282,22 @@
 	    	        content: '' +
 	    	        '<form action="" class="formName">' +
 	    	        '<div class="form-group">' +
+	    	        '<label> 职工 </label>' +
+	    	        '<input id="empId" type="text" class="name form-control" required />' +
 	    	        '<label> 车牌号 </label>' +
 	    	        '<input id="license" type="text" class="name form-control" required />' +
+	    	        '<label> 归还时间 </label>' +
+	    	        '<input id="returnTime" type="text" class="name form-control" required />' +
 	    	        '<label> 维护状态 </label>' +
 	    	        '<input id="maintenance" type="text" class="name form-control" required />' +
-	    	        '<label> 使用状态 </label>' +
-	    	        '<input id="useState" type="text" class="name form-control" required />' +
+	    	        '<label> 地点 </label>' +
+	    	        '<input id="place" type="text" class="name form-control" required />' +
+	    	        '<label> 里程 </label>' +
+	    	        '<input id="mileage" type="text" class="name form-control" required />' +
+	    	        '<label> 油耗 </label>' +
+	    	        '<input id="oil" type="text" class="name form-control" required />' +
 	    	        '<label> 停车位 </label>' +
-	    	        '<input id="parkingSpace" type="text" class="name form-control" required />' +
+	    	        '<input id="parkingPlace" type="text" class="name form-control" required />' +
 	    	        '</div>' +
 	    	        '</form>',
 	    	        buttons: {
@@ -270,24 +305,31 @@
 	    	                text: '提交',
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
+	    	                	var empId=$("#empId").val();
 	    	                	var license=$("#license").val();
+	    	                	var returnTime=$("#returnTime").val();
     							var maintenance=$("#maintenance").val();
-    							var useState=$("#useState").val();
-    							var parkingSpace=$("#parkingSpace").val();
-    							if(!license||!maintenance||!useState||!parkingSpace){
+    							var place=$("#place").val();
+    							var mileage=$("#mileage").val();
+    							var oil=$("#oil").val();
+    							var parkingPlace=$("#parkingPlace").val();
+	    	                    if(!empId||!license||!returnTime||!maintenance||!place||!mileage||!oil||!parkingPlace){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
 	    	                  //发送添加请求 
 	    	                  axios({
-    						        	url:'[[@{/car/insert}]]',
+    						        	url:'[[@{/returnRegister/insert}]]',
     						        	method:'post',
     						        	data:{
-    						        			
-    						        			"license":license,
-    						        			"maintenance":maintenance,
-    						        			"useState":useState,
-    						        			"parkingSpace":parkingSpace
+						        			"empId":empId,
+						        			"license":license,
+						        			"returnTime":returnTime,
+						        			"maintenance":maintenance,
+						        			"place":place,
+						        			"mileage":mileage,
+						        			"oil":oil,
+						        			"parkingPlace":parkingPlace
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);

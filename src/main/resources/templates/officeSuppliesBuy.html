@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>车辆管理</title>
+<title>办公用品请购管理</title>
 <link rel="icon" href="favicon.ico" type="image/ico">
 <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
@@ -39,17 +39,16 @@
 				                    <div class="input-group-btn">
 				                      
 				                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" 
-				                      	aria-haspopup="true" aria-expanded="false" data-field="license">
-				                      		车牌 <span class="caret"></span>
+				                      	aria-haspopup="true" aria-expanded="false" data-field="empId">
+				                      		职工 <span class="caret"></span>
 				                      </button>
 				                      <ul class="dropdown-menu" @click="turn()">
-				                        <li> <a tabindex="-1" href="#" data-field="license">车牌</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="maintenance">维护状态</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="useState">使用状态</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="parkingSpace">停车位</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="empId">职工</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="buyTime">请购时间</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="state">处理状态</a> </li>
 				                      </ul>
 				                    </div>
-				                    <input type="text" class="form-control" id="condition" data-field="license" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
+				                    <input type="text" class="form-control" id="condition" data-field="empId" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
 				                  </div>
 				                </form>
 								<div class="toolbar-btn-action">
@@ -68,10 +67,10 @@
 												<th><label class="lyear-checkbox checkbox-primary">
 														<input type="checkbox" id="check-all"><span></span>
 												</label></th>
-												<th>车牌</th>
-												<th>维护状态</th>
-												<th>使用状态</th>
-												<th>停车位</th>
+												<th>职工</th>
+												<th>内容</th>
+												<th>请购时间</th>
+												<th>处理状态</th>
 												<th>操作</th>
 											</tr>
 										</thead>
@@ -80,16 +79,16 @@
 												<td><label class="lyear-checkbox checkbox-primary">
 														<input type="checkbox" name="ids[]" value="item.carId"><span></span>
 												</label></td>
-												<td>{{item.license}}</td>
-												<td>{{item.maintenance}}</td>
-												<td>{{item.useState}}</td>
-												<td>{{item.parkingSpace}}</td>
+												<td>{{item.empId}}</td>
+												<td>{{item.content}}</td>
+												<td>{{item.buyTime}}</td>
+												<td>{{item.state}}</td>
 												<td>
 													<div class="btn-group">
 														<a class="btn btn-xs btn-default " href="#!"
 															title="编辑" data-toggle="tooltip" @click="update(item,pb.pageIndex)"><i class="mdi mdi-pencil"></i></a>
 														<a class="btn btn-xs btn-default " href="#!" title="删除"
-															data-toggle="tooltip" @click="del(item.carId,pb.pageIndex)">
+															data-toggle="tooltip" @click="del(item.osbId,pb.pageIndex)">
 														<i class="mdi mdi-window-close"></i></a>
 													</div>
 												</td>
@@ -136,23 +135,21 @@
 	    	send(pageIndex){
 	    		var that=this;
 		    	  //获取查询条件
-		    	  var sort = $("#condition").attr('data-field');
+		    	  var type = $("#condition").attr('data-field');
 			  	  var param = $("#condition").val();
-			  	  var license,maintenance,useState,parkingSpace;
-			  	  if(sort=="license"){license=param};
-			  	  if(sort=="maintenance"){maintenance=param};
-			  	  if(sort=="useState"){useState=param};
-			  	  if(sort=="parkingSpace"){parkingSpace=param};
+			  	  var empId,buyTime,state;
+			  	  if(type=="empId"){empId=param};
+			  	  if(type=="buyTime"){buyTime=param};
+			  	  if(type=="state"){state=param};
 			  	//发送查询请求 
 	            axios({
-				        	url:'[[@{/car/list}]]',
+				        	url:'[[@{/officeSuppliesBuy/list}]]',
 				        	method:'post',
 				        	data:{
 				        			"t":{
-				        				"license":license,
-					        			"maintenance":maintenance,
-					        			"useState":useState,
-					        			"parkingSpace":parkingSpace
+				        				"empId":empId,
+					        			"buyTime":buyTime,
+					        			"state":state
 				        			},
 				        			"pageIndex":pageIndex
 				        		}
@@ -162,7 +159,7 @@
 				        })	 
 	      },
 	      //根据ID删除
-	      del(carId,pageIndex){
+	      del(osbId,pageIndex){
 	    		var that=this;    
 	    	  	//弹出确认框
 	    		$.alert({
@@ -175,7 +172,7 @@
 	    						action: function(){
 	    							//发送删除请求 
 	    							axios({
-	    						        	url:'[[@{/car/deleteByCarId?carId=}]]'+carId,
+	    						        	url:'[[@{/officeSuppliesBuy/deleteByOsbId?osbId=}]]'+osbId,
 	    						        	method:'post'
 	    						        }).then(res=>{
 	    						        	alert(res.data.message);
@@ -200,14 +197,14 @@
 	    	        content: '' +
 	    	        '<form action="" class="formName">' +
 	    	        '<div class="form-group">' +
-	    	        '<label> 车牌号 </label>' +
-	    	        '<input id="license" type="text" value="'+item.license+'" class="name form-control" required />' +
-	    	        '<label> 维护状态 </label>' +
-	    	        '<input id="maintenance" type="text" value="'+item.maintenance+'" class="name form-control" required />' +
-	    	        '<label> 使用状态 </label>' +
-	    	        '<input id="useState" type="text" value="'+item.useState+'" class="name form-control" required />' +
-	    	        '<label> 停车位 </label>' +
-	    	        '<input id="parkingSpace" type="text" value="'+item.parkingSpace+'" class="name form-control" required />' +
+	    	        '<label> 职工 </label>' +
+	    	        '<input id="empId" type="text" value="'+item.empId+'" class="name form-control" required />' +
+	    	        '<label> 内容 </label>' +
+	    	        '<input id="buycontent" type="text" value="'+item.content+'" class="name form-control" required />' +
+	    	        '<label> 请购时间 </label>' +
+	    	        '<input id="buyTime" type="text" value="'+item.buyTime+'" class="name form-control" required />' +
+	    	        '<label> 处理状态 </label>' +
+	    	        '<input id="state" type="text" value="'+item.state+'" class="name form-control" required />' +
 	    	        '</div>' +
 	    	        '</form>',
 	    	        buttons: {
@@ -215,25 +212,25 @@
 	    	                text: '提交',
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
-	    	                	var license=$("#license").val();
-    							var maintenance=$("#maintenance").val();
-    							var useState=$("#useState").val();
-    							var parkingSpace=$("#parkingSpace").val();
-	    	                    if(!license||!maintenance||!useState||!parkingSpace){
+	    	                	var empId=$("#empId").val();
+    							var buycontent=$("#buycontent").val();
+    							var buyTime=$("#buyTime").val();
+    							var state=$("#state").val();
+	    	                    if(!empId||!buycontent||!buyTime||!state){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
 	    	                  //发送编辑请求 
     						
 	    	                  axios({
-    						        	url:'[[@{/car/updateByCarId}]]',
+    						        	url:'[[@{/officeSuppliesBuy/updateByOsbId}]]',
     						        	method:'post',
     						        	data:{
-    						        			"carId":item.carId,
-    						        			"license":license,
-    						        			"maintenance":maintenance,
-    						        			"useState":useState,
-    						        			"parkingSpace":parkingSpace
+    						        			"osbId":item.osbId,
+    						        			"empId":empId,
+    						        			"content":buycontent,
+    						        			"buyTime":buyTime,
+    						        			"state":state
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);
@@ -255,14 +252,14 @@
 	    	        content: '' +
 	    	        '<form action="" class="formName">' +
 	    	        '<div class="form-group">' +
-	    	        '<label> 车牌号 </label>' +
-	    	        '<input id="license" type="text" class="name form-control" required />' +
-	    	        '<label> 维护状态 </label>' +
-	    	        '<input id="maintenance" type="text" class="name form-control" required />' +
-	    	        '<label> 使用状态 </label>' +
-	    	        '<input id="useState" type="text" class="name form-control" required />' +
-	    	        '<label> 停车位 </label>' +
-	    	        '<input id="parkingSpace" type="text" class="name form-control" required />' +
+	    	        '<label> 职工 </label>' +
+	    	        '<input id="empId" type="text" class="name form-control" required />' +
+	    	        '<label> 内容 </label>' +
+	    	        '<input id="buycontent" type="text" class="name form-control" required />' +
+	    	        '<label> 请购时间 </label>' +
+	    	        '<input id="buyTime" type="text" class="name form-control" required />' +
+	    	        '<label> 处理状态 </label>' +
+	    	        '<input id="state" type="text" class="name form-control" required />' +
 	    	        '</div>' +
 	    	        '</form>',
 	    	        buttons: {
@@ -270,24 +267,23 @@
 	    	                text: '提交',
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
-	    	                	var license=$("#license").val();
-    							var maintenance=$("#maintenance").val();
-    							var useState=$("#useState").val();
-    							var parkingSpace=$("#parkingSpace").val();
-    							if(!license||!maintenance||!useState||!parkingSpace){
+	    	                	var empId=$("#empId").val();
+    							var buycontent=$("#buycontent").val();
+    							var buyTime=$("#buyTime").val();
+    							var state=$("#state").val();
+	    	                    if(!empId||!buycontent||!buyTime||!state){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
 	    	                  //发送添加请求 
 	    	                  axios({
-    						        	url:'[[@{/car/insert}]]',
+    						        	url:'[[@{/officeSuppliesBuy/insert}]]',
     						        	method:'post',
     						        	data:{
-    						        			
-    						        			"license":license,
-    						        			"maintenance":maintenance,
-    						        			"useState":useState,
-    						        			"parkingSpace":parkingSpace
+						        			"empId":empId,
+						        			"content":buycontent,
+						        			"buyTime":buyTime,
+						        			"state":state
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);

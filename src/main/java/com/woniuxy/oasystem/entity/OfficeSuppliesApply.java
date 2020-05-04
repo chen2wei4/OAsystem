@@ -7,6 +7,10 @@ package com.woniuxy.oasystem.entity;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +29,8 @@ private Integer osaId;//主键
 private Integer osNumber;//用品编号
 private Integer empId;//职工id
 private Integer number;//数量
+@DateTimeFormat(pattern = "yyyy-MM-dd")
+@JsonFormat(pattern = "yyyy-MM-dd")
 private Date applyTime;//申请时间
 private String review;//审核状态
 private Integer flag;//软删除

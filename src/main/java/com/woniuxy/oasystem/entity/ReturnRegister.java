@@ -7,6 +7,10 @@ package com.woniuxy.oasystem.entity;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +28,8 @@ public class ReturnRegister {
 	private Integer rrId;//主键
 	private Integer empId;//员工id
 	private String license;//车牌
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date returnTime;//归还时间
 	private String maintenance;//维护
 	private String place;//地点

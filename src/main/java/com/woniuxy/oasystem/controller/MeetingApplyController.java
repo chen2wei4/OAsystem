@@ -18,6 +18,7 @@ import com.woniuxy.oasystem.entity.Meeting;
 import com.woniuxy.oasystem.entity.MeetingApply;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.PageBean;
+import com.woniuxy.oasystem.entity.Vo;
 import com.woniuxy.oasystem.service.CarApplyService;
 import com.woniuxy.oasystem.service.CarService;
 import com.woniuxy.oasystem.service.MeetingApplyService;
@@ -45,14 +46,17 @@ public class MeetingApplyController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	public CommonResult<PageBean<MeetingApply>> findAll(@RequestBody MeetingApply meetingApply,Integer pageIndex) {
-		System.out.println(meetingApply);
-		if (pageIndex == null) {
-			pageIndex = 1;
+	public CommonResult<PageBean<MeetingApply>> findAll(@RequestBody Vo<MeetingApply> vo) {
+		System.out.println(vo.t);
+		if(vo.t==null) {
+			vo.t = new MeetingApply();
 		}
-		int pageSize = 10;
+		if (vo.pageIndex == null) {
+			vo.pageIndex = 1;
+		}
+		int pageSize = 3;
 		try {
-			PageBean<MeetingApply> pb = meetingApplyService.findAllByPage(meetingApply, pageIndex, pageSize);
+			PageBean<MeetingApply> pb = meetingApplyService.findAllByPage(vo.t,vo.pageIndex, pageSize);
 			return new CommonResult<PageBean<MeetingApply>>(200,"ok",pb);
 		} catch (Exception e) {
 			e.printStackTrace();

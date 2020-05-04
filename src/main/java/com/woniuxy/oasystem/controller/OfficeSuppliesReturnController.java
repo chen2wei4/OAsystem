@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+import com.woniuxy.oasystem.entity.Car;
 import com.woniuxy.oasystem.entity.OfficeSuppliesReturn;
 import com.woniuxy.oasystem.entity.PageBean;
-
+import com.woniuxy.oasystem.entity.Vo;
 import com.woniuxy.oasystem.service.OfficeSuppliesReturnService;
 import com.woniuxy.oasystem.util.CommonResult;
 
@@ -40,14 +40,17 @@ public class OfficeSuppliesReturnController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	public CommonResult<PageBean<OfficeSuppliesReturn>> findAll(@RequestBody OfficeSuppliesReturn officeSuppliesReturn,Integer pageIndex) {
-	
-		if (pageIndex == null) {
-			pageIndex = 1;
+	public CommonResult<PageBean<OfficeSuppliesReturn>> findAll(@RequestBody Vo<OfficeSuppliesReturn> vo) {
+		System.out.println(vo.t);
+		if(vo.t==null) {
+			vo.t = new OfficeSuppliesReturn();
+		}
+		if (vo.pageIndex == null) {
+			vo.pageIndex = 1;
 		}
 		int pageSize = 3;
 		try {
-			PageBean<OfficeSuppliesReturn> pb = officeSuppliesReturnService.findAllByPage(officeSuppliesReturn, pageIndex, pageSize);
+			PageBean<OfficeSuppliesReturn> pb = officeSuppliesReturnService.findAllByPage(vo.t, vo.pageIndex, pageSize);
 			return new CommonResult<PageBean<OfficeSuppliesReturn>>(200,"ok",pb);
 		} catch (Exception e) {
 			return new CommonResult<PageBean<OfficeSuppliesReturn>>(500,"error",null);

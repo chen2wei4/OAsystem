@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.woniuxy.oasystem.entity.Car;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.OfficeSuppliesBuy;
 import com.woniuxy.oasystem.entity.PageBean;
+import com.woniuxy.oasystem.entity.Vo;
 import com.woniuxy.oasystem.service.OfficeSuppliesBuyService;
 import com.woniuxy.oasystem.service.OfficeSuppliesService;
 import com.woniuxy.oasystem.util.CommonResult;
@@ -39,14 +41,17 @@ public class OfficeSuppliesBuyController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	public CommonResult<PageBean<OfficeSuppliesBuy>> findAll(@RequestBody OfficeSuppliesBuy officeSuppliesBuy,Integer pageIndex) {
-		System.out.println(officeSuppliesBuy);
-		if (pageIndex == null) {
-			pageIndex = 1;
+	public CommonResult<PageBean<OfficeSuppliesBuy>> findAll(@RequestBody Vo<OfficeSuppliesBuy> vo) {
+		System.out.println(vo.t);
+		if(vo.t==null) {
+			vo.t = new OfficeSuppliesBuy();
+		}
+		if (vo.pageIndex == null) {
+			vo.pageIndex = 1;
 		}
 		int pageSize = 3;
 		try {
-			PageBean<OfficeSuppliesBuy> pb = officeSuppliesBuyService.findAllByPage(officeSuppliesBuy, pageIndex, pageSize);
+			PageBean<OfficeSuppliesBuy> pb = officeSuppliesBuyService.findAllByPage(vo.t, vo.pageIndex, pageSize);
 			return new CommonResult<PageBean<OfficeSuppliesBuy>>(200,"ok",pb);
 		} catch (Exception e) {
 			e.printStackTrace();

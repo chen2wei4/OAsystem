@@ -17,6 +17,7 @@ import com.woniuxy.oasystem.entity.CarApply;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.PageBean;
 import com.woniuxy.oasystem.entity.ReturnRegister;
+import com.woniuxy.oasystem.entity.Vo;
 import com.woniuxy.oasystem.service.CarApplyService;
 import com.woniuxy.oasystem.service.CarService;
 import com.woniuxy.oasystem.service.OfficeSuppliesService;
@@ -43,14 +44,17 @@ public class ReturnRegisterController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	public CommonResult<PageBean<ReturnRegister>> findAll(@RequestBody ReturnRegister returnRegister,Integer pageIndex) {
-		System.out.println(returnRegister);
-		if (pageIndex == null) {
-			pageIndex = 1;
+	public CommonResult<PageBean<ReturnRegister>> findAll(@RequestBody Vo<ReturnRegister> vo) {
+		System.out.println(vo.t);
+		if(vo.t==null) {
+			vo.t = new ReturnRegister();
 		}
-		int pageSize = 10;
+		if (vo.pageIndex == null) {
+			vo.pageIndex = 1;
+		}
+		int pageSize = 3;
 		try {
-			PageBean<ReturnRegister> pb = returnRegisterService.findAllByPage(returnRegister, pageIndex, pageSize);
+			PageBean<ReturnRegister> pb = returnRegisterService.findAllByPage(vo.t, vo.pageIndex, pageSize);
 			return new CommonResult<PageBean<ReturnRegister>>(200,"ok",pb);
 		} catch (Exception e) {
 			e.printStackTrace();

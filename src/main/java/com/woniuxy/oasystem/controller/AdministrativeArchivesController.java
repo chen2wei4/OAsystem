@@ -16,6 +16,7 @@ import com.woniuxy.oasystem.entity.AdministrativeArchives;
 import com.woniuxy.oasystem.entity.Car;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.PageBean;
+import com.woniuxy.oasystem.entity.Vo;
 import com.woniuxy.oasystem.service.AdministrativeArchivesService;
 import com.woniuxy.oasystem.service.CarService;
 import com.woniuxy.oasystem.service.OfficeSuppliesService;
@@ -41,14 +42,17 @@ public class AdministrativeArchivesController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	public CommonResult<PageBean<AdministrativeArchives>> findAll(@RequestBody AdministrativeArchives administrativeArchives,Integer pageIndex) {
-		System.out.println(administrativeArchives);
-		if (pageIndex == null) {
-			pageIndex = 1;
+	public CommonResult<PageBean<AdministrativeArchives>> findAll(@RequestBody Vo<AdministrativeArchives> vo) {
+		
+		if(vo.t==null) {
+			vo.t = new AdministrativeArchives();
 		}
-		int pageSize = 10;
+		if (vo.pageIndex == null) {
+			vo.pageIndex = 1;
+		}
+		int pageSize = 3;
 		try {
-			PageBean<AdministrativeArchives> pb = administrativeArchivesService.findAllByPage(administrativeArchives, pageIndex, pageSize);
+			PageBean<AdministrativeArchives> pb = administrativeArchivesService.findAllByPage(vo.t, vo.pageIndex, pageSize);
 			return new CommonResult<PageBean<AdministrativeArchives>>(200,"ok",pb);
 		} catch (Exception e) {
 			e.printStackTrace();
