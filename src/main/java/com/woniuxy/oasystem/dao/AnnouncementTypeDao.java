@@ -19,12 +19,8 @@ public interface AnnouncementTypeDao {
 	public void deleteAnnouncementType(Integer id);
 	//条件查询公告类别
 	public List<AnnouncementType> selectAnnouncementTypeByType(@Param(value="pagelimit")Integer pagelimit, @Param(value="pageSize")Integer pageSize, @Param(value="antype")AnnouncementType antype);
-	//通过ID查询公告类别(查询当前公告类别下所有公告)
-	public AnnouncementType selectAnnouncementTypeById(Integer id);
 	//修改公告类别名称
 	public void updateAnnouncementTypeById(AnnouncementType antype);
-	//查询公告类别数量
-	public Integer selectAnnouncementTypeCount();
 	/**
 	 * TODO
 	 * @param antype

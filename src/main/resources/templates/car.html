@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>车辆管理</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<!--对话框-->
+<link rel="stylesheet" th:href="@{/js/jconfirm/jquery-confirm.min.css}">
+
+<script th:src="@{/js/vue.js}"></script>
+<script th:src="@{/js/axios.js}"></script>
+</head>
+
+<body>
+	<div class="lyear-layout-web">
+		<div class="lyear-layout-container">
+			<!--左侧导航-->
+
+			<!--End 左侧导航-->
+
+			<!--头部信息-->
+
+			<!--End 头部信息-->
+
+			<!--页面主要内容-->
+			<main class="lyear-layout-content" id="content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-toolbar clearfix">
+								<form class="pull-right search-bar" method="get" action="#!" role="form">
+				                  <div class="input-group">
+				                    <div class="input-group-btn">
+				                      
+				                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" 
+				                      	aria-haspopup="true" aria-expanded="false" data-field="license">
+				                      		车牌 <span class="caret"></span>
+				                      </button>
+				                      <ul class="dropdown-menu" @click="turn()">
+				                        <li> <a tabindex="-1" href="#" data-field="license">车牌</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="maintenance">维护状态</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="useState">使用状态</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="parkingSpace">停车位</a> </li>
+				                      </ul>
+				                    </div>
+				                    <input type="text" class="form-control" id="condition" data-field="license" name="keyword" placeholder="请输入" @change="search()">
+				                  </div>
+				                </form>
+								<div class="toolbar-btn-action">
+									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
+										class="mdi mdi-plus"></i> 新增</a> <a class="btn btn-danger"
+										href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+								</div>
+							</div>
+							<!--正文-->
+							<div class="card-body">
+								<!--内容-->
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead>
+											<tr>
+												<th><label class="lyear-checkbox checkbox-primary">
+														<input type="checkbox" id="check-all"><span></span>
+												</label></th>
+												<th>车牌</th>
+												<th>维护状态</th>
+												<th>使用状态</th>
+												<th>停车位</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="item in list">
+												<td><label class="lyear-checkbox checkbox-primary">
+														<input type="checkbox" name="ids[]" value="item.carId"><span></span>
+												</label></td>
+												<td>{{item.license}}</td>
+												<td>{{item.maintenance}}</td>
+												<td>{{item.useState}}</td>
+												<td>{{item.parkingSpace}}</td>
+												<td>
+													<div class="btn-group">
+														<a class="btn btn-xs btn-default " href="#!"
+															title="编辑" data-toggle="tooltip" @click="update(item,pb.pageIndex)"><i class="mdi mdi-pencil"></i></a>
+														<a class="btn btn-xs btn-default " href="#!" title="删除"
+															data-toggle="tooltip" @click="del(item.carId,pb.pageIndex)">
+														<i class="mdi mdi-window-close"></i></a>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!--页码-->
+								<ul class="pagination">
+									<li :class="pb.pageIndex==1?'disabled':''"><a href="#"
+										@click="(pb.pageIndex-1)>=1?send(pb.pageIndex-1):'' ">«</a></li>
+									<li :class="pb.pageIndex==i?'active':''"
+										v-for="i in pb.pageEnd"><a href="#" @click="send(i)">{{i}}</a>
+									</li>
+									<li :class="pb.pageIndex==pb.totalPage?'disabled':''"><a
+										href="#"
+										@click="(pb.pageIndex+1)<=pb.totalPage?send(pb.pageIndex+1):''">»</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</main>
+			<!--End 页面主要内容-->
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/main.min.js}"></script>
+	<!--对话框-->
+	<script th:src="@{/js/jconfirm/jquery-confirm.min.js}"></script>
+
+	<script type="text/javascript">
+	var list = new Vue({
+	    el:"#content",
+	    data:{
+	      pb:"",//页码信息
+	      list:[]//数据
+	    },
+	    methods:{
+	      //展示所有数据
+	    	send(pageIndex){
+	        axios({
+	        	url:'[[@{/car/list}]]',
+	        	method:'post',
+	        	data:{ "pageIndex":pageIndex }
+	        }).then(res=>{
+	        	this.list=res.data.data.beanList;
+	        	this.pb=res.data.data
+	        })
+	      },
+	      //根据ID删除
+	      del(carId,pageIndex){
+	    		var that=this;    
+	    	  	//弹出确认框
+	    		$.alert({
+	    		        title: '',
+	    		        content: '确认删除吗',
+	    				buttons: {
+	    					confirm: {
+	    						text: '确认',
+	    						btnClass: 'btn-primary',
+	    						action: function(){
+	    							//发送删除请求 
+	    							axios({
+	    						        	url:'[[@{/car/deleteByCarId?carId=}]]'+carId,
+	    						        	method:'post'
+	    						        }).then(res=>{
+	    						        	alert(res.data.message);
+	    						        	that.send(pageIndex);
+	    						        })
+	    						}
+	    					},
+	    					cancel: {
+	    						text: '取消',
+	    						action: function () {
+	    		                    
+	    						}
+	    					}
+	    				}
+	    		    });
+	      },
+	      //根据id编辑
+	      update(item,pageIndex){
+	    	  var that=this;
+	    	  $.confirm({
+	    	        title: '编辑',
+	    	        content: '' +
+	    	        '<form action="" class="formName">' +
+	    	        '<div class="form-group">' +
+	    	        '<label> 车牌号 </label>' +
+	    	        '<input id="license" type="text" value="'+item.license+'" class="name form-control" required />' +
+	    	        '<label> 维护状态 </label>' +
+	    	        '<input id="maintenance" type="text" value="'+item.maintenance+'" class="name form-control" required />' +
+	    	        '<label> 使用状态 </label>' +
+	    	        '<input id="useState" type="text" value="'+item.useState+'" class="name form-control" required />' +
+	    	        '<label> 停车位 </label>' +
+	    	        '<input id="parkingSpace" type="text" value="'+item.parkingSpace+'" class="name form-control" required />' +
+	    	        '</div>' +
+	    	        '</form>',
+	    	        buttons: {
+	    	        	confirm: {
+	    	                text: '提交',
+	    	                btnClass: 'btn-blue',
+	    	                action: function () {
+	    	                	var license=$("#license").val();
+    							var maintenance=$("#maintenance").val();
+    							var useState=$("#useState").val();
+    							var parkingSpace=$("#parkingSpace").val();
+	    	                    if(!license||!maintenance||!useState||!parkingSpace){
+	    	                        $.alert('请输入完整信息');
+	    	                        return false;
+	    	                    }
+	    	                  //发送编辑请求 
+    						
+	    	                  axios({
+    						        	url:'[[@{/car/updateByCarId}]]',
+    						        	method:'post',
+    						        	data:{
+    						        			"carId":item.carId,
+    						        			"license":license,
+    						        			"maintenance":maintenance,
+    						        			"useState":useState,
+    						        			"parkingSpace":parkingSpace
+    						        		}
+    						        }).then(res=>{
+    						        	alert(res.data.message);
+    						        	that.send(pageIndex);
+    						        })
+	    	                }
+	    	            },
+	    	            cancel: {
+	    	                text: '取消'
+	    	            },
+	    	        }
+	    	    });
+	      },
+	      //新增数据
+	      insert(pageEnd){
+	    	  var that=this;
+	    	  $.confirm({
+	    	        title: '添加',
+	    	        content: '' +
+	    	        '<form action="" class="formName">' +
+	    	        '<div class="form-group">' +
+	    	        '<label> 车牌号 </label>' +
+	    	        '<input id="license" type="text" class="name form-control" required />' +
+	    	        '<label> 维护状态 </label>' +
+	    	        '<input id="maintenance" type="text" class="name form-control" required />' +
+	    	        '<label> 使用状态 </label>' +
+	    	        '<input id="useState" type="text" class="name form-control" required />' +
+	    	        '<label> 停车位 </label>' +
+	    	        '<input id="parkingSpace" type="text" class="name form-control" required />' +
+	    	        '</div>' +
+	    	        '</form>',
+	    	        buttons: {
+	    	        	confirm: {
+	    	                text: '提交',
+	    	                btnClass: 'btn-blue',
+	    	                action: function () {
+	    	                	var license=$("#license").val();
+    							var maintenance=$("#maintenance").val();
+    							var useState=$("#useState").val();
+    							var parkingSpace=$("#parkingSpace").val();
+    							if(!license||!maintenance||!useState||!parkingSpace){
+	    	                        $.alert('请输入完整信息');
+	    	                        return false;
+	    	                    }
+	    	                  //发送添加请求 
+	    	                  axios({
+    						        	url:'[[@{/car/insert}]]',
+    						        	method:'post',
+    						        	data:{
+    						        			
+    						        			"license":license,
+    						        			"maintenance":maintenance,
+    						        			"useState":useState,
+    						        			"parkingSpace":parkingSpace
+    						        		}
+    						        }).then(res=>{
+    						        	alert(res.data.message);
+    						        	that.send(pageEnd);
+    						        })
+	    	                }
+	    	            },
+	    	            cancel: {
+	    	                text: '取消'
+	    	            },
+	    	        }
+	    	    });
+	      },
+	      //模糊查询
+	      turn(){
+	    	 //查询条件切换
+	    	  $('.search-bar .dropdown-menu a').click(function() {
+			        var field = $(this).data('field');
+			        $('#condition').attr('data-field',field);
+			        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+			    });
+	      },
+	      search(){
+	    	  var that=this;
+	    	  //获取查询条件
+	    	  var sort = $("#condition").attr('data-field');
+		  	  var param = $("#condition").val();
+		  	  var license,maintenance,useState,parkingSpace;
+		  	  if(sort=="license"){license=param};
+		  	  if(sort=="maintenance"){maintenance=param};
+		  	  if(sort=="useState"){useState=param};
+		  	  if(sort=="parkingSpace"){parkingSpace=param};
+		  	//发送查询请求 
+              axios({
+			        	url:'[[@{/car/list}]]',
+			        	method:'post',
+			        	data:{
+			        			"t":{
+			        				"license":license,
+				        			"maintenance":maintenance,
+				        			"useState":useState,
+				        			"parkingSpace":parkingSpace
+			        			}
+			        		}
+			        }).then(res=>{
+			        	this.list=res.data.data.beanList;
+			        	this.pb=res.data.data
+			        })	 
+	      }
+	    },
+	    //页面加载时调用
+	    created(){
+	    	this.send(1);
+	    }
+	  })
+
+
+	</script>
+</body>
+</html>

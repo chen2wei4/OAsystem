@@ -3,13 +3,8 @@ package com.woniuxy.oasystem.controller;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,18 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.woniuxy.oasystem.entity.AnnouncementFile;
-import com.woniuxy.oasystem.entity.AnnouncementMessage;
 import com.woniuxy.oasystem.entity.ResponseResult;
 import com.woniuxy.oasystem.service.AnnouncementFileService;
-import com.woniuxy.oasystem.service.AnnouncementService;
-import com.woniuxy.oasystem.service.AnnountcementTypeService;
 
 @Controller
 public class AnnouncementFileController {
-	@Autowired
-	AnnouncementService announcementService;
-	@Autowired
-	AnnountcementTypeService annountcementTypeService;
+
+
 	@Autowired
 	AnnouncementFileService announcementFileService;
 

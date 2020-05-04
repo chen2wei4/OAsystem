@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @Description  TODO
  * @author liuwenpeng
  * @changeLog 	1. 创建 (2020年4月29日 上午10:46:35 [liuwenpeng])
- * 				2.
+ * 				2.文件上传工具类
  */
 public class FileUtil {
 
@@ -23,7 +23,7 @@ public class FileUtil {
 	 * @param string
 	 * @return
 	 * @changeLog 	1. 创建 (2020年4月29日 上午10:46:59 [liuwenpeng])
-	 *              2.文件上传工具类
+	 *              2.文件上传工具方法
 	 */
 	public static String uploadFile(MultipartFile file, String uploadPath) {
 		//如果文件是空，返回空

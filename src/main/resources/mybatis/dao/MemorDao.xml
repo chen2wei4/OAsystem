@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.MemorDao">
+	<insert id="addMemor">
+		insert into memor (memor_from,memor_content,memor_time,
+		memor_type) 
+		values 
+		(#{memorFrom.empId},#{memorContent},#{memorTime},#{memorType})
+	</insert>
+	
+	<delete id="deleteMemor">
+		delete from memor where memor_id=#{memorId}
+	</delete>
+	
+	<update id="changeMemor">
+		update memor
+		<trim prefix="set" suffixOverrides=",">
+			<if test="memorContent!='' and memorContent!=null">
+					memor_content=#{memorContent},
+			</if>
+			<if test="memorType!='' and memorType!=null">
+					memor_type=#{memorType},
+			</if>
+		</trim>	
+		where memor_id=#{memorId}
+	</update>
+	
+	<select id="queryMemor" resultType="Memor">
+		select*from memor
+		<where>
+				1=1
+			<if test="memorId!='' and memorId!=null">
+				,memor_id=#{memorId}
+			</if>
+			<if test="roomArea!='' and roomArea!=null">
+				,room_area like "%#{roomId}%"
+			</if>
+		</where>
+	</select>
+</mapper>
