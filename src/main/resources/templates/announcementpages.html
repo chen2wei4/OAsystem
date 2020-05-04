@@ -65,7 +65,7 @@
 											placeholder="请输入公告名称" />
 									 <button class="btn btn-label btn-primary" type="submit"><label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认查询</button>		
 								</form>
-								<div class="toolbar-btn-action">
+								<div class="toolbar-btn-action" th:if="${session.emp.role.roleId==1}">
 									<a class="btn btn-warning m-r-5"
 										th:href="@{/anmanage(pageIndex=1)}"><i
 										class="mdi mdi-settings">管理</i></a>

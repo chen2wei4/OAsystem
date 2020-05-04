@@ -27,7 +27,6 @@ public class AnnouncementFileController {
 
 	@RequestMapping("/downloadFile")
 	public String downloadFile2(AnnouncementFile annf, HttpServletResponse response) {
-		
 		String downloadFilePath = annf.getAfAddress();// 被下载的文件在服务器中的路径,
 		String fileName = annf.getAfName();// 被下载文件的名称
 		File file = new File(downloadFilePath);

@@ -31,6 +31,7 @@ public class AnnouncementWatchedController {
 	// 查看观看人员名单
 	@RequestMapping("/announcementwatched")
 	public String AnnouncementWatched(Announcement ann,Model model) {
+		try {
 		// 通过Id查询观看名单
 		List<AnnouncementWatched> showWatchedMessage = announcementWatchedService.ShowWatchedMessage(ann.getAnId());
 		Integer count=announcementWatchedService.ShowCountById(ann.getAnId());
@@ -39,6 +40,12 @@ public class AnnouncementWatchedController {
 		model.addAttribute("ancontent", ann);
 		model.addAttribute("WatchedMessage", showWatchedMessage);
 		return "announcementcontentPeoplelist";
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
 	}
 
 }

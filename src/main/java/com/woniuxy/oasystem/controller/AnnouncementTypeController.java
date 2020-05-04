@@ -25,15 +25,23 @@ public class AnnouncementTypeController {
 	// 添加公告前的查看所有公告类别
 	@RequestMapping("/selecttypeByAtId")
 	public String addAnShowAllantype(AnnouncementType antype,Model model) {
+		try {
 		// 把公告分类查询出来
 		List<AnnouncementType> types = announcementTypeService.ShowAllAnnountcementTypes();
 		model.addAttribute("antypes", types);
 		return "addannouncement";
-	}
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
+		}
 
 	// 查看所有公告类别发到管理页面
 	@RequestMapping("/selectallantype")
 	public String ShowAllantypeByType(AnnouncementType antype,Integer pageIndex,Model model) {
+		try {
 		if (pageIndex == null) {
 			pageIndex = 1;
 		}
@@ -46,47 +54,86 @@ public class AnnouncementTypeController {
 		//把查询条件存入回显
 		model.addAttribute("condition", antype);
 		return "announcementtypemanage";
-	}
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
+		}
 	// 添加类别公告
 	@PostMapping("/addantype")
 	public String addannouncementType(AnnouncementType antype, Model model) {
+		try {
 		// 設置添加時的屬性
 		antype.setAtFlag(true);
 		announcementTypeService.addAnType(antype);
 		return "redirect:/selectallantype";
-
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
 	}
 
 	// 修改公告类别前的查询
 	@RequestMapping("/updantype")
 	public String updateShowAnTypeById(AnnouncementType at, Model model) {
+	try {
 		// 查询公告类别信息
 		AnnouncementType antype=announcementTypeService.showantype(at.getAtId());
 		model.addAttribute("antypeInfo", antype);
 		return "updateannouncementtype";
+	}catch(Exception e) {
+		e.printStackTrace();
+		//发生异常打到错误页
+		return "lyear_pages_error";
+				
+	}
 	}
 
 	// 修改公告类别
 	@PutMapping("/updateantype")
 	public String updateAnnouncement(AnnouncementType anType) {
+		try {
 		// 修改公告
 		announcementTypeService.UpdateAntypeById(anType);
 		return "redirect:/selectallantype";
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
 	}
 	
 // 	软删除公告类别
 @RequestMapping("/delantype")
 public String delAnnouncementType(AnnouncementType at, Model model) {
-		// 删除
+	try {	
+	// 删除
 		announcementTypeService.DeleteAntypeById(at.getAtId());
 		return "redirect:/selectallantype";
+	}catch(Exception e) {
+		e.printStackTrace();
+		//发生异常打到错误页
+		return "lyear_pages_error";
+				
+	}
 }
 //	启用公告类别
 @RequestMapping("/startantype")
 public String startAnnouncementType(AnnouncementType at, Model model) {
-	System.out.println(at);
+try {
 	announcementTypeService.StartAntypeById(at.getAtId());
 	return "redirect:/selectallantype";
+}catch(Exception e) {
+	e.printStackTrace();
+	//发生异常打到错误页
+	return "lyear_pages_error";
+			
+}
 }
 	
 }

@@ -38,6 +38,7 @@ public class AnnouncementMessageController {
 	 */
 	@RequestMapping("/insertanmessage")
 	public String announcementContent(HttpServletRequest req, AnnouncementMessage am, Model model) {
+		try {
 		// 设置添加到数据库的数据
 		am.setAmFlag(true);
 		am.setAmTime(new Date());
@@ -62,7 +63,12 @@ public class AnnouncementMessageController {
 		model.addAttribute("ancontent", announcement);
 		model.addAttribute("messages", messages);
 		return "announcementcontent";
-
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
 	}
 
 	/*
