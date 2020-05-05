@@ -32,4 +32,12 @@ public interface AnnouncementFileDao {
 	 */
 	public List<AnnouncementFile> selectFileByAnId(Integer anId);
 
+	/**
+	 * TODO
+	 * @param afanId
+	 * @changeLog 	1. 创建 (2020年5月4日 下午2:56:44 [liuwenpeng])
+	 *              2.软删除公告文件
+	 */
+	public void deleteFileById(Integer afId);
+
 }

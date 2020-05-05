@@ -1,7 +1,7 @@
 package com.woniuxy.oasystem.entity;
 
 import java.util.Date;
-
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +23,9 @@ public class Announcement {
 	private Boolean anFlag;
 	private AnnouncementType atype;
 	private Emp emp;
+	private Boolean iswatched;
+	//公告观看人数
+	private Integer countwatch;
+	//公告观看人员信息列表
+	private List<AnnouncementWatched> watchedlist;
 }

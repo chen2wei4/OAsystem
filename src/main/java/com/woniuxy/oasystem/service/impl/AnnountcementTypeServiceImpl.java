@@ -21,9 +21,24 @@ public class AnnountcementTypeServiceImpl implements AnnountcementTypeService {
 
 	// 展示所有公告分类
 	@Override
-	public List<AnnouncementType> ShowAllAnnountcementType() {
-		List<AnnouncementType> alltype = announcementTypeDao.selectAllAnnouncementType();
-		return alltype;
+	public PageBean<AnnouncementType> ShowAllAnnountcementType(AnnouncementType antype, Integer pageIndex, Integer pageSize) {
+		// 分页类设置页码
+				pagebean.setPageIndex(pageIndex);
+				// 分页类设置每页展示数
+				pagebean.setPageSize(pageSize);
+				// 分页类设置总条数
+				Integer count = announcementTypeDao.selectAnnouncementCountByCondition(antype);
+				pagebean.setTotalRecord(count);
+				// 设置总页数
+				Integer totalrecord = pagebean.getTotalRecord();
+				pagebean.setTotalPage((totalrecord % 10 == 0) ? (totalrecord / 10) : (totalrecord / 10 + 1));
+				// 分页设置开始和结束页
+				pagebean.setPageBeginAndPageEnd();
+				// 设置内容
+				List<AnnouncementType> alltype = announcementTypeDao.selectAnnouncementTypeByType(pageSize*(pageIndex-1),pageSize,antype);
+				pagebean.setBeanList(alltype);
+				System.out.println(pagebean);
+		return pagebean;
 	}
 
 	// 软删除公告类别
@@ -38,36 +53,39 @@ public class AnnountcementTypeServiceImpl implements AnnountcementTypeService {
 		announcementTypeDao.updateAnnouncementTypeById(anType);
 	}
 
-	// 通过ID查询单个公告类别
-	@Override
-	public AnnouncementType ShowAntypeById(Integer id) {
-		AnnouncementType antype = announcementTypeDao.selectAnnouncementTypeById(id);
-		return antype;
-	}
-
 	// 插入新的公告类别
 	@Override
 	public void addAnType(AnnouncementType anType) {
 		announcementTypeDao.insertAnnouncementType(anType);
 	}
 
-	/*
-	 * 分页
+	/* 
+	 * 查询所有启用的类别
 	 */
 	@Override
-	public PageBean<AnnouncementType> ShowAllAnnountcementTypePage(Integer pageIndex, Integer pageSize) {
-		// 分页类设置页码
-		pagebean.setPageIndex(pageIndex);
-		// 分页类设置每页展示数
-		pagebean.setPageSize(pageSize);
-		// 分页类设置总条数
-		pagebean.setTotalRecord(announcementTypeDao.selectAnnouncementTypeCount());
-		// 分页设置开始和结束页
-		pagebean.setPageBeginAndPageEnd();
-		// 设置内容
-		List<AnnouncementType> alltype = announcementTypeDao.selectAllAnnouncementType();
-		pagebean.setBeanList(alltype);
-		return pagebean;
+	public List<AnnouncementType> ShowAllAnnountcementTypes() {
+		List<AnnouncementType> alltype = announcementTypeDao.selectAnnouncementType();
+		return alltype;
+	}
+
+	/* 
+	 * 修改类别前的查询
+	 */
+	@Override
+	public AnnouncementType showantype(Integer atId) {
+		AnnouncementType antype=new AnnouncementType();
+		antype.setAtId(atId);
+		List<AnnouncementType> types = announcementTypeDao.selectAnnouncementTypeByType(0, 1, antype);
+		AnnouncementType type = types.get(0);
+		return type;
+	}
+
+	/* 
+	 * 启用公告类别
+	 */
+	@Override
+	public void StartAntypeById(Integer atId) {
+		announcementTypeDao.StartAnnouncementType(atId);
 	}
 
 }

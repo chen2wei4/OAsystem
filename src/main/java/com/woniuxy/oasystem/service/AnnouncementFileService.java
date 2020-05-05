@@ -25,4 +25,12 @@ public interface AnnouncementFileService {
 	 *              2.查询公告Id下的所有文件
 	 */
 	public List<AnnouncementFile> ShowFiles(Integer anId);
+
+	/**
+	 * TODO
+	 * @param afanId
+	 * @changeLog 	1. 创建 (2020年5月4日 下午2:55:29 [liuwenpeng])
+	 *              2.软删除文件
+	 */
+	public void deleteFileById(Integer afanId);
 }

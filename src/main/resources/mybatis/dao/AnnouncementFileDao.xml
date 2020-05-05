@@ -13,6 +13,10 @@
 	</insert>
 	<!-- 通过公告Id查询文件 -->
 	<select id="selectFileByAnId" resultType="AnnouncementFile">
-		select * from announcement_file where af_an_id=#{anId}
+		select * from announcement_file where af_an_id=#{anId} and af_flag=1
 	</select>
+	<!-- 软删除文件 -->
+	<update id="deleteFileById">
+		update announcement_file set af_flag=0 where af_id=#{afId} 
+	</update>
 </mapper>

@@ -52,25 +52,16 @@
           <div class="col-lg-12">
             <div class="card">
               <div class="card-toolbar clearfix">
-                <form class="pull-right search-bar" method="get" action="#!" role="form">
-                  <div class="input-group">
-                    <div class="input-group-btn">
-                      <input type="hidden" name="search_field" id="search-field" value="title">
-                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
-                      标题 <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">标题</a> </li>
-                        <li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>
-                      </ul>
-                    </div>
-                    <input type="text" class="form-control" value="" name="keyword" placeholder="请输入名称">
-                  </div>
-                </form>
                 <div class="toolbar-btn-action">
                   <a class="btn btn-primary m-r-5" th:href="@{/addaantype}"><i class="mdi mdi-plus"></i>新增公告类别</a>
                 </div>
+                <div class="toolbar-btn-action">
+									<a class="btn btn-danger m-r-5"
+										th:href="@{/anmanage(pageIndex=1)}"><i
+										class="mdi mdi-keyboard-backspace"></i>返回</a>
+								</div>
               </div>
+              	
               <div class="card-body">
                 
                 <div class="table-responsive">
@@ -84,36 +75,56 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr th:each="antype:${antypes}" th:id="${antype.atId}">
+                      <tr th:each="antype:${antypes.beanList}" th:id="${antype.atId}">
                         <td>[[${antype.atName}]]</td>
                         <td>[[${antype.atDescription}]]</td>
-                        <td><font class="text-success">正常</font></td>
+                        <td><font class="text-success" th:if="${antype.atFlag}">启用</font>
+							<font class="alert-link" th:if="${not antype.atFlag}">禁用</font></td>
                         <td>
                           <div class="btn-group">
-                            <a class="btn btn-xs btn-default" href="#" th:onclick="'javascript:doDelete('+${antype.atId}+')'" title="启用" data-toggle="tooltip"><i class="mdi mdi-radiobox-blank"></i></a>
-                            <a class="btn btn-xs btn-default" th:href="@{/updantype/}+${antype.atId}" title="编辑" data-toggle="tooltip"><i class="mdi mdi-lead-pencil"></i></a>
-                            <a class="btn btn-xs btn-default" href="#" th:onclick="'javascript:doDelete('+${antype.atId}+')'" title="禁用" data-toggle="tooltip"><i class="mdi mdi-close"></i></a>
-                          </div>
+                            <a  th:if="${not antype.atFlag}" class="btn btn-xs btn-default" href="#" th:onclick="'javascript:doStart('+${antype.atId}+')'" title="启用" data-toggle="tooltip"><i class="mdi mdi-radiobox-blank"></i></a>
+                            <a  th:if="${antype.atFlag}" class="btn btn-xs btn-default" href="#" th:onclick="'javascript:doDelete('+${antype.atId}+')'" title="禁用" data-toggle="tooltip"><i class="mdi mdi-close"></i></a>
+							<a class="btn btn-xs btn-default" th:href="@{/updantype(atId=${antype.atId})}" title="编辑" data-toggle="tooltip"><i class="mdi mdi-lead-pencil"></i></a>                         
+</div>
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                <ul class="pagination">
-                  <li class="disabled"><span>«</span></li>
-                  <li class="active"><span>1</span></li>
-                  <li><a href="#1">2</a></li>
-                  <li><a href="#1">3</a></li>
-                  <li><a href="#1">4</a></li>
-                  <li><a href="#1">5</a></li>
-                  <li><a href="#1">6</a></li>
-                  <li><a href="#1">7</a></li>
-                  <li><a href="#1">8</a></li>
-                  <li class="disabled"><span>...</span></li>
-                  <li><a href="#!">14452</a></li>
-                  <li><a href="#!">14453</a></li>
-                  <li><a href="#!">»</a></li>
-                </ul>
+               	<div class="row">
+									<!--文字信息-->
+									<div class="col-md-6">当前第 [[${antypes.pageIndex}]] 页.总共
+										[[${antypes.totalPage}]] 页.一共 [[${antypes.totalRecord}]] 条记录</div>
+									<!--点击分页-->
+									<div class="col-md-6" th:if="${antypes.pageIndex != 0}">
+										<nav aria-label="Page navigation">
+											<ul class="pagination">
+												<!-- 首页 -->
+												<li th:if="${antypes.pageIndex!=1}"><a
+													th:href="@{/selectallantype(pageIndex=1)}">首页</a></li>
+												<!-- 上一页 -->
+												<li th:if="${antypes.pageIndex!=1}"><a
+													th:href="@{/selectallantype(pageIndex=${antypes.pageIndex-1})}"
+													aria-label="Previous">«</a></li>
+												<!--循环遍历连续显示的页面，若是当前页就高亮显示，并且没有链接-->
+												<li
+													th:each="i:${#numbers.sequence(antypes.pageBegin,antypes.pageEnd)}">
+													<a th:href="@{/selectallantype(pageIndex=${i})}" th:text="${i}"
+													th:if="${antypes.PageIndex!=i}"></a> <span
+													th:if="${antypes.PageIndex==i}" th:text="${i}"
+													style="background-color: #C0C0C0"></span>
+												</li>
+												<!--下一页-->
+												<li th:if="${antypes.pageIndex!=antypes.pageEnd}"><a
+													th:href="@{/selectallantype(pageIndex=${antypes.pageIndex+1})}">»</a>
+												</li>
+												<!-- 尾页 -->
+												<li th:if="${antypes.pageIndex!=antypes.pageEnd}"><a
+													th:href="@{/selectallantype(pageIndex=${antypes.totalPage})}">尾页</a></li>
+											</ul>
+										</nav>
+									</div>
+								</div>
        
               </div>
             </div>
@@ -139,14 +150,14 @@ $(function(){
         $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
     });
 });
-function doDelete(atId){
-	if(confirm("确认删除？")){
-		$.get("[[@{/announcementtype/del}]]",{atId:atId},function(d){
-			if(d.stateCode==200){
-			$("#"+atId).remove();
-			}
-			alert(d.message)
-		})
+function doDelete(atId) {
+	if (confirm("确认禁用？")) {
+		window.location.href = "[[@{/delantype}]]" + "?atId=" + atId;
+	}
+}
+function doStart(atId) {
+	if (confirm("确认启用？")) {
+		window.location.href = "[[@{/startantype}]]" + "?atId=" + atId;
 	}
 }
 </script>

@@ -59,11 +59,12 @@
 									<input type="hidden" name="pageIndex" value="1"> <select
 										name="anType" size="1" class="form-control"
 										id="example-select">
-										<option value="" selected="selected">全部分类</option>
-										<option th:each="type:${types}" th:value="${type.atId}">[[${type.atName}]]</option>
+										<option value="" th:selected="${condition.anType==null}">全部分类</option>
+										<option th:each="type:${types}" th:value="${type.atId}"
+											th:selected="${condition.anType==type.atId}">[[${type.atName}]]</option>
 									</select> <input type="hidden" class="form-control"
 										th:value="${session.emp.empId}" name="anEmpId"> <input
-										type="text" class="form-control" value="" name="anName"
+										type="text" class="form-control" th:value="${condition.anName}" name="anName"
 										placeholder="请输入公告名称" />
 									<button class="btn btn-label btn-primary" type="submit">
 										<label><i
@@ -72,15 +73,16 @@
 								</form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5"
-										th:href="@{/updateantype/select}"><i
+										th:href="@{/selectallantype(pageIndex=1)}"><i
 										class="mdi mdi-settings"></i>公告类别管理</a>
 								</div>
 								<div class="toolbar-btn-action">
-									<a class="btn btn-success m-r-5" th:href="@{/addantype/select}"><i
+									<a class="btn btn-success m-r-5" th:href="@{/addan}"><i
 										class="mdi mdi-plus"></i>新增公告</a>
 								</div>
 								<div class="toolbar-btn-action">
-									<a class="btn btn-danger m-r-5" th:href="@{/announcement(pageIndex=1)}"><i
+									<a class="btn btn-danger m-r-5"
+										th:href="@{/announcement(pageIndex=1)}"><i
 										class="mdi mdi-keyboard-backspace"></i>返回</a>
 								</div>
 							</div>
@@ -93,6 +95,7 @@
 												<th>公告类别</th>
 												<th>公告标题</th>
 												<th>发布时间</th>
+												<th>阅读人数</th>
 												<th>操作</th>
 											</tr>
 										</thead>
@@ -101,10 +104,15 @@
 												<td>[[${pa.atype.atName}]]</td>
 												<td>[[${pa.anName}]]</td>
 												<td>[[${#dates.format(pa.anTime,"yyyy--MM--dd")}]]</td>
+												<td>[[${pa.countwatch}]]人
+													<a class="btn btn-xs btn-default"
+															th:href="@{/announcementwatched(anType=${pa.anType},anName=${pa.anName},anId=${pa.anId})}" title="观看名单"
+															data-toggle="tooltip"><i class="mdi mdi-lead-pencil">观看名单</i></a>
+												</td>
 												<td>
 													<div class="btn-group">
 														<a class="btn btn-xs btn-default"
-															th:href="@{/updatean/}+${pa.anId}" title="编辑"
+															th:href="@{/updatean(anId=${pa.anId})}" title="编辑"
 															data-toggle="tooltip"><i class="mdi mdi-lead-pencil"></i></a>
 														<a class="btn btn-xs btn-default" href="#"
 															th:onclick="'javascript:doDelete('+${pa.anId}+')'"
@@ -126,8 +134,7 @@
 											<ul class="pagination">
 												<!-- 首页 -->
 												<li th:if="${page.pageIndex!=1}"><a
-													th:href="@{/anmanage(pageIndex=${page.pageBegin})}">首页</a>
-												</li>
+													th:href="@{/anmanage(pageIndex=1)}">首页</a></li>
 												<!-- 上一页 -->
 												<li th:if="${page.pageIndex!=1}"><a
 													th:href="@{/anmanage(pageIndex=${page.pageIndex-1})}"
@@ -146,7 +153,7 @@
 												</li>
 												<!-- 尾页 -->
 												<li th:if="${page.pageIndex!=page.pageEnd}"><a
-													th:href="@{/anmanage(pageIndex=${page.pageEnd})}">尾页</a></li>
+													th:href="@{/anmanage(pageIndex=${page.totalPage})}">尾页</a></li>
 											</ul>
 										</nav>
 									</div>
@@ -159,11 +166,9 @@
 				</div>
 
 			</div>
-
+ </div>
 			</main>
 			<!--End 页面主要内容-->
-		</div>
-	</div>
 	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
