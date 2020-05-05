@@ -213,7 +213,6 @@
 	<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/main.min.js}"></script>
 	<!--标签插件-->
-<<<<<<< HEAD
 	<script th:src="@{/js/jquery-tags-input/jquery.tagsinput.min.js}"></script>
 	<!--对话框-->
 	<script th:src="@{/js/jconfirm/jquery-confirm.min.js}"></script>
@@ -241,35 +240,6 @@
 			document.body.removeChild(tempForm);
 		}
 	</script>
-=======
-	<script src="js/jquery-tags-input/jquery.tagsinput.min.js"></script>
-	<script type="text/javascript" src="js/main.min.js"></script>
-	<script type="text/javascript">
-	function exportFile(afName,afAddress){ 
-		alert(afName);
-		alert(afAddress);
-			if(confirm="确认下载？"){       
-		var tempForm = document.createElement("form");  
-					  	tempForm.id="download";  
-					  	tempForm.method="post";  
-					  	tempForm.action="[[@{/downloadFile}]]";  
-					  	tempForm.target="";  
-					 		var hideInput = document.createElement("input");  
-					 		hideInput.type="hidden";  
-					 		hideInput.name= "afAddress";
-					 		hideInput.value= afAddress;
-					 		tempForm.appendChild(hideInput);   
-					 		hideInput = document.createElement("input");  
-					 		hideInput.type="hidden";  
-					 		hideInput.name="afName";
-					 		hideInput.value=afName;
-					 		tempForm.appendChild(hideInput);   
-					 		document.body.appendChild(tempForm);  
-					 		tempForm.submit();
-						  document.body.removeChild(tempForm);
-			}     
-		   }
-</script>
->>>>>>> branch 'master' of https://github.com/chen2wei4/OAsystem.git
+
 </body>
 </html>

@@ -45,6 +45,7 @@ public class AnnouncementController {
 		if (pageIndex == null) {
 			pageIndex = 1;
 		}
+		try {
 		// 获取读取的人的信息
 		Emp emp = (Emp) req.getSession().getAttribute("emp");
 		// 分页查询所有公告，同时可以查看是否已经观看
@@ -62,6 +63,12 @@ public class AnnouncementController {
 		// 将类别也传到页面
 		model.addAttribute("types", list);
 		return "announcementpages";
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
 	}
 
 	/*
@@ -69,6 +76,7 @@ public class AnnouncementController {
 	 */
 	@RequestMapping("/ancontent")
 	public String announcementContent(HttpServletRequest req, Announcement an, Model model) {
+		try {
 		// 通过Id查询详细公告内容
 		Announcement announcement = announcementService.ShowContentById(an);
 		// 通过Id查询公告中是否含有附件
@@ -85,7 +93,12 @@ public class AnnouncementController {
 		model.addAttribute("ancontent", announcement);
 		model.addAttribute("messages", messages);
 		return "announcementcontent";
-
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
 	}
 
 	/*
@@ -93,6 +106,7 @@ public class AnnouncementController {
 	 */
 	@RequestMapping("/anmanage")
 	public String announcementByEmp(Announcement an, Integer pageIndex, HttpServletRequest req, Model model) {
+		try {
 		Emp emp = (Emp) req.getSession().getAttribute("emp");
 		an.setAnEmpId(emp.getEmpId());
 		if (pageIndex == null) {
@@ -111,7 +125,12 @@ public class AnnouncementController {
 		// 将类别也传到页面
 		model.addAttribute("types", list);
 		return "announcementmanage";
-
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
 	}
 
 	/*
@@ -119,15 +138,22 @@ public class AnnouncementController {
 	 */
 	@RequestMapping("/delan")
 	public String delAnnouncement(HttpServletRequest req, Integer anId, Model model) {
-		System.out.println(anId);
+		try {
 		announcementService.delAn(anId);
 		return "redirect:/anmanage";
-	}
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
+		}
 
 	// 添加公告
 	@RequestMapping("/addannouncement")
 	public String addannouncement(@RequestParam(value = "files", required = false) MultipartFile[] files,
 			HttpServletRequest req, Announcement ann, Model model) {
+		try {
 		// 添加公告信息到数据库中,同时查出自增列
 		ann.setAnFlag(true);
 		ann.setAnTime(new Date());
@@ -156,7 +182,12 @@ public class AnnouncementController {
 			}
 		}
 		return "redirect:/anmanage";
-
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
 	}
 
 	/*
@@ -164,6 +195,7 @@ public class AnnouncementController {
 	 */
 	@RequestMapping("/updatean")
 	public String updateShowAnById(Announcement an, Model model) { // 查询公告信息 Announcement announcement =
+		try {
 		Announcement announcement = announcementService.ShowContentById(an);
 		List<AnnouncementType> types = annountcementTypeService.ShowAllAnnountcementTypes(); // 查看当前公告的留言板
 		List<AnnouncementMessage> messages = announcementMessageService.ShowAnnouncementMessage(an.getAnId());
@@ -174,17 +206,30 @@ public class AnnouncementController {
 		model.addAttribute("anInfo", announcement);
 		model.addAttribute("messages", messages);
 		return "updateannouncement";
-	}
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
+		}
 
 // 	添加公告前的查询
 	@RequestMapping("/addan")
 	public String addShowAnById(Model model) {
+		try {
 		// 查询公告类别信息
 		List<AnnouncementType> types = annountcementTypeService.ShowAllAnnountcementTypes();
 		// 把公告类别返回页面
 		model.addAttribute("antypes", types);
 		return "addannouncement";
-	}
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
+		}
 
 	/*
 	 * 修改公告
@@ -192,7 +237,7 @@ public class AnnouncementController {
 	@RequestMapping("/updateannouncement")
 	public String updateAnnouncement(@RequestParam(value = "files", required = false) MultipartFile[] files,
 			Announcement ann) {
-		System.out.println(ann);
+		try {
 		// 修改公告本身的内容
 		announcementService.updateAnnouncement(ann);
 		// 判断有无文件上传，有则上传文件。并且把文件的信息添加到数据库，没有则直接返回
@@ -221,6 +266,12 @@ public class AnnouncementController {
 		}
 
 		return "redirect:/anmanage";
-	}
+		}catch(Exception e) {
+			e.printStackTrace();
+			//发生异常打到错误页
+			return "lyear_pages_error";
+					
+		}
+		}
 
 }

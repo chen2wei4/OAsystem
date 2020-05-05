@@ -21,22 +21,22 @@ import com.woniuxy.oasystem.service.AnnouncementFileService;
 @Controller
 public class AnnouncementFileController {
 
+
 	@Autowired
 	AnnouncementFileService announcementFileService;
 
 	@RequestMapping("/downloadFile")
 	public String downloadFile2(AnnouncementFile annf, HttpServletResponse response) {
-
 		String downloadFilePath = annf.getAfAddress();// 被下载的文件在服务器中的路径,
 		String fileName = annf.getAfName();// 被下载文件的名称
 		File file = new File(downloadFilePath);
 		if (file.exists()) {
-			response.setContentType("application/force-download");// 设置强制下载不打开            
+			response.setContentType("application/force-download");// 设置强制下载不打开            
 			response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
 			byte[] buffer = new byte[1024];
-			FileInputStream fis = null; // 文件输入流
-			BufferedInputStream bis = null;
-			OutputStream os = null; // 输出流
+			FileInputStream fis = null; //文件输入流
+            BufferedInputStream bis = null;
+            OutputStream os = null; //输出流
 			try {
 				fis = new FileInputStream(file);
 				bis = new BufferedInputStream(fis);
@@ -48,7 +48,7 @@ public class AnnouncementFileController {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-			} finally {
+			}finally {
 				if (bis != null) {
 					try {
 						bis.close();
@@ -74,15 +74,15 @@ public class AnnouncementFileController {
 		}
 		return null;
 	}
-
+	
 	/*
-	 * 软删除公告
+	 *软删除公告
 	 */
 	@ResponseBody
 	@RequestMapping("/deletefiles")
 	public ResponseResult<AnnouncementFile> deleteannouncementFile(HttpServletRequest req, AnnouncementFile af,
 			Model model) {
-
+		
 		try {// 软删除公告文件
 			Integer afId = af.getAfId();
 			System.out.println(afId);
@@ -93,5 +93,6 @@ public class AnnouncementFileController {
 			return new ResponseResult<AnnouncementFile>(500, "failed", null);
 		}
 	}
-
+	
+	
 }
