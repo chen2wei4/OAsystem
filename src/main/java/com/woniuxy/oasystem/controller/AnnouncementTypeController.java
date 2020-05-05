@@ -2,7 +2,6 @@ package com.woniuxy.oasystem.controller;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +18,11 @@ public class AnnouncementTypeController {
 	@Autowired
 	AnnountcementTypeService announcementTypeService;
 	// 固定每页展示5行数据
-		Integer PAGESIZE = 10;
-
+	Integer PAGESIZE = 10;
 
 	// 添加公告前的查看所有公告类别
 	@RequestMapping("/selecttypeByAtId")
-	public String addAnShowAllantype(AnnouncementType antype,Model model) {
+	public String addAnShowAllantype(AnnouncementType antype, Model model) {
 		// 把公告分类查询出来
 		List<AnnouncementType> types = announcementTypeService.ShowAllAnnountcementTypes();
 		model.addAttribute("antypes", types);
@@ -33,20 +31,22 @@ public class AnnouncementTypeController {
 
 	// 查看所有公告类别发到管理页面
 	@RequestMapping("/selectallantype")
-	public String ShowAllantypeByType(AnnouncementType antype,Integer pageIndex,Model model) {
+	public String ShowAllantypeByType(AnnouncementType antype, Integer pageIndex, Model model) {
 		if (pageIndex == null) {
 			pageIndex = 1;
 		}
 		// 把公告分类查询出来
-		PageBean<AnnouncementType> types = announcementTypeService.ShowAllAnnountcementType(antype,pageIndex,PAGESIZE);
+		PageBean<AnnouncementType> types = announcementTypeService.ShowAllAnnountcementType(antype, pageIndex,
+				PAGESIZE);
 		if (types.getTotalPage() == 0) {
 			types.setPageIndex(0);
 		}
 		model.addAttribute("antypes", types);
-		//把查询条件存入回显
+		// 把查询条件存入回显
 		model.addAttribute("condition", antype);
 		return "announcementtypemanage";
 	}
+
 	// 添加类别公告
 	@PostMapping("/addantype")
 	public String addannouncementType(AnnouncementType antype, Model model) {
@@ -61,7 +61,7 @@ public class AnnouncementTypeController {
 	@RequestMapping("/updantype")
 	public String updateShowAnTypeById(AnnouncementType at, Model model) {
 		// 查询公告类别信息
-		AnnouncementType antype=announcementTypeService.showantype(at.getAtId());
+		AnnouncementType antype = announcementTypeService.showantype(at.getAtId());
 		model.addAttribute("antypeInfo", antype);
 		return "updateannouncementtype";
 	}
@@ -73,20 +73,21 @@ public class AnnouncementTypeController {
 		announcementTypeService.UpdateAntypeById(anType);
 		return "redirect:/selectallantype";
 	}
-	
+
 // 	软删除公告类别
-@RequestMapping("/delantype")
-public String delAnnouncementType(AnnouncementType at, Model model) {
+	@RequestMapping("/delantype")
+	public String delAnnouncementType(AnnouncementType at, Model model) {
 		// 删除
 		announcementTypeService.DeleteAntypeById(at.getAtId());
 		return "redirect:/selectallantype";
-}
+	}
+
 //	启用公告类别
-@RequestMapping("/startantype")
-public String startAnnouncementType(AnnouncementType at, Model model) {
-	System.out.println(at);
-	announcementTypeService.StartAntypeById(at.getAtId());
-	return "redirect:/selectallantype";
-}
-	
+	@RequestMapping("/startantype")
+	public String startAnnouncementType(AnnouncementType at, Model model) {
+		System.out.println(at);
+		announcementTypeService.StartAntypeById(at.getAtId());
+		return "redirect:/selectallantype";
+	}
+
 }

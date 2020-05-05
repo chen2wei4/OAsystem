@@ -27,7 +27,7 @@ public class ReportsController {
 
 	// 根据report_from分页查询
 	@GetMapping(value = "/reportByReportFrom")
-	public String reportByEmp(HttpServletRequest req, Model model, Reports reports, Integer pageIndex) {
+	public String reportByReportFrom(HttpServletRequest req, Model model, Reports reports, Integer pageIndex) {
 		Emp emp = (Emp) req.getSession().getAttribute("emp");
 		reports.setReportFrom(emp);
 		reports.setReportFromId(emp.getEmpId());
@@ -36,6 +36,9 @@ public class ReportsController {
 		}
 		int pagesize = 10;
 		PageBean<Reports> pb = reportsService.selectReportsByReportFromAndConditionPage(reports, pageIndex, pagesize);
+		List<ReportType> allReportType = reportTypeService.selectAllReportType();
+		model.addAttribute("reportType", allReportType);
+		model.addAttribute("reports", reports);
 		model.addAttribute("pb", pb);
 		return "reoprt_list.html";
 	}
