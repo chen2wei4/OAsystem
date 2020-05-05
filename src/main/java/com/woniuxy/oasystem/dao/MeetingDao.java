@@ -26,4 +26,6 @@ public interface MeetingDao {
 	void updateByMid(@Param("m")Meeting meeting);
 	//添加
 	void insert(@Param("m")Meeting meeting);
+	//根据办公室名查询Id
+	Integer findIdByBoardroomName(String name);
 }

@@ -29,4 +29,6 @@ public interface ReturnRegisterService {
 	// 添加
 	void insert(ReturnRegister returnRegister);
 
+	//根据用户名查询empId
+	Integer findIdByEmpName(String empName);
 }

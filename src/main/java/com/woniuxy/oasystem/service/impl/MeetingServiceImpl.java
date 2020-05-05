@@ -9,8 +9,10 @@ import com.woniuxy.oasystem.dao.CarApplyDao;
 import com.woniuxy.oasystem.dao.CarDao;
 import com.woniuxy.oasystem.dao.MeetingDao;
 import com.woniuxy.oasystem.dao.OfficeSuppliesDao;
+import com.woniuxy.oasystem.entity.Boardroom;
 import com.woniuxy.oasystem.entity.Car;
 import com.woniuxy.oasystem.entity.CarApply;
+import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.Meeting;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.PageBean;
@@ -46,11 +48,21 @@ public class MeetingServiceImpl implements MeetingService{
 
 	@Override
 	public void updateByMid(Meeting meeting) {
+		String name = meeting.getBoardroom().getName();
+		Integer boardroomId = meetingDao.findIdByBoardroomName(name);
+		Boardroom boardroom = new Boardroom();
+		boardroom.setBoardroomId(boardroomId);;
+		meeting.setBoardroom(boardroom);
 		meetingDao.updateByMid(meeting);
 	}
 
 	@Override
 	public void insert(Meeting meeting) {
+		String name = meeting.getBoardroom().getName();
+		Integer boardroomId = meetingDao.findIdByBoardroomName(name);
+		Boardroom boardroom = new Boardroom();
+		boardroom.setBoardroomId(boardroomId);;
+		meeting.setBoardroom(boardroom);
 		meetingDao.insert(meeting);
 	}
 

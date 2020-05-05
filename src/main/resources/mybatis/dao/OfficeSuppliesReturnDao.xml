@@ -5,15 +5,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 办公用品归还 -->
 <mapper namespace="com.woniuxy.oasystem.dao.OfficeSuppliesReturnDao">
 	<!-- 分页查询 -->
-	<select id="findAllByPage" resultType="OfficeSuppliesReturn">
-		select * from office_supplies_return where flag = 1
+	<select id="findAllByPage" resultMap="empMap">
+		select * 
+		from office_supplies_return osr,emp e 
+		where osr.flag = 1 and osr.emp_id = e.emp_id
 		<include refid="conditionSql"/>
 		limit #{pageIndex},#{pageSize}
 	</select>
+	<resultMap type="OfficeSuppliesReturn" id="empMap">
+		<id column="osr_id" property="osrId"/>
+		<result column="os_number" property="osNumber"/>
+		<result column="return_time" property="returnTime"/>
+		<result column="maintenance" property="maintenance"/>
+		
+		<collection property="emp" ofType="Emp">
+			<result column="emp_name" property="empName"/>
+		</collection>
+	</resultMap>
 	<!-- 总条数-->
 	<select id="findAllByPageCount" resultType="int">
-		select count(*) from office_supplies_return 
-		where flag = 1
+		select count(distinct osr_id) from office_supplies_return osr,emp e
+		where osr.flag = 1 and osr.emp_id = e.emp_id
 		<include refid="conditionSql"/>
 	</select>
 	<!-- 模糊查询条件 -->
@@ -21,9 +33,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="osr.osNumber!= null and osr.osNumber!=''">
 				and os_number like concat('%',#{osr.osNumber},'%')
 			</if>
-			<if test="osr.empId!= null and osr.empId!=''">
-				and emp_id like concat('%',#{osr.empId},'%')
-				
+			<if test="osr.emp.empName!= null and osr.emp.empName!=''">
+				and e.emp_name like '%' #{osr.emp.empName} '%'
 			</if>
 			<if test="osr.returnTime!= null and osr.returnTime!=''">
 				and return_time like '%' #{osr.returnTime} '%'
@@ -37,13 +48,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 根据osrid修改 -->
 	<update id="updateByOsrId">
 		update office_supplies_return set 
-		os_number=#{osr.osNumber},emp_id=#{osr.empId},return_time=#{osr.returnTime},
+		os_number=#{osr.osNumber},emp_id=#{osr.emp.empId},return_time=#{osr.returnTime},
 		maintenance=#{osr.maintenance}
 		where osr_id = #{osr.osrId}
 	</update>
 	<!-- 添加 -->
 	<insert id="insert">
 		insert into office_supplies_return (os_number,emp_id,return_time,maintenance) 
-		values (#{osr.osNumber},#{osr.empId},#{osr.returnTime},#{osr.maintenance})
+		values (#{osr.osNumber},#{osr.emp.empId},#{osr.returnTime},#{osr.maintenance})
 	</insert>
+	<!-- 根据用户名查询empId -->
+	<select id="findIdByEmpName" resultType="Integer">
+		select emp_id from emp where emp_name = #{empName}
+	</select>
 </mapper>

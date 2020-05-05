@@ -2,6 +2,9 @@ package com.woniuxy.oasystem.entity;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +26,8 @@ public class OfficeSupplies {
 	private Integer osNumber;//编号
 	private String sort;//种类
 	private Double prince;//价格
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date osTime;//入库时间
 	private Integer number;//数量
 	private String useState;//使用状态

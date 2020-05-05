@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.woniuxy.oasystem.dao.OfficeSuppliesApplyDao;
 import com.woniuxy.oasystem.dao.OfficeSuppliesReturnDao;
+import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.OfficeSuppliesApply;
 import com.woniuxy.oasystem.entity.OfficeSuppliesReturn;
@@ -54,12 +55,23 @@ public class OfficeSuppliesReturnServiceImpl implements OfficeSuppliesReturnServ
 
 	@Override
 	public void updateByOsrId(OfficeSuppliesReturn officeSuppliesReturn) {
+		String empName = officeSuppliesReturn.getEmp().getEmpName();
+		Integer empId = officeSuppliesReturnDao.findIdByEmpName(empName);
+		Emp emp = new Emp();
+		emp.setEmpId(empId);
+		officeSuppliesReturn.setEmp(emp);
 		officeSuppliesReturnDao.updateByOsrId(officeSuppliesReturn);
 		
 	}
 
 	@Override
 	public void insert(OfficeSuppliesReturn officeSuppliesReturn) {
+		String empName = officeSuppliesReturn.getEmp().getEmpName();
+		Integer empId = officeSuppliesReturnDao.findIdByEmpName(empName);
+		Emp emp = new Emp();
+		emp.setEmpId(empId);
+		System.out.println(emp);
+		officeSuppliesReturn.setEmp(emp);
 		officeSuppliesReturnDao.insert(officeSuppliesReturn);
 		
 	}

@@ -5,21 +5,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 车辆申请管理 -->
 <mapper namespace="com.woniuxy.oasystem.dao.CarApplyDao">
 	<!-- 分页查询 -->
-	<select id="findAllByPage" resultType="CarApply">
-		select * from car_apply where flag = 1
+	<select id="findAllByPage" resultMap="empMap">
+		select * 
+		from car_apply ca,emp e 
+		where ca.flag = 1 and ca.emp_id = e.emp_id
 		<include refid="conditionSql"/>
 		limit #{pageIndex},#{pageSize}
 	</select>
+	<resultMap type="CarApply" id="empMap">
+		<id column="ca_id" property="caId"/>
+		<result column="license" property="license"/>
+		<result column="apply_time" property="applyTime"/>
+		<result column="start_time" property="startTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="purpose" property="purpose"/>
+		<result column="review" property="review"/>
+		
+		<collection property="emp" ofType="Emp">
+			<result column="emp_name" property="empName"/>
+		</collection>
+	</resultMap>
 	<!-- 总条数-->
 	<select id="findAllByPageCount" resultType="int">
-		select count(*) from car_apply 
-		where flag = 1
+		select count(distinct ca_id) 
+		from car_apply ca,emp e
+		where ca.flag = 1 and ca.emp_id = e.emp_id
 		<include refid="conditionSql"/>
 	</select>
 	<!-- 模糊查询条件 -->
 	<sql id="conditionSql">
-			<if test="ca.empId!= null and ca.empId!=''">
-				and emp_id like '%' #{ca.empId} '%'
+			<if test="ca.emp.empName!= null and ca.emp.empName!=''">
+				and emp_name like '%' #{ca.emp.empName} '%'
 			</if>
 			<if test="ca.license!= null and ca.license!=''">
 				and license like '%' #{ca.license} '%'
@@ -54,6 +70,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 添加 -->
 	<insert id="insert">
 		insert into car_apply (license,emp_id,apply_time,start_time,end_time,purpose,review) 
-		values (#{ca.license},#{ca.empId},#{ca.applyTime},#{ca.startTime},#{ca.endTime},#{ca.purpose},#{ca.review})
+		values (#{ca.license},#{ca.emp.empId},#{ca.applyTime},#{ca.startTime},#{ca.endTime},#{ca.purpose},#{ca.review})
 	</insert>
 </mapper>

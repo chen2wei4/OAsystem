@@ -5,21 +5,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 办公用品请购 -->
 <mapper namespace="com.woniuxy.oasystem.dao.OfficeSuppliesBuyDao">
 	<!-- 分页查询 -->
-	<select id="findAllByPage" resultType="OfficeSuppliesBuy">
-		select * from office_supplies_buy where flag = 1
+	<select id="findAllByPage" resultMap="empMap">
+		select * 
+		from office_supplies_buy osb,emp e
+		where osb.flag = 1 and osb.emp_id = e.emp_id
 		<include refid="conditionSql"/>
 		limit #{pageIndex},#{pageSize}
 	</select>
+	<resultMap type="OfficeSuppliesBuy" id="empMap">
+		<id column="osb_id" property="osbId"/>
+		<result column="content" property="content"/>
+		<result column="buy_time" property="buyTime"/>
+		<result column="state" property="state"/>
+		
+		<collection property="emp" ofType="Emp">
+			<result column="emp_name" property="empName"/>
+		</collection>
+	</resultMap>
 	<!-- 总条数-->
 	<select id="findAllByPageCount" resultType="int">
-		select count(*) from office_supplies_buy 
-		where flag = 1
+		select count(distinct osb_id) 
+		from office_supplies_buy osb,emp e
+		where osb.flag = 1 and osb.emp_id = e.emp_id
 		<include refid="conditionSql"/>
 	</select>
 	<!-- 模糊查询条件 -->
 	<sql id="conditionSql">
-			<if test="osb.empId!= null and osb.empId!=''">
-				and emp_id like concat('%',#{osb.empId},'%')
+			<if test="osb.emp.empName!= null and osb.emp.empName!=''">
+				and emp_Name like concat('%',#{osb.emp.empName},'%')
 			</if>
 			<if test="osb.buyTime!= null and osb.buyTime!=''">
 				and buy_time like '%' #{osb.buyTime} '%'
@@ -35,12 +48,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 根据osbid修改 -->
 	<update id="updateByOsbId">
 		update office_supplies_buy set 
-		emp_id=#{osb.empId},content=#{osb.content},buy_time=#{osb.buyTime},state=#{osb.state}
+		content=#{osb.content},buy_time=#{osb.buyTime},state=#{osb.state}
 		where osb_id = #{osb.osbId}
 	</update>
 	<!-- 添加 -->
 	<insert id="insert">
 		insert into office_supplies_buy (emp_id,content,buy_time,state) 
-		values (#{osb.empId},#{osb.content},#{osb.buyTime},#{osb.state})
+		values (#{osb.emp.empId},#{osb.content},#{osb.buyTime},#{osb.state})
 	</insert>
 </mapper>

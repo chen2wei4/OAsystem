@@ -41,8 +41,21 @@ public class WebMvcConfig {
 				registry.addViewController("/addaantype").setViewName("addantype");
 				registry.addViewController("/anmanage").setViewName("announcementmanage");
 				registry.addViewController("/anmanagetype").setViewName("announcementtypemanage");
-				//行政管理相关
+				//车辆管理相关
 				registry.addViewController("/car.html").setViewName("car");
+				registry.addViewController("/carApply.html").setViewName("carApply");
+				registry.addViewController("/returnRegister.html").setViewName("returnRegister");
+				//会议管理相关
+				registry.addViewController("/meeting.html").setViewName("meeting");
+				registry.addViewController("/meetingApply.html").setViewName("meetingApply");
+				registry.addViewController("/boardroom.html").setViewName("boardroom");
+				//办公用品管理相关
+				registry.addViewController("/officeSupplies.html").setViewName("officeSupplies");
+				registry.addViewController("/officeSuppliesApply.html").setViewName("officeSuppliesApply");
+				registry.addViewController("/officeSuppliesReturn.html").setViewName("officeSuppliesReturn");
+				registry.addViewController("/officeSuppliesBuy.html").setViewName("officeSuppliesBuy");
+				//行政档案管理相关
+				registry.addViewController("/administrativeArchives.html").setViewName("administrativeArchives");
 				//事务模块
 				registry.addViewController("/information").setViewName("information");
 				registry.addViewController("/apply_add").setViewName("apply_add");

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>车辆管理</title>
+<title>办公用品管理</title>
 <link rel="icon" href="favicon.ico" type="image/ico">
 <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
@@ -35,7 +35,7 @@
 									class="lyear-toggler-bar"></span> <span
 									class="lyear-toggler-bar"></span>
 							</div>
-							<span class="navbar-page-title"> 车辆管理 </span>
+							<span class="navbar-page-title"> 办公用品管理 </span>
 						</div>
 						<!-- 导航栏信息 -->
 						<ul class="topbar-right" th:replace="common :: header"></ul>
@@ -45,6 +45,7 @@
 
 			</header>
 			<!--End 头部信息-->
+
 
 			<!--页面主要内容-->
 			<main class="lyear-layout-content" id="content">
@@ -58,17 +59,16 @@
 				                    <div class="input-group-btn">
 				                      
 				                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" 
-				                      	aria-haspopup="true" aria-expanded="false" data-field="license">
-				                      		车牌 <span class="caret"></span>
+				                      	aria-haspopup="true" aria-expanded="false" data-field="osName">
+				                      		办公用品名 <span class="caret"></span>
 				                      </button>
 				                      <ul class="dropdown-menu" @click="turn()">
-				                        <li> <a tabindex="-1" href="#" data-field="license">车牌</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="maintenance">维护状态</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="useState">使用状态</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="parkingSpace">停车位</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="osName">办公用品名</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="osNumber">用品编号</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="sort">种类</a> </li>
 				                      </ul>
 				                    </div>
-				                    <input type="text" class="form-control" id="condition" data-field="license" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
+				                    <input type="text" class="form-control" id="condition" data-field="osName" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
 				                  </div>
 				                </form>
 								<div class="toolbar-btn-action">
@@ -84,26 +84,34 @@
 										<thead>
 											<tr>
 												
-												<th>车牌</th>
-												<th>维护状态</th>
+												<th>办公用品名</th>
+												<th>用品编号</th>
+												<th>类别</th>
+												<th>价格</th>
+												<th>数量</th>
+												<th>入库时间</th>
 												<th>使用状态</th>
-												<th>停车位</th>
+												<th>维护</th>
 												<th>操作</th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr v-for="item in list">
 												
-												<td>{{item.license}}</td>
-												<td>{{item.maintenance}}</td>
+												<td>{{item.osName}}</td>
+												<td>{{item.osNumber}}</td>
+												<td>{{item.sort}}</td>
+												<td>{{item.prince}}</td>
+												<td>{{item.number}}</td>
+												<td>{{item.osTime}}</td>
 												<td>{{item.useState}}</td>
-												<td>{{item.parkingSpace}}</td>
+												<td>{{item.maintenance}}</td>
 												<td>
 													<div class="btn-group">
 														<a class="btn btn-xs btn-default " href="#!"
 															title="编辑" data-toggle="tooltip" @click="update(item,pb.pageIndex)"><i class="mdi mdi-pencil"></i></a>
 														<a class="btn btn-xs btn-default " href="#!" title="删除"
-															data-toggle="tooltip" @click="del(item.carId,pb.pageIndex)">
+															data-toggle="tooltip" @click="del(item.osId,pb.pageIndex)">
 														<i class="mdi mdi-window-close"></i></a>
 													</div>
 												</td>
@@ -150,23 +158,21 @@
 	    	send(pageIndex){
 	    		var that=this;
 		    	  //获取查询条件
-		    	  var sort = $("#condition").attr('data-field');
+		    	  var type = $("#condition").attr('data-field');
 			  	  var param = $("#condition").val();
-			  	  var license,maintenance,useState,parkingSpace;
-			  	  if(sort=="license"){license=param};
-			  	  if(sort=="maintenance"){maintenance=param};
-			  	  if(sort=="useState"){useState=param};
-			  	  if(sort=="parkingSpace"){parkingSpace=param};
+			  	  var osName,osNumber,sort;
+			  	  if(type=="osName"){osName=param};
+			  	  if(type=="osNumber"){osNumber=param};
+			  	  if(type=="sort"){sort=param};
 			  	//发送查询请求 
 	            axios({
-				        	url:'[[@{/car/list}]]',
+				        	url:'[[@{/officeSupplies/list}]]',
 				        	method:'post',
 				        	data:{
 				        			"t":{
-				        				"license":license,
-					        			"maintenance":maintenance,
-					        			"useState":useState,
-					        			"parkingSpace":parkingSpace
+				        				"osName":osName,
+					        			"osNumber":osNumber,
+					        			"sort":sort
 				        			},
 				        			"pageIndex":pageIndex
 				        		}
@@ -176,7 +182,7 @@
 				        })	 
 	      },
 	      //根据ID删除
-	      del(carId,pageIndex){
+	      del(osId,pageIndex){
 	    		var that=this;    
 	    	  	//弹出确认框
 	    		$.alert({
@@ -189,7 +195,7 @@
 	    						action: function(){
 	    							//发送删除请求 
 	    							axios({
-	    						        	url:'[[@{/car/deleteByCarId?carId=}]]'+carId,
+	    						        	url:'[[@{/officeSupplies/deleteByOsId?osId=}]]'+osId,
 	    						        	method:'post'
 	    						        }).then(res=>{
 	    						        	alert(res.data.message);
@@ -214,14 +220,22 @@
 	    	        content: '' +
 	    	        '<form action="" class="formName">' +
 	    	        '<div class="form-group">' +
-	    	        '<label> 车牌号 </label>' +
-	    	        '<input id="license" type="text" value="'+item.license+'" class="name form-control" required />' +
-	    	        '<label> 维护状态 </label>' +
-	    	        '<input id="maintenance" type="text" value="'+item.maintenance+'" class="name form-control" required />' +
+	    	        '<label> 办公用品名 </label>' +
+	    	        '<input id="osName" type="text" value="'+item.osName+'" class="name form-control" required />' +
+	    	        '<label> 用品编号 </label>' +
+	    	        '<input id="osNumber" type="text" value="'+item.osNumber+'" class="name form-control" required />' +
+	    	        '<label> 类别 </label>' +
+	    	        '<input id="sort" type="text" value="'+item.sort+'" class="name form-control" required />' +
+	    	        '<label> 价格 </label>' +
+	    	        '<input id="prince" type="text" value="'+item.prince+'" class="name form-control" required />' +
+	    	        '<label> 数量 </label>' +
+	    	        '<input id="number" type="text" value="'+item.number+'" class="name form-control" required />' +
+	    	        '<label> 入库时间 </label>' +
+	    	        '<input id="osTime" type="text" value="'+item.osTime+'" class="name form-control" required />' +
 	    	        '<label> 使用状态 </label>' +
 	    	        '<input id="useState" type="text" value="'+item.useState+'" class="name form-control" required />' +
-	    	        '<label> 停车位 </label>' +
-	    	        '<input id="parkingSpace" type="text" value="'+item.parkingSpace+'" class="name form-control" required />' +
+	    	        '<label> 维护 </label>' +
+	    	        '<input id="maintenance" type="text" value="'+item.maintenance+'" class="name form-control" required />' +
 	    	        '</div>' +
 	    	        '</form>',
 	    	        buttons: {
@@ -229,25 +243,33 @@
 	    	                text: '提交',
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
-	    	                	var license=$("#license").val();
-    							var maintenance=$("#maintenance").val();
+	    	                	var osName=$("#osName").val();
+    							var osNumber=$("#osNumber").val();
+    							var sort=$("#sort").val();
+    							var prince=$("#prince").val();
+    							var number=$("#number").val();
+    							var osTime=$("#osTime").val();
     							var useState=$("#useState").val();
-    							var parkingSpace=$("#parkingSpace").val();
-	    	                    if(!license||!maintenance||!useState||!parkingSpace){
+    							var maintenance=$("#maintenance").val();
+	    	                    if(!osName||!osNumber||!sort||!prince||!number||!osTime||!useState||!maintenance){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
 	    	                  //发送编辑请求 
     						
 	    	                  axios({
-    						        	url:'[[@{/car/updateByCarId}]]',
+    						        	url:'[[@{/officeSupplies/updateByOsId}]]',
     						        	method:'post',
     						        	data:{
-    						        			"carId":item.carId,
-    						        			"license":license,
-    						        			"maintenance":maintenance,
+    						        			"osId":item.osId,
+    						        			"osName":osName,
+    						        			"osNumber":osNumber,
+    						        			"sort":sort,
+    						        			"prince":prince,
+    						        			"number":number,
+    						        			"osTime":osTime,
     						        			"useState":useState,
-    						        			"parkingSpace":parkingSpace
+    						        			"maintenance":maintenance
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);
@@ -269,10 +291,18 @@
 	    	        content: '' +
 	    	        '<form action="" class="formName">' +
 	    	        '<div class="form-group">' +
-	    	        '<label> 车牌号 </label>' +
-	    	        '<input id="license" type="text" class="name form-control" required />' +
-	    	        '<label> 停车位 </label>' +
-	    	        '<input id="parkingSpace" type="text" class="name form-control" required />' +
+	    	        '<label> 办公用品名 </label>' +
+	    	        '<input id="osName" type="text" class="name form-control" required />' +
+	    	        '<label> 用品编号 </label>' +
+	    	        '<input id="osNumber" type="text" class="name form-control" required />' +
+	    	        '<label> 类别 </label>' +
+	    	        '<input id="sort" type="text" class="name form-control" required />' +
+	    	        '<label> 价格 </label>' +
+	    	        '<input id="prince" type="text" class="name form-control" required />' +
+	    	        '<label> 数量 </label>' +
+	    	        '<input id="number" type="text" class="name form-control" required />' +
+	    	        '<label> 入库时间 </label>' +
+	    	        '<input id="osTime" type="text" class="name form-control" required />' +
 	    	        '</div>' +
 	    	        '</form>',
 	    	        buttons: {
@@ -280,22 +310,30 @@
 	    	                text: '提交',
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
-	    	                	var license=$("#license").val();
-    							var parkingSpace=$("#parkingSpace").val();
-    							if(!license||!parkingSpace){
+	    	                	var osName=$("#osName").val();
+    							var osNumber=$("#osNumber").val();
+    							var sort=$("#sort").val();
+    							var prince=$("#prince").val();
+    							var number=$("#number").val();
+    							var osTime=$("#osTime").val();
+    							
+	    	                    if(!osName||!osNumber||!sort||!prince||!number||!osTime){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
 	    	                  //发送添加请求 
 	    	                  axios({
-    						        	url:'[[@{/car/insert}]]',
+    						        	url:'[[@{/officeSupplies/insert}]]',
     						        	method:'post',
     						        	data:{
-    						        			
-    						        			"license":license,
-    						        			"maintenance":"完好",
-    						        			"useState":"未使用",
-    						        			"parkingSpace":parkingSpace
+						        			"osNumber":osNumber,
+						        			"osName":osName,
+						        			"sort":sort,
+						        			"prince":prince,
+						        			"number":number,
+						        			"osTime":osTime,
+						        			"useState":"未使用",
+						        			"maintenance":"完好"
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);
