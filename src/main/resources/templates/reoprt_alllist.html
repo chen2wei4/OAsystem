@@ -30,7 +30,7 @@
 									class="lyear-toggler-bar"></span> <span
 									class="lyear-toggler-bar"></span>
 							</div>
-							<span class="navbar-page-title"> 所有报表 </span>
+							<span class="navbar-page-title"> 所有报告 </span>
 						</div>
 						<!-- 导航栏信息 -->
 						<ul class="topbar-right" th:replace="common :: header"></ul>
@@ -45,33 +45,31 @@
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-toolbar clearfix">
-								<form class="pull-right search-bar" method="get" action="#!"
-									role="form">
+								<form class="pull-right search-bar" method="get"
+									th:action="@{/allReports}" role="form">
 									<div class="input-group">
-										<div class="input-group-btn">
-											<input type="hidden" name="search_field" id="search-field"
-												value="title">
-											<button class="btn btn-default dropdown-toggle"
-												id="search-btn" data-toggle="dropdown" type="button"
-												aria-haspopup="true" aria-expanded="false">
-												类型 <span class="caret"></span>
-											</button>
-											<ul class="dropdown-menu">
-												<li><a tabindex="-1" href="javascript:void(0)"
-													data-field="title">标题</a></li>
-												<li><a tabindex="-1" href="javascript:void(0)"
-													data-field="cat_name">栏目</a></li>
-											</ul>
-										</div>
-										<input type="text" class="form-control" value=""
-											name="keyword" placeholder="请输入名称">
+										<input type="hidden" name="search_field" id="search-field"
+											value="title"> <select name="typeId" size="1"
+											class="form-control" id="example-select">
+											<option value="">选择类型</option>
+											<option th:each="type:${reportType}"
+												th:value="${type.typeId}">[[${type.typeId}]]</option>
+										</select> <input type="text" class="form-control"
+											th:value="${reports.reportName}" name="reportName"
+											placeholder="请输入标题">
+									</div>
+									<div class="input-group-btn">
+										<button class="btn btn-label btn-primary" type="submit">
+											<label><i class="mdi mdi-plus"></i></label> 查询
+										</button>
 									</div>
 								</form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5"
 										th:href="@{/addReportPageJumps}"><i class="mdi mdi-plus"></i>
-										新增报表</a> <a class="btn btn-danger" href="#!"><i
-										class="mdi mdi-window-close"></i> 删除所选</a>
+										新增报告</a>
+									<!-- <a class="btn btn-danger" href="#!"><i
+										class="mdi mdi-window-close"></i> 删除所选</a> -->
 								</div>
 							</div>
 							<div class="card-body">
@@ -128,19 +126,25 @@
 											th:href="@{/allReports?pageIndex=1}">«首页</a></span></li>
 									<li th:if="${allpb.pageIndex>1 }" class="disabled"><span><a
 											th:href="@{/allReports?pageIndex=}+${allpb.pageIndex-1 }">上一页</a></span></li>
-									<li th:each="i:${#numbers.sequence(allpb.pageBegin,allpb.pageEnd)}">
+									<li
+										th:each="i:${#numbers.sequence(allpb.pageBegin,allpb.pageEnd)}">
 										<a th:href="@{/allReports(pageIndex=${i})}" th:text="${i}"
 										th:if="${allpb.pageIndex!=i}"></a> <span
-										th:if="${allpb.pageIndex==i}" th:text="${i}" aria-hidden="true"
-										style="background-color: #33CABB"></span>
+										th:if="${allpb.pageIndex==i}" th:text="${i}"
+										aria-hidden="true" style="background-color: #33CABB"></span>
 									</li>
-									<li th:if="${allpb.pageIndex<allpb.totalPage }" class="disabled"><span><a
+									<li th:if="${allpb.pageIndex<allpb.totalPage }"
+										class="disabled"><span><a
 											th:href="@{/allReports?pageIndex=}+${allpb.pageIndex+1 }">下一页</a></span></li>
-									<li th:if="${allpb.pageIndex<allpb.totalPage }" class="disabled"><span><a
+									<li th:if="${allpb.pageIndex<allpb.totalPage }"
+										class="disabled"><span><a
 											th:href="@{/allReports?pageIndex=}+${allpb.totalPage }">末页»</a></span></li>
-									<li class="disabled"><span>共[[${allpb.totalPage }]]页</span></li>
-									<li class="disabled"><span>第[[${allpb.pageIndex }]]页</span></li>
-									<li class="disabled"><span>共[[${allpb.totalRecord }]]条</span></li>
+									<li class="disabled"><span>共[[${allpb.totalPage
+											}]]页</span></li>
+									<li class="disabled"><span>第[[${allpb.pageIndex
+											}]]页</span></li>
+									<li class="disabled"><span>共[[${allpb.totalRecord
+											}]]条</span></li>
 								</ul>
 							</div>
 						</div>

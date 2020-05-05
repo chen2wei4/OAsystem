@@ -56,16 +56,23 @@
 							<div class="card-toolbar clearfix">
 								<form class="pull-right search-bar" method="get"
 									th:action="@{/announcement}" role="form">
-									<input type="hidden" name="pageIndex" value="1">
-											<select name="anType" size="1" class="form-control" id="example-select">
-												<option th:value="null" selected="selected" th:selected="${condition.anType==null}">全部分类</option>
-												<option th:each="type:${types}" th:value="${type.atId}" th:selected="${condition.anType==type.atId}">[[${type.atName}]]</option>
-											</select>
-										<input type="text" class="form-control" th:value="${condition.anName}" name="anName"
-											placeholder="请输入公告名称" />
-									 <button class="btn btn-label btn-primary" type="submit"><label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认查询</button>		
+									<input type="hidden" name="pageIndex" value="1"> <select
+										name="anType" size="1" class="form-control"
+										id="example-select">
+										<option th:value="null" selected="selected"
+											th:selected="${condition.anType==null}">全部分类</option>
+										<option th:each="type:${types}" th:value="${type.atId}"
+											th:selected="${condition.anType==type.atId}">[[${type.atName}]]</option>
+									</select> <input type="text" class="form-control"
+										th:value="${condition.anName}" name="anName"
+										placeholder="请输入公告名称" />
+									<button class="btn btn-label btn-primary" type="submit">
+										<label><i
+											class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认查询
+									</button>
 								</form>
-								<div class="toolbar-btn-action" th:if="${session.emp.role.roleId==1}">
+								<div class="toolbar-btn-action"
+									th:if="${session.emp.role.roleId==1}">
 									<a class="btn btn-warning m-r-5"
 										th:href="@{/anmanage(pageIndex=1)}"><i
 										class="mdi mdi-settings">管理</i></a>
@@ -91,9 +98,9 @@
 												<td>[[${pagean.anName}]]</td>
 												<td>[[${#dates.format(pagean.anTime,"yyyy--MM--dd")}]]</td>
 												<td>[[${pagean.emp.empName}]]</td>
-												<td>
-												<font class="text-success" th:if="${pagean.iswatched}">已读</font>
-												<font class="alert-link" th:if="${not pagean.iswatched}">未读</font>
+												<td><font class="text-success"
+													th:if="${pagean.iswatched}">已读</font> <font
+													class="alert-link" th:if="${not pagean.iswatched}">未读</font>
 												</td>
 												<td>
 													<div class="btn-group">

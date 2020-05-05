@@ -67,7 +67,6 @@ public class AnnouncementController {
 			e.printStackTrace();
 			//发生异常打到错误页
 			return "lyear_pages_error";
-					
 		}
 	}
 

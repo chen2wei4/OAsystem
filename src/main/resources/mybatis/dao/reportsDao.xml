@@ -36,13 +36,9 @@
 	<!-- 根据report_from分页查询 -->
 	<select id="selectReportsByReportFromAndConditionPage"
 		resultMap="reportsMapper">
-		SELECT * FROM reports r,report_type t,emp e WHERE
-		r.type_id=t.type_id
-		AND r.report_from=e.emp_id AND r.flag = 1 AND
-		report_from =
-		#{reports.reportFromId}
-		<include refid="condition" />
-		limit #{pageIndex},#{pageSize}
+	SELECT * FROM reports r,report_type t,emp e WHERE r.type_id=t.type_id
+	AND r.report_from=e.emp_id AND r.flag = 1 AND report_from =
+	#{reports.reportFromId} <include refid="condition" /> limit #{pageIndex},#{pageSize}
 	</select>
 	<!-- 根据report_from查分页数量 -->
 	<select id="selectReportsByReportFromAndConditionPageCount"
@@ -69,18 +65,16 @@
 	<!-- 查询的条件 -->
 	<sql id="condition">
 		<if test="reports!=null">
-			<if test="reports.reportId!=null and reports.reportId!=''">
-				and report_id=#{reports.reportId}
-			</if>
+			<!-- <if test="reports.reportId!=null and reports.reportId!=''"> and report_id=#{reports.reportId} 
+				</if> -->
 			<if test="reports.typeId!=null and reports.typeId!=''">
-				and type_id=#{reports.typeId}
+				and r.type_id = #{reports.typeId}
 			</if>
 			<if test="reports.reportName!=null and reports.reportName!=''">
 				and report_name like '%' #{reports.reportName} '%'
 			</if>
-			<if test="reports.reportFromId!=null and reports.reportFromId!=''">
-				and report_from=#{reports.reportFromId}
-			</if>
+			<!-- <if test="reports.reportFromId!=null and reports.reportFromId!=''"> 
+				and report_from=#{reports.reportFromId} </if> -->
 		</if>
 	</sql>
 	<!-- 查询所有 -->
