@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.woniuxy.oasystem.entity.Car;
+import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.OfficeSuppliesBuy;
 import com.woniuxy.oasystem.entity.PageBean;
@@ -45,6 +46,7 @@ public class OfficeSuppliesBuyController {
 		System.out.println(vo.t);
 		if(vo.t==null) {
 			vo.t = new OfficeSuppliesBuy();
+			vo.t.setEmp(new Emp());
 		}
 		if (vo.pageIndex == null) {
 			vo.pageIndex = 1;

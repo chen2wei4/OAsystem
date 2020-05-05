@@ -5,42 +5,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 会议管理 -->
 <mapper namespace="com.woniuxy.oasystem.dao.MeetingDao">
 	<!-- 分页查询 -->
-	<select id="findAllByPage" resultMap="meetingMap">
-		select m.meeting_id,m.emp_id,principal,recorder,topic,boardroom_id,start_time,end_time,file,
-		p.participant_id,p.meeting_id,p.meeting_id,p.emp_id pemp_id
-		from meeting m,participant p where m.meeting_id=p.meeting_id and m.flag = 1 and p.flag = 1
+	<select id="findAllByPage" resultMap="empMap">
+		select * 
+		from meeting m
+		inner join emp e on m.emp_id = e.emp_id
+		inner join boardroom b on m.boardroom_id = b.boardroom_id
+		where m.flag = 1
 		<include refid="conditionSql"/>
 		limit #{pageIndex},#{pageSize}
 	</select>
 	
-	<resultMap type="Meeting" id="meetingMap">
+	<resultMap type="Meeting" id="empMap">
 		<id column="meeting_id" property="meetingId"/>
-		<result column="emp_id" property="empId"/>
 		<result column="principal" property="principal"/>
 		<result column="recorder" property="recorder"/>
 		<result column="topic" property="topic"/>
-		<result column="boardroom_id" property="boardroomId"/>
 		<result column="start_time" property="startTime"/>
 		<result column="end_time" property="endTime"/>
 		<result column="file" property="file"/>
 		
-		<collection property="participant" ofType="Participant">
-			<id column="participant_id" property="participantId"/>
-			<result column="pemp_id" property="empId"/>
-			<result column="meeting_id" property="meetingId"/>
+		<collection property="emp" ofType="Emp">
+			<result column="emp_name" property="empName"/>
+		</collection>
+		<collection property="boardroom" ofType="Boardroom">
+			<result column="name" property="name"/>
 		</collection>
 	</resultMap>
 	
 	<!-- 总条数-->
 	<select id="findAllByPageCount" resultType="int">
-		select count(*) from meeting 
-		where flag = 1
+		select count(distinct meeting_id) 
+		from meeting m
+		inner join emp e on m.emp_id = e.emp_id
+		inner join boardroom b on m.boardroom_id = b.boardroom_id
+		where m.flag = 1
 		<include refid="conditionSql"/>
 	</select>
 	<!-- 模糊查询条件 -->
 	<sql id="conditionSql">
-			<if test="m.empId!= null and m.empId!=''">
-				and emp_id like '%' #{m.empId} '%'
+			<if test="m.emp.empName!= null and m.emp.empName!=''">
+				and emp_Name like '%' #{m.emp.empName} '%'
 			</if>
 			<if test="m.principal!= null and m.principal!=''">
 				and principal like '%' #{m.principal} '%'
@@ -51,8 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="m.topic!= null and m.topic!=''">
 				and topic like '%' #{m.topic} '%'
 			</if>
-			<if test="m.boardroomId!= null and m.boardroomId!=''">
-				and boardroom_id like '%' #{m.boardroomId} '%'
+			<if test="m.boardroom.name!= null and m.boardroom.name!=''">
+				and b.name like '%' #{m.boardroom.name} '%'
 			</if>
 			<if test="m.startTime!= null and m.startTime!=''">
 				and start_time like '%' #{m.startTime} '%'
@@ -69,13 +73,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 根据mid修改 -->
 	<update id="updateByMid">
 		update meeting set 
-		emp_id=#{m.empId},principal=#{m.principal},recorder=#{m.recorder},topic=#{m.topic},boardroom_id=#{m.boardroomId},
+		principal=#{m.principal},recorder=#{m.recorder},topic=#{m.topic},boardroom_id=#{m.boardroom.boardroomId},
 		start_time=#{m.startTime},end_time=#{m.endTime},file=#{m.file}
 		where meeting_id = #{m.meetingId}
 	</update>
 	<!-- 添加 -->
 	<insert id="insert">
 		insert into meeting (emp_id,principal,recorder,topic,boardroom_id,start_time,end_time,file) 
-		values (#{m.empId},#{m.principal},#{m.recorder},#{m.topic},#{m.boardroomId},#{m.startTime},#{m.endTime},#{m.file})
+		values (#{m.emp.empId},#{m.principal},#{m.recorder},#{m.topic},#{m.boardroom.boardroomId},#{m.startTime},#{m.endTime},#{m.file})
 	</insert>
+	
+	<!-- 根据用户名查询empId -->
+	<select id="findIdByBoardroomName" resultType="Integer">
+		select boardroom_id from boardroom where name = #{name}
+	</select>
 </mapper>

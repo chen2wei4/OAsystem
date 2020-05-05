@@ -20,12 +20,32 @@
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
 			<!--左侧导航-->
-
+			<div th:replace="common :: lefter"></div>
 			<!--End 左侧导航-->
 
 			<!--头部信息-->
+			<header class="lyear-layout-header">
 
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 行政档案管理 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header"></ul>
+
+					</div>
+				</nav>
+
+			</header>
 			<!--End 头部信息-->
+
 
 			<!--页面主要内容-->
 			<main class="lyear-layout-content" id="content">
@@ -53,8 +73,7 @@
 				                </form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
-										class="mdi mdi-plus"></i> 新增</a> <a class="btn btn-danger"
-										href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+										class="mdi mdi-plus"></i> 新增</a>
 								</div>
 							</div>
 							<!--正文-->
@@ -64,11 +83,9 @@
 									<table class="table table-bordered">
 										<thead>
 											<tr>
-												<th><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" id="check-all"><span></span>
-												</label></th>
+												
 												<th>档案名</th>
-												<th>文件地址</th>
+												<th>文件</th>
 												<th>入档时间</th>
 												<th>档案类别</th>
 												<th>操作</th>
@@ -76,9 +93,7 @@
 										</thead>
 										<tbody>
 											<tr v-for="item in list">
-												<td><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" name="ids[]" value="item.carId"><span></span>
-												</label></td>
+												
 												<td>{{item.name}}</td>
 												<td>{{item.file}}</td>
 												<td>{{item.time}}</td>
@@ -250,8 +265,6 @@
 	    	        '<div class="form-group">' +
 	    	        '<label> 档案名 </label>' +
 	    	        '<input id="name" type="text" class="name form-control" required />' +
-	    	        '<label> 入档时间 </label>' +
-	    	        '<input id="time" type="text" class="name form-control" required />' +
 	    	        '<label> 档案类别 </label>' +
 	    	        '<input id="sort" type="text" class="name form-control" required />' +
 	    	        '</div>' +
@@ -262,19 +275,26 @@
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
 	    	                	var name=$("#name").val();
-    							var time=$("#time").val();
     							var sort=$("#sort").val();
-	    	                    if(!name||!file||!time||!sort){
+	    	                    if(!name||!file||!sort){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
-	    	                  //发送添加请求 
+	    	                    //获取系统时间
+								var d=new Date(),str='';
+								str +=d.getFullYear()+'-'; 
+								str +=d.getMonth()+1+'-'; 
+								str +=d.getDate()+' ';
+								str +=d.getHours()+':';
+								str +=d.getMinutes()+':';
+								str +=d.getSeconds();  
+	    	                    //发送添加请求 
 	    	                  axios({
     						        	url:'[[@{/administrativeArchives/insert}]]',
     						        	method:'post',
     						        	data:{
     						        		"name":name,
-						        			"time":time,
+						        			"time":str,
 						        			"sort":sort
     						        		}
     						        }).then(res=>{

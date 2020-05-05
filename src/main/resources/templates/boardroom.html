@@ -20,14 +20,32 @@
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
 			<!--左侧导航-->
-
+			<div th:replace="common :: lefter"></div>
 			<!--End 左侧导航-->
 
 			<!--头部信息-->
+			<header class="lyear-layout-header">
 
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 会议室 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header"></ul>
+
+					</div>
+				</nav>
+
+			</header>
 			<!--End 头部信息-->
 
-			<!--页面主要内容-->
 			<main class="lyear-layout-content" id="content">
 			<div class="container-fluid">
 				<div class="row">
@@ -53,8 +71,7 @@
 				                </form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
-										class="mdi mdi-plus"></i> 新增</a> <a class="btn btn-danger"
-										href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+										class="mdi mdi-plus"></i> 新增</a> 
 								</div>
 							</div>
 							<!--正文-->
@@ -64,9 +81,7 @@
 									<table class="table table-bordered">
 										<thead>
 											<tr>
-												<th><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" id="check-all"><span></span>
-												</label></th>
+												
 												<th>会议室</th>
 												<th>地址</th>
 												<th>使用状态</th>
@@ -75,9 +90,7 @@
 										</thead>
 										<tbody>
 											<tr v-for="item in list">
-												<td><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" name="ids[]" value="item.boardroomId"><span></span>
-												</label></td>
+												
 												<td>{{item.name}}</td>
 												<td>{{item.address}}</td>
 												<td>{{item.useState}}</td>
@@ -250,8 +263,6 @@
 	    	        '<input id="name" type="text" class="name form-control" required />' +
 	    	        '<label> 地址 </label>' +
 	    	        '<input id="address" type="text" class="name form-control" required />' +
-	    	        '<label> 使用状态 </label>' +
-	    	        '<input id="useState" type="text" class="name form-control" required />' +
 	    	        '</div>' +
 	    	        '</form>',
 	    	        buttons: {
@@ -261,7 +272,6 @@
 	    	                action: function () {
 	    	                	var name=$("#name").val();
     							var address=$("#address").val();
-    							var useState=$("#useState").val();
     							if(!name||!address||!useState){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
@@ -274,7 +284,7 @@
     						        			
     						        			"name":name,
     						        			"address":address,
-    						        			"useState":useState
+    						        			"useState":"未使用"
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);

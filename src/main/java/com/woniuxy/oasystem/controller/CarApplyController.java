@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.woniuxy.oasystem.entity.Car;
 import com.woniuxy.oasystem.entity.CarApply;
+import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.PageBean;
 import com.woniuxy.oasystem.entity.Vo;
@@ -46,6 +47,7 @@ public class CarApplyController {
 		System.out.println(vo.t);
 		if(vo.t==null) {
 			vo.t = new CarApply();
+			vo.t.setEmp(new Emp());
 		}
 		if (vo.pageIndex == null) {
 			vo.pageIndex = 1;
@@ -109,6 +111,7 @@ public class CarApplyController {
 			carApplyService.insert(carApply);
 			return new CommonResult<PageBean<CarApply>>(200,"添加成功",null);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new CommonResult<PageBean<CarApply>>(500,"添加失败",null);
 		}
 	}

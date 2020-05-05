@@ -24,4 +24,8 @@ pagehelper:
  reasonable: true
  support-methods-arguments: true
  params: count=countSql
-    
+#JACKSON 
+spring:  
+  jackson:     
+    date-format: "yyyy-MM-dd"     
+    time-zone: "GMT+8" 

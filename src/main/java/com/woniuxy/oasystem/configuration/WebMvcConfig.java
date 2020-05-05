@@ -54,7 +54,6 @@ public class WebMvcConfig {
 				registry.addViewController("/officeSuppliesApply.html").setViewName("officeSuppliesApply");
 				registry.addViewController("/officeSuppliesReturn.html").setViewName("officeSuppliesReturn");
 				registry.addViewController("/officeSuppliesBuy.html").setViewName("officeSuppliesBuy");
-
 				//行政档案管理相关
 				registry.addViewController("/administrativeArchives.html").setViewName("administrativeArchives");
 				//事务模块

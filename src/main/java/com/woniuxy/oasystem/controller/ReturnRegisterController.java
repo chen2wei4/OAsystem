@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.woniuxy.oasystem.entity.Car;
 import com.woniuxy.oasystem.entity.CarApply;
+import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.PageBean;
 import com.woniuxy.oasystem.entity.ReturnRegister;
@@ -48,6 +49,7 @@ public class ReturnRegisterController {
 		System.out.println(vo.t);
 		if(vo.t==null) {
 			vo.t = new ReturnRegister();
+			vo.t.setEmp(new Emp());
 		}
 		if (vo.pageIndex == null) {
 			vo.pageIndex = 1;

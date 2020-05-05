@@ -20,12 +20,32 @@
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
 			<!--左侧导航-->
-
+			<div th:replace="common :: lefter"></div>
 			<!--End 左侧导航-->
 
 			<!--头部信息-->
+			<header class="lyear-layout-header">
 
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 办公用品请购 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header"></ul>
+
+					</div>
+				</nav>
+
+			</header>
 			<!--End 头部信息-->
+
 
 			<!--页面主要内容-->
 			<main class="lyear-layout-content" id="content">
@@ -39,22 +59,21 @@
 				                    <div class="input-group-btn">
 				                      
 				                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" 
-				                      	aria-haspopup="true" aria-expanded="false" data-field="empId">
+				                      	aria-haspopup="true" aria-expanded="false" data-field="empName">
 				                      		职工 <span class="caret"></span>
 				                      </button>
 				                      <ul class="dropdown-menu" @click="turn()">
-				                        <li> <a tabindex="-1" href="#" data-field="empId">职工</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="empName">职工</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="buyTime">请购时间</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="state">处理状态</a> </li>
 				                      </ul>
 				                    </div>
-				                    <input type="text" class="form-control" id="condition" data-field="empId" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
+				                    <input type="text" class="form-control" id="condition" data-field="empName" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
 				                  </div>
 				                </form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
-										class="mdi mdi-plus"></i> 新增</a> <a class="btn btn-danger"
-										href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+										class="mdi mdi-plus"></i> 新增</a> 
 								</div>
 							</div>
 							<!--正文-->
@@ -64,9 +83,7 @@
 									<table class="table table-bordered">
 										<thead>
 											<tr>
-												<th><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" id="check-all"><span></span>
-												</label></th>
+												
 												<th>职工</th>
 												<th>内容</th>
 												<th>请购时间</th>
@@ -76,10 +93,8 @@
 										</thead>
 										<tbody>
 											<tr v-for="item in list">
-												<td><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" name="ids[]" value="item.carId"><span></span>
-												</label></td>
-												<td>{{item.empId}}</td>
+												
+												<td>{{item.emp.empName}}</td>
 												<td>{{item.content}}</td>
 												<td>{{item.buyTime}}</td>
 												<td>{{item.state}}</td>
@@ -124,6 +139,7 @@
 	<script th:src="@{/js/jconfirm/jquery-confirm.min.js}"></script>
 
 	<script type="text/javascript">
+	var empId = [[${session.emp.empId}]];
 	var list = new Vue({
 	    el:"#content",
 	    data:{
@@ -137,8 +153,8 @@
 		    	  //获取查询条件
 		    	  var type = $("#condition").attr('data-field');
 			  	  var param = $("#condition").val();
-			  	  var empId,buyTime,state;
-			  	  if(type=="empId"){empId=param};
+			  	  var empName,buyTime,state;
+			  	  if(type=="empName"){empName=param};
 			  	  if(type=="buyTime"){buyTime=param};
 			  	  if(type=="state"){state=param};
 			  	//发送查询请求 
@@ -147,7 +163,9 @@
 				        	method:'post',
 				        	data:{
 				        			"t":{
-				        				"empId":empId,
+				        				"emp":{
+				        					"empName":empName,
+				        				},
 					        			"buyTime":buyTime,
 					        			"state":state
 				        			},
@@ -197,8 +215,6 @@
 	    	        content: '' +
 	    	        '<form action="" class="formName">' +
 	    	        '<div class="form-group">' +
-	    	        '<label> 职工 </label>' +
-	    	        '<input id="empId" type="text" value="'+item.empId+'" class="name form-control" required />' +
 	    	        '<label> 内容 </label>' +
 	    	        '<input id="buycontent" type="text" value="'+item.content+'" class="name form-control" required />' +
 	    	        '<label> 请购时间 </label>' +
@@ -212,11 +228,10 @@
 	    	                text: '提交',
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
-	    	                	var empId=$("#empId").val();
     							var buycontent=$("#buycontent").val();
     							var buyTime=$("#buyTime").val();
     							var state=$("#state").val();
-	    	                    if(!empId||!buycontent||!buyTime||!state){
+	    	                    if(!buycontent||!buyTime||!state){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
@@ -227,7 +242,6 @@
     						        	method:'post',
     						        	data:{
     						        			"osbId":item.osbId,
-    						        			"empId":empId,
     						        			"content":buycontent,
     						        			"buyTime":buyTime,
     						        			"state":state
@@ -252,14 +266,8 @@
 	    	        content: '' +
 	    	        '<form action="" class="formName">' +
 	    	        '<div class="form-group">' +
-	    	        '<label> 职工 </label>' +
-	    	        '<input id="empId" type="text" class="name form-control" required />' +
 	    	        '<label> 内容 </label>' +
 	    	        '<input id="buycontent" type="text" class="name form-control" required />' +
-	    	        '<label> 请购时间 </label>' +
-	    	        '<input id="buyTime" type="text" class="name form-control" required />' +
-	    	        '<label> 处理状态 </label>' +
-	    	        '<input id="state" type="text" class="name form-control" required />' +
 	    	        '</div>' +
 	    	        '</form>',
 	    	        buttons: {
@@ -267,23 +275,32 @@
 	    	                text: '提交',
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
-	    	                	var empId=$("#empId").val();
     							var buycontent=$("#buycontent").val();
     							var buyTime=$("#buyTime").val();
     							var state=$("#state").val();
-	    	                    if(!empId||!buycontent||!buyTime||!state){
+	    	                    if(!buycontent){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
-	    	                  //发送添加请求 
+	    	                    //获取系统时间
+								var d=new Date(),str='';
+								str +=d.getFullYear()+'-'; 
+								str +=d.getMonth()+1+'-'; 
+								str +=d.getDate()+' ';
+								str +=d.getHours()+':';
+								str +=d.getMinutes()+':';
+								str +=d.getSeconds();  
+	    	                    //发送添加请求 
 	    	                  axios({
     						        	url:'[[@{/officeSuppliesBuy/insert}]]',
     						        	method:'post',
     						        	data:{
-						        			"empId":empId,
+    						        		"emp":{
+						        				"empId":empId
+						        			},
 						        			"content":buycontent,
-						        			"buyTime":buyTime,
-						        			"state":state
+						        			"buyTime":str,
+						        			"state":"处理中"
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);

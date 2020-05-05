@@ -54,5 +54,11 @@ public class ReturnRegisterServiceImpl implements ReturnRegisterService{
 		returnRegisterDao.insert(returnRegister);
 	}
 
+	@Override
+	public Integer findIdByEmpName(String empName) {
+		
+		return 1;
+	}
+
 	
 }

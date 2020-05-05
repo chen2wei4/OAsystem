@@ -25,4 +25,6 @@ public interface OfficeSuppliesReturnDao {
 	void updateByOsrId(@Param("osr")OfficeSuppliesReturn officeSuppliesReturn);
 	//添加办公用品
 	void insert(@Param("osr")OfficeSuppliesReturn officeSuppliesReturn);
+	//根据用户名查询empId
+	Integer findIdByEmpName(String empName);
 }

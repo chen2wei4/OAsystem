@@ -20,12 +20,32 @@
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
 			<!--左侧导航-->
-
+			<div th:replace="common :: lefter"></div>
 			<!--End 左侧导航-->
 
 			<!--头部信息-->
+			<header class="lyear-layout-header">
 
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 办公用品申请 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header"></ul>
+
+					</div>
+				</nav>
+
+			</header>
 			<!--End 头部信息-->
+
 
 			<!--页面主要内容-->
 			<main class="lyear-layout-content" id="content">
@@ -44,7 +64,7 @@
 				                      </button>
 				                      <ul class="dropdown-menu" @click="turn()">
 				                        <li> <a tabindex="-1" href="#" data-field="osNumber">用品编号</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="empId">职工</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="empName">职工</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="applyTime">申请时间</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="review">审核状态</a> </li>
 				                      </ul>
@@ -54,8 +74,7 @@
 				                </form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
-										class="mdi mdi-plus"></i> 新增</a> <a class="btn btn-danger"
-										href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+										class="mdi mdi-plus"></i> 新增</a> 
 								</div>
 							</div>
 							<!--正文-->
@@ -65,9 +84,7 @@
 									<table class="table table-bordered">
 										<thead>
 											<tr>
-												<th><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" id="check-all"><span></span>
-												</label></th>
+												
 												<th>用品编号</th>
 												<th>职工</th>
  												<th>数量</th>
@@ -78,11 +95,8 @@
 										</thead>
 										<tbody>
 											<tr v-for="item in list">
-												<td><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" name="ids[]" value="item.carId"><span></span>
-												</label></td>
 												<td>{{item.osNumber}}</td>
-												<td>{{item.empId}}</td>
+												<td>{{item.emp.empName}}</td>
 												<td>{{item.number}}</td>
 												<td>{{item.applyTime}}</td>
 												<td>{{item.review}}</td>
@@ -127,11 +141,13 @@
 	<script th:src="@{/js/jconfirm/jquery-confirm.min.js}"></script>
 
 	<script type="text/javascript">
+	var empId = [[${session.emp.empId}]];
 	var list = new Vue({
 	    el:"#content",
 	    data:{
 	      pb:"",//页码信息
-	      list:[]//数据
+	      list:[],//数据
+	     
 	    },
 	    methods:{
 	    	//展示所有数据
@@ -140,9 +156,9 @@
 		    	  //获取查询条件
 		    	  var type = $("#condition").attr('data-field');
 			  	  var param = $("#condition").val();
-			  	  var osNumber,empId,applyTime,review;
+			  	  var osNumber,empName,applyTime,review;
 			  	  if(type=="osNumber"){osNumber=param};
-			  	  if(type=="empId"){empId=param};
+			  	  if(type=="empName"){empName=param};
 			  	  if(type=="applyTime"){applyTime=param};
 			  	  if(type=="review"){review=param};
 			  	//发送查询请求 
@@ -152,15 +168,20 @@
 				        	data:{
 				        			"t":{
 				        				"osNumber":osNumber,
-					        			"empId":empId,
+					        			"emp":{
+					        				"empName":empName
+					        				},
 					        			"applyTime":applyTime,
 					        			"review":review
 				        			},
 				        			"pageIndex":pageIndex
 				        		}
 				        }).then(res=>{
+				        	
 				        	this.list=res.data.data.beanList;
 				        	this.pb=res.data.data
+				        	
+				        	
 				        })	 
 	      },
 	      //根据ID删除
@@ -204,8 +225,6 @@
 	    	        '<div class="form-group">' +
 	    	        '<label> 用品编号 </label>' +
 	    	        '<input id="osNumber" type="text" value="'+item.osNumber+'" class="name form-control" required />' +
-	    	        '<label> 职工 </label>' +
-	    	        '<input id="empId" type="text" value="'+item.empId+'" class="name form-control" required />' +
 	    	        '<label> 数量 </label>' +
 	    	        '<input id="number" type="text" value="'+item.number+'" class="name form-control" required />' +
 	    	        '<label> 申请时间 </label>' +
@@ -219,11 +238,10 @@
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
     							var osNumber=$("#osNumber").val();
-    							var empId=$("#empId").val();
     							var number=$("#number").val();
     							var applyTime=$("#applyTime").val();
     							var review=$("#review").val();
-	    	                    if(!osNumber||!empId||!number||!applyTime||!review){
+	    	                    if(!osNumber||!number||!applyTime||!review){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
@@ -235,7 +253,6 @@
     						        	data:{
     						        			"osaId":item.osaId,
     						        			"osNumber":osNumber,
-    						        			"empId":empId,
     						        			"number":number,
     						        			"applyTime":applyTime,
     						        			"review":review
@@ -262,14 +279,8 @@
 	    	        '<div class="form-group">' +
 	    	        '<label> 用品编号 </label>' +
 	    	        '<input id="osNumber" type="text" class="name form-control" required />' +
-	    	        '<label> 职工 </label>' +
-	    	        '<input id="empId" type="text" class="name form-control" required />' +
 	    	        '<label> 数量 </label>' +
 	    	        '<input id="number" type="text" class="name form-control" required />' +
-	    	        '<label> 申请时间 </label>' +
-	    	        '<input id="applyTime" type="text" class="name form-control" required />' +
-	    	        '<label> 审核状态 </label>' +
-	    	        '<input id="review" type="text" class="name form-control" required />' +
 	    	        '</form>',
 	    	        buttons: {
 	    	        	confirm: {
@@ -277,24 +288,31 @@
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
 	    	                	var osNumber=$("#osNumber").val();
-    							var empId=$("#empId").val();
     							var number=$("#number").val();
-    							var applyTime=$("#applyTime").val();
-    							var review=$("#review").val();
-	    	                    if(!osNumber||!empId||!number||!applyTime||!review){
+	    	                    if(!osNumber||!number){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
-	    	                  //发送添加请求 
+	    	                    //获取系统时间
+								var d=new Date(),str='';
+								str +=d.getFullYear()+'-'; 
+								str +=d.getMonth()+1+'-'; 
+								str +=d.getDate()+' ';
+								str +=d.getHours()+':';
+								str +=d.getMinutes()+':';
+								str +=d.getSeconds();  
+	    	                    //发送添加请求 
 	    	                  axios({
     						        	url:'[[@{/officeSuppliesApply/insert}]]',
     						        	method:'post',
     						        	data:{
 						        			"osNumber":osNumber,
-						        			"empId":empId,
+						        			"emp":{
+						        				"empId":empId
+						        			},
 						        			"number":number,
-						        			"applyTime":applyTime,
-						        			"review":review
+						        			"applyTime":str,
+						        			"review":"审核中"
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);

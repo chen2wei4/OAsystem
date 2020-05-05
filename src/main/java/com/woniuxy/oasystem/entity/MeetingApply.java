@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MeetingApply {
 private Integer maId;//主键
-private Integer empId;//员工id
+private Emp emp;//员工id
 @DateTimeFormat(pattern = "yyyy-MM-dd")
 @JsonFormat(pattern = "yyyy-MM-dd")
 private Date applyTime;//申请时间
@@ -39,5 +39,5 @@ private Date startTime;//开始时间
 private Date endTime;//结束时间
 private String purpose;//用途
 private String review;//审核
-private Integer boardroomId;//会议室id
+private Boardroom boardroom;//会议室id
 }

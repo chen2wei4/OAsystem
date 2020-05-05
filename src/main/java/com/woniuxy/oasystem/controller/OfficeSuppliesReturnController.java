@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.woniuxy.oasystem.entity.Car;
+import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.OfficeSuppliesReturn;
 import com.woniuxy.oasystem.entity.PageBean;
 import com.woniuxy.oasystem.entity.Vo;
@@ -44,6 +45,7 @@ public class OfficeSuppliesReturnController {
 		System.out.println(vo.t);
 		if(vo.t==null) {
 			vo.t = new OfficeSuppliesReturn();
+			vo.t.setEmp(new Emp());
 		}
 		if (vo.pageIndex == null) {
 			vo.pageIndex = 1;
@@ -105,6 +107,7 @@ public class OfficeSuppliesReturnController {
 			officeSuppliesReturnService.insert(officeSuppliesReturn);
 			return new CommonResult<PageBean<OfficeSuppliesReturn>>(200,"添加成功",null);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new CommonResult<PageBean<OfficeSuppliesReturn>>(500,"添加失败",null);
 		}
 	}

@@ -20,12 +20,32 @@
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
 			<!--左侧导航-->
-
+			<div th:replace="common :: lefter"></div>
 			<!--End 左侧导航-->
 
 			<!--头部信息-->
+			<header class="lyear-layout-header">
 
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 会议管理 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header"></ul>
+
+					</div>
+				</nav>
+
+			</header>
 			<!--End 头部信息-->
+
 
 			<!--页面主要内容-->
 			<main class="lyear-layout-content" id="content">
@@ -39,25 +59,25 @@
 				                    <div class="input-group-btn">
 				                      
 				                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" 
-				                      	aria-haspopup="true" aria-expanded="false" data-field="empId">
+				                      	aria-haspopup="true" aria-expanded="false" data-field="empName">
 				                      		召开人 <span class="caret"></span>
 				                      </button>
 				                      <ul class="dropdown-menu" @click="turn()">
+				                      <li> <a tabindex="-1" href="#" data-field="empName">召开人 </a></li>
 				                        <li> <a tabindex="-1" href="#" data-field="principal">负责人 </a></li>
 				                        <li> <a tabindex="-1" href="#" data-field="recorder">记录员</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="topic">主题</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="boardroomId">会议室</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="name">会议室</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="startTime">开始时间</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="endTime">结束时间</a> </li>
 				                      </ul>
 				                    </div>
-				                    <input type="text" class="form-control" id="condition" data-field="empId" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
+				                    <input type="text" class="form-control" id="condition" data-field="empName" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
 				                  </div>
 				                </form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
-										class="mdi mdi-plus"></i> 新增</a> <a class="btn btn-danger"
-										href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+										class="mdi mdi-plus"></i> 新增</a> 
 								</div>
 							</div>
 							<!--正文-->
@@ -67,9 +87,7 @@
 									<table class="table table-bordered">
 										<thead>
 											<tr>
-												<th><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" id="check-all"><span></span>
-												</label></th>
+												
 												<th>召开人</th>
 												<th>负责人</th>
 												<th>记录员</th>
@@ -84,14 +102,12 @@
 										</thead>
 										<tbody>
 											<tr v-for="item in list">
-												<td><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" name="ids[]" value="item.meetingId"><span></span>
-												</label></td>
-												<td>{{item.empId}}</td>
+												
+												<td>{{item.emp.empName}}</td>
 												<td>{{item.principal}}</td>
 												<td>{{item.recorder}}</td>
 												<td>{{item.topic}}</td>
-												<td>{{item.boardroomId}}</td>
+												<td>{{item.boardroom.name}}</td>
 												<td>{{item.startTime}}</td>
 												<td>{{item.endTime}}</td>
 												<td>{{item.file}}</td>
@@ -137,6 +153,7 @@
 	<script th:src="@{/js/jconfirm/jquery-confirm.min.js}"></script>
 
 	<script type="text/javascript">
+	var empId = [[${session.emp.empId}]];
 	var list = new Vue({
 	    el:"#content",
 	    data:{
@@ -150,12 +167,12 @@
 		    	  //获取查询条件
 		    	  var sort = $("#condition").attr('data-field');
 			  	  var param = $("#condition").val();
-			  	  var empId,principal,recorder,topic,boardroomId,startTime,endTime,file;
-			  	  if(sort=="empId"){empId=param};
+			  	  var empName,principal,recorder,topic,name,startTime,endTime,file;
+			  	  if(sort=="empName"){empName=param};
 			  	  if(sort=="principal"){principal=param};
 			  	  if(sort=="recorder"){recorder=param};
 			  	  if(sort=="topic"){topic=param};
-			  	  if(sort=="boardroomId"){boardroomId=param};
+			  	  if(sort=="name"){name=param};
 			  	  if(sort=="startTime"){startTime=param};
 			  	  if(sort=="endTime"){endTime=param};
 			  	  if(sort=="file"){file=param};
@@ -165,11 +182,15 @@
 				        	method:'post',
 				        	data:{
 				        			"t":{
-				        				"empId":empId,
+				        				"emp":{
+				        					"empName":empName
+				        				},
 					        			"principal":principal,
 					        			"recorder":recorder,
 					        			"topic":topic,
-					        			"boardroomId":boardroomId,
+					        			"boardroom":{
+					        				"name":name
+					        			},
 					        			"startTime":startTime,
 					        			"endTime":endTime,
 					        			"file":file
@@ -220,8 +241,6 @@
 	    	        content: '' +
 	    	        '<form action="" class="formName">' +
 	    	        '<div class="form-group">' +
-	    	        '<label> 职工 </label>' +
-	    	        '<input id="empId" type="text" value="'+item.empId+'" class="name form-control" required />' +
 	    	        '<label> 负责人 </label>' +
 	    	        '<input id="principal" type="text" value="'+item.principal+'" class="name form-control" required />' +
 	    	        '<label> 记录员 </label>' +
@@ -229,7 +248,7 @@
 	    	        '<label> 主题 </label>' +
 	    	        '<input id="topic" type="text" value="'+item.topic+'" class="name form-control" required />' +
 	    	        '<label> 会议室 </label>' +
-	    	        '<input id="boardroomId" type="text" value="'+item.boardroomId+'" class="name form-control" required />' +
+	    	        '<input id="boardroomName" type="text" value="'+item.boardroom.name+'" class="name form-control" required />' +
 	    	        '<label> 开始时间 </label>' +
 	    	        '<input id="startTime" type="text" value="'+item.startTime+'" class="name form-control" required />' +
 	    	        '<label> 结束时间 </label>' +
@@ -243,15 +262,14 @@
 	    	                text: '提交',
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
-	    	                	var empId=$("#empId").val();
     							var principal=$("#principal").val();
     							var recorder=$("#recorder").val();
     							var topic=$("#topic").val();
-    							var boardroomId=$("#boardroomId").val();
+    							var boardroomName=$("#boardroomName").val();
     							var startTime=$("#startTime").val();
     							var endTime=$("#endTime").val();
     							var file=$("#file").val();
-	    	                    if(!empId||!principal||!recorder||!topic||!boardroomId||!startTime||!endTime||!file){
+	    	                    if(!principal||!recorder||!topic||!boardroomName||!startTime||!endTime||!file){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
@@ -261,11 +279,12 @@
     						        	url:'[[@{/meeting/updateByMid}]]',
     						        	method:'post',
     						        	data:{
-    						        			"empId":item.empId,
     						        			"principal":principal,
     						        			"recorder":recorder,
     						        			"topic":topic,
-    						        			"boardroomId":boardroomId,
+    						        			"boardroom":{
+    						        				"boardroomName":boardroomName
+    						        			},
     						        			"startTime":startTime,
     						        			"endTime":endTime,
     						        			"file":file
@@ -290,8 +309,6 @@
 	    	        content: '' +
 	    	        '<form action="" class="formName">' +
 	    	        '<div class="form-group">' +
-	    	        '<label> 职工 </label>' +
-	    	        '<input id="empId" type="text"  class="name form-control" required />' +
 	    	        '<label> 负责人 </label>' +
 	    	        '<input id="principal" type="text"  class="name form-control" required />' +
 	    	        '<label> 记录员 </label>' +
@@ -313,15 +330,14 @@
 	    	                text: '提交',
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
-	    	                	var empId=$("#empId").val();
     							var principal=$("#principal").val();
     							var recorder=$("#recorder").val();
     							var topic=$("#topic").val();
-    							var boardroomId=$("#boardroomId").val();
+    							var boardroomName=$("#boardroomName").val();
     							var startTime=$("#startTime").val();
     							var endTime=$("#endTime").val();
     							var file=$("#file").val();
-	    	                    if(!empId||!principal||!recorder||!topic||!boardroomId||!startTime||!endTime||!file){
+	    	                    if(!principal||!recorder||!topic||!boardroomName||!startTime||!endTime||!file){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
@@ -330,11 +346,15 @@
     						        	url:'[[@{/meeting/insert}]]',
     						        	method:'post',
     						        	data:{
-    						        		"empId":empId,
+    						        		"emp":{
+    						        			"empId":empId
+    						        		},
 						        			"principal":principal,
 						        			"recorder":recorder,
 						        			"topic":topic,
-						        			"boardroomId":boardroomId,
+						        			"boardroom":{
+						        				"boardroomName":boardroomName
+						        			},
 						        			"startTime":startTime,
 						        			"endTime":endTime,
 						        			"file":file

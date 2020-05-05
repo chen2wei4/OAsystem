@@ -108,14 +108,12 @@ public class CarController {
 			carService.insert(car);
 			return new CommonResult<PageBean<Car>>(200,"添加成功",null);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new CommonResult<PageBean<Car>>(500,"添加失败",null);
 		}
 	}
 	
 	
 }
-class Param {
-	public Car car;
-	public Integer pageIndex;
-}
+
 

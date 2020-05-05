@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OfficeSuppliesReturn {
 private Integer osrId;//主键
-private Integer empId;//职工id
+private Emp emp;//职工id
 private Integer osNumber;//物品编号
 @DateTimeFormat(pattern = "yyyy-MM-dd")
 @JsonFormat(pattern = "yyyy-MM-dd")

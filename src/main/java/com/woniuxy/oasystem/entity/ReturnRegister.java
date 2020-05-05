@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReturnRegister {
 	private Integer rrId;//主键
-	private Integer empId;//员工id
+	private Emp emp;;//员工id
 	private String license;//车牌
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")

@@ -27,11 +27,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Meeting {
 private Integer meetingId;//主键
-private Integer empId;//员工id
+private Emp emp;//员工id
 private String principal;//负责人
 private String recorder;//记录员
 private String topic;//主题
-private Integer boardroomId;//会议室id
+private Boardroom boardroom;//会议室id
 @DateTimeFormat(pattern = "yyyy-MM-dd")
 @JsonFormat(pattern = "yyyy-MM-dd")
 private Date startTime;//开始时间

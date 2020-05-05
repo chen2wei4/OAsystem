@@ -20,12 +20,32 @@
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
 			<!--左侧导航-->
-
+			<div th:replace="common :: lefter"></div>
 			<!--End 左侧导航-->
 
 			<!--头部信息-->
+			<header class="lyear-layout-header">
 
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 会议申请 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header"></ul>
+
+					</div>
+				</nav>
+
+			</header>
 			<!--End 头部信息-->
+
 
 			<!--页面主要内容-->
 			<main class="lyear-layout-content" id="content">
@@ -39,26 +59,25 @@
 				                    <div class="input-group-btn">
 				                      
 				                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" 
-				                      	aria-haspopup="true" aria-expanded="false" data-field="empId">
+				                      	aria-haspopup="true" aria-expanded="false" data-field="empName">
 				                      		申请人 <span class="caret"></span>
 				                      </button>
 				                      <ul class="dropdown-menu" @click="turn()">
-				                        <li> <a tabindex="-1" href="#" data-field="empId">申请人 </a></li>
+				                        <li> <a tabindex="-1" href="#" data-field="empName">申请人 </a></li>
 				                         <li> <a tabindex="-1" href="#" data-field="applyTime">申请时间</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="startTime">开始时间</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="endTime">结束时间</a> </li>
 				                         <li> <a tabindex="-1" href="#" data-field="purpose">用途</a> </li>
-				                        <li> <a tabindex="-1" href="#" data-field="boardroomId">会议室</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="name">会议室</a> </li>
 				                        <li> <a tabindex="-1" href="#" data-field="review">审核状态</a> </li>
 				                      </ul>
 				                    </div>
-				                    <input type="text" class="form-control" id="condition" data-field="empId" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
+				                    <input type="text" class="form-control" id="condition" data-field="empName" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
 				                  </div>
 				                </form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
-										class="mdi mdi-plus"></i> 新增</a> <a class="btn btn-danger"
-										href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+										class="mdi mdi-plus"></i> 新增</a>
 								</div>
 							</div>
 							<!--正文-->
@@ -68,9 +87,7 @@
 									<table class="table table-bordered">
 										<thead>
 											<tr>
-												<th><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" id="check-all"><span></span>
-												</label></th>
+												
 												<th>申请人</th>
 												<th>申请时间</th>
 												<th>开始时间</th>
@@ -83,15 +100,13 @@
 										</thead>
 										<tbody>
 											<tr v-for="item in list">
-												<td><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" name="ids[]" value="item.meetingId"><span></span>
-												</label></td>
-												<td>{{item.empId}}</td>
+												
+												<td>{{item.emp.empName}}</td>
 												<td>{{item.applyTime}}</td>
 												<td>{{item.startTime}}</td>
 												<td>{{item.endTime}}</td>
 												<td>{{item.purpose}}</td>
-												<td>{{item.boardroomId}}</td>
+												<td>{{item.boardroom.name}}</td>
 												<td>{{item.review}}</td>
 												<td>
 													<div class="btn-group">
@@ -147,13 +162,13 @@
 		    	  //获取查询条件
 		    	  var sort = $("#condition").attr('data-field');
 			  	  var param = $("#condition").val();
-			  	  var empId,applyTime,startTime,endTime,purpose,boardroomId,review;
-			  	  if(sort=="empId"){empId=param};
+			  	  var empName,applyTime,startTime,endTime,purpose,name,review;
+			  	  if(sort=="empName"){empName=param};
 			  	 if(sort=="applyTime"){applyTime=param};
 			  	  if(sort=="startTime"){startTime=param};
 			  	  if(sort=="endTime"){endTime=param};
 			  	 if(sort=="purpose"){purpose=param};
-			  	  if(sort=="boardroomId"){boardroomId=param};
+			  	  if(sort=="name"){name=param};
 			  	 if(sort=="review"){review=param};
 			  	//发送查询请求 
 	            axios({
@@ -161,12 +176,16 @@
 				        	method:'post',
 				        	data:{
 				        			"t":{
-				        				"empId":empId,
+				        				"emp":{
+				        					"empName":empName
+				        				},
 					        			"applyTime":applyTime,
 					        			"startTime":startTime,
 					        			"endTime":endTime,
 					        			"purpose":purpose,
-					        			"boardroomId":boardroomId,
+					        			"boardroom":{
+					        				"name":name
+					        			},
 					        			"review":review
 				        			},
 				        			"pageIndex":pageIndex
@@ -304,28 +323,34 @@
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
 	    	                	var empId=$("#empId").val();
-    							var applyTime=$("#applyTime").val();
     							var startTime=$("#startTime").val();
     							var endTime=$("#endTime").val();
     							var purpose=$("#purpose").val();
     							var boardroomId=$("#boardroomId").val();
-    							var review=$("#review").val();
-	    	                    if(!empId||!applyTime||!startTime||!endTime||!purpose||!boardroomId||!review){
+	    	                    if(!empId||!startTime||!endTime||!purpose||!boardroomId){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
-	    	                  //发送添加请求 
+	    	                    //获取系统时间
+								var d=new Date(),str='';
+								str +=d.getFullYear()+'-'; 
+								str +=d.getMonth()+1+'-'; 
+								str +=d.getDate()+' ';
+								str +=d.getHours()+':';
+								str +=d.getMinutes()+':';
+								str +=d.getSeconds();  
+	    	                    //发送添加请求 
 	    	                  axios({
     						        	url:'[[@{/meetingApply/insert}]]',
     						        	method:'post',
     						        	data:{
     						        		"empId":empId,
-						        			"applyTime":applyTime,
+						        			"applyTime":str,
 						        			"startTime":startTime,
 						        			"endTime":endTime,
 						        			"purpose":purpose,
 						        			"boardroomId":boardroomId,
-						        			"review":review
+						        			"review":"审核中"
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);

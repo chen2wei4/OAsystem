@@ -6,6 +6,7 @@
 package com.woniuxy.oasystem.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class OfficeSuppliesApply {
 private Integer osaId;//主键
 private Integer osNumber;//用品编号
-private Integer empId;//职工id
+private Emp emp;//职工id
 private Integer number;//数量
 @DateTimeFormat(pattern = "yyyy-MM-dd")
 @JsonFormat(pattern = "yyyy-MM-dd")

@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.woniuxy.oasystem.entity.Boardroom;
 import com.woniuxy.oasystem.entity.Car;
 import com.woniuxy.oasystem.entity.CarApply;
+import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.Meeting;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.PageBean;
@@ -48,6 +50,8 @@ public class MeetingController {
 		System.out.println(vo.t);
 		if(vo.t==null) {
 			vo.t = new Meeting();
+			vo.t.setEmp(new Emp());
+			vo.t.setBoardroom(new Boardroom());
 		}
 		if (vo.pageIndex == null) {
 			vo.pageIndex = 1;

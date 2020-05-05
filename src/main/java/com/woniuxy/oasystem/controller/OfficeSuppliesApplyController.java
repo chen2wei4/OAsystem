@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.woniuxy.oasystem.entity.Car;
+import com.woniuxy.oasystem.entity.Emp;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.OfficeSuppliesApply;
 import com.woniuxy.oasystem.entity.PageBean;
@@ -45,6 +46,7 @@ public class OfficeSuppliesApplyController {
 		System.out.println(vo.t);
 		if(vo.t==null) {
 			vo.t = new OfficeSuppliesApply();
+			vo.t.setEmp(new Emp());
 		}
 		if (vo.pageIndex == null) {
 			vo.pageIndex = 1;
@@ -54,6 +56,7 @@ public class OfficeSuppliesApplyController {
 			PageBean<OfficeSuppliesApply> pb = officeSuppliesApplyService.findAllByPage(vo.t, vo.pageIndex, pageSize);
 			return new CommonResult<PageBean<OfficeSuppliesApply>>(200,"ok",pb);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new CommonResult<PageBean<OfficeSuppliesApply>>(500,"error",null);
 		}
 	}

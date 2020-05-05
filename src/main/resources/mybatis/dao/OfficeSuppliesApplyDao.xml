@@ -5,25 +5,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 办公用品申请管理 -->
 <mapper namespace="com.woniuxy.oasystem.dao.OfficeSuppliesApplyDao">
 	<!-- 分页查询 -->
-	<select id="findAllByPage" resultType="OfficeSuppliesApply">
-		select * from office_supplies_apply where flag = 1
+	<select id="findAllByPage" resultMap="empMap">
+		select *
+		from office_supplies_apply osa, emp e 
+		where osa.flag = 1 and osa.emp_id = e.emp_id
 		<include refid="conditionSql"/>
 		limit #{pageIndex},#{pageSize}
 	</select>
+	<resultMap type="OfficeSuppliesApply" id="empMap">
+		<id column="osa_id" property="osaId"/>
+		<result column="os_number" property="osNumber"/>
+		<result column="number" property="number"/>
+		<result column="apply_time" property="applyTime"/>
+		<result column="review" property="review"/>
+		
+		<collection property="emp" ofType="Emp">
+			<result column="emp_name" property="empName"/>
+		</collection>
+	</resultMap>
 	<!-- 总条数-->
 	<select id="findAllByPageCount" resultType="int">
-		select count(*) from office_supplies_apply 
-		where flag = 1
+		select count(distinct osa.osa_id) from office_supplies_apply osa, emp e
+		where osa.flag = 1 and osa.emp_id = e.emp_id
 		<include refid="conditionSql"/>
 	</select>
+	
+	
+	
 	<!-- 模糊查询条件 -->
 	<sql id="conditionSql">
 			<if test="osa.osNumber!= null and osa.osNumber!=''">
 				and os_number like concat('%',#{osa.osNumber},'%')
 				
 			</if>
-			<if test="osa.empId!= null and osa.empId!=''">
-				and emp_id like concat('%',#{osa.empId},'%')
+			<if test="osa.emp.empName!= null and osa.emp.empName!=''">
+				and e.emp_name like '%' #{osa.emp.empName} '%'
 			</if>
 			<if test="osa.applyTime!= null and osa.applyTime!=''">
 				and apply_time like '%' #{osa.applyTime} '%'
@@ -39,13 +55,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 根据osaid修改 -->
 	<update id="updateByOsaId">
 		update office_supplies_apply set 
-		os_number=#{osa.osNumber},emp_id=#{osa.empId},apply_time=#{osa.applyTime},
+		os_number=#{osa.osNumber},apply_time=#{osa.applyTime},
 		number=#{osa.number},review=#{osa.review}
 		where osa_id = #{osa.osaId}
 	</update>
 	<!-- 添加 -->
 	<insert id="insert">
 		insert into office_supplies_apply (os_number,emp_id,apply_time,number,review) 
-		values (#{osa.osNumber},#{osa.empId},#{osa.applyTime},#{osa.number},#{osa.review})
+		values (#{osa.osNumber},#{osa.emp.empId},#{osa.applyTime},#{osa.number},#{osa.review})
 	</insert>
 </mapper>

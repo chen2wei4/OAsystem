@@ -20,12 +20,32 @@
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
 			<!--左侧导航-->
-
+			<div th:replace="common :: lefter"></div>
 			<!--End 左侧导航-->
 
 			<!--头部信息-->
+			<header class="lyear-layout-header">
 
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 办公用品管理 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header"></ul>
+
+					</div>
+				</nav>
+
+			</header>
 			<!--End 头部信息-->
+
 
 			<!--页面主要内容-->
 			<main class="lyear-layout-content" id="content">
@@ -53,8 +73,7 @@
 				                </form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
-										class="mdi mdi-plus"></i> 新增</a> <a class="btn btn-danger"
-										href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+										class="mdi mdi-plus"></i> 新增</a> 
 								</div>
 							</div>
 							<!--正文-->
@@ -64,9 +83,7 @@
 									<table class="table table-bordered">
 										<thead>
 											<tr>
-												<th><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" id="check-all"><span></span>
-												</label></th>
+												
 												<th>办公用品名</th>
 												<th>用品编号</th>
 												<th>类别</th>
@@ -80,9 +97,7 @@
 										</thead>
 										<tbody>
 											<tr v-for="item in list">
-												<td><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" name="ids[]" value="item.carId"><span></span>
-												</label></td>
+												
 												<td>{{item.osName}}</td>
 												<td>{{item.osNumber}}</td>
 												<td>{{item.sort}}</td>
@@ -288,10 +303,6 @@
 	    	        '<input id="number" type="text" class="name form-control" required />' +
 	    	        '<label> 入库时间 </label>' +
 	    	        '<input id="osTime" type="text" class="name form-control" required />' +
-	    	        '<label> 使用状态 </label>' +
-	    	        '<input id="useState" type="text" class="name form-control" required />' +
-	    	        '<label> 维护 </label>' +
-	    	        '<input id="maintenance" type="text" class="name form-control" required />' +
 	    	        '</div>' +
 	    	        '</form>',
 	    	        buttons: {
@@ -305,9 +316,8 @@
     							var prince=$("#prince").val();
     							var number=$("#number").val();
     							var osTime=$("#osTime").val();
-    							var useState=$("#useState").val();
-    							var maintenance=$("#maintenance").val();
-	    	                    if(!osName||!osNumber||!sort||!prince||!number||!osTime||!useState||!maintenance){
+    							
+	    	                    if(!osName||!osNumber||!sort||!prince||!number||!osTime){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
@@ -322,8 +332,8 @@
 						        			"prince":prince,
 						        			"number":number,
 						        			"osTime":osTime,
-						        			"useState":useState,
-						        			"maintenance":maintenance
+						        			"useState":"未使用",
+						        			"maintenance":"完好"
     						        		}
     						        }).then(res=>{
     						        	alert(res.data.message);

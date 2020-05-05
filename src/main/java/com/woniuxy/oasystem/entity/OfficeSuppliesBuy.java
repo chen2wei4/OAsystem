@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OfficeSuppliesBuy {
 private Integer osbId;//主键
-private Integer empId;//职工id
+private Emp emp;//职工id
 private String content;//内容
 @DateTimeFormat(pattern = "yyyy-MM-dd")
 @JsonFormat(pattern = "yyyy-MM-dd")
