@@ -56,6 +56,8 @@ public class WebMvcConfig {
 				registry.addViewController("/officeSuppliesBuy.html").setViewName("officeSuppliesBuy");
 				//行政档案管理相关
 				registry.addViewController("/administrativeArchives.html").setViewName("administrativeArchives");
+				//跳转异常页面
+				registry.addViewController("/exception.html").setViewName("exception");
 				//事务模块
 				registry.addViewController("/information").setViewName("information");
 				registry.addViewController("/apply_add").setViewName("apply_add");

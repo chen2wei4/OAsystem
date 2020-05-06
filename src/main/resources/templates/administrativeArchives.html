@@ -143,7 +143,9 @@
 	    el:"#content",
 	    data:{
 	      pb:"",//页码信息
-	      list:[]//数据
+	      list:[],//数据
+	      stateCode:"",//状态码
+	      message:""//信息
 	    },
 	    methods:{
 	    	//展示所有数据
@@ -171,6 +173,14 @@
 				        }).then(res=>{
 				        	this.list=res.data.data.beanList;
 				        	this.pb=res.data.data
+				        	this.stateCode= res.data.stateCode;
+				        	var message=res.data.message;
+				        	var sc = this.stateCode.toString();
+				        	sc = sc.substring(0,1);
+				        	if(sc==4||sc==5){
+				        		location.href="[[@{/exception.html}]]"			
+				        		}
+				        	
 				        })	 
 	      },
 	      //根据ID删除
@@ -298,6 +308,7 @@
 						        			"sort":sort
     						        		}
     						        }).then(res=>{
+    						        	
     						        	alert(res.data.message);
     						        	that.send(pageEnd);
     						        })
@@ -317,7 +328,16 @@
 			        $('#condition').attr('data-field',field);
 			        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
 			    });
+	      },
+	      //跳转异常页面方法
+	      exception(){
+	    	  axios({
+	    		  url:'',
+	    		  method:'',
+	    		  data
+	    	  })
 	      }
+	      
 	    },
 	    //页面加载时调用
 	    created(){

@@ -145,8 +145,8 @@
 	    el:"#content",
 	    data:{
 	      pb:"",//页码信息
-	      list:[],//数据
-	      empIdByName:""//根据用户名查询得到的id
+	      list:[]//数据
+	     
 	    },
 	    methods:{
 	    	//展示所有数据
@@ -175,7 +175,14 @@
 				        		}
 				        }).then(res=>{
 				        	this.list=res.data.data.beanList;
-				        	this.pb=res.data.data
+				        	this.pb=res.data.data;
+				        	this.stateCode= res.data.stateCode;
+				        	var message=res.data.message;
+				        	var sc = this.stateCode.toString();
+				        	sc = sc.substring(0,1);
+				        	if(sc==4||sc==5){
+				        		location.href="[[@{/exception.html}]]"			
+				        		}
 				        })	 
 	      },
 	      //根据ID删除
@@ -305,7 +312,7 @@
     						        	data:{
     						        		"emp":{
     						        			"empName":empName
-    						        		}
+    						        		},
 						        			"osNumber":osNumber,
 						        			"returnTime":returnTime,
 						        			"maintenance":maintenance
