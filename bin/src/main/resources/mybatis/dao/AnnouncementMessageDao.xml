@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：映射文件，命名空间必须用接口全限定名 -->
+<mapper
+	namespace="com.woniuxy.oasystem.dao.AnnouncementMessageDao">
+
+	<!-- 插入新公告 -->
+	<insert id="insertMessage">
+		insert into
+		announcement_message(am_time,am_an_id,am_emp_id,am_content,am_flag)
+		values(#{amTime},#{amAnId},#{amEmpId},#{amContent},#{amFlag})
+	</insert>
+
+	<!-- 通过公告Id查询留言 -->
+	<select id="selectMessageByAnId" resultMap="messageMapper">
+		select * from
+		announcement_message am,emp where am.am_emp_id=emp.emp_id and am_an_id=#{anId} and am_flag=1
+	</select>
+	<resultMap type="AnnouncementMessage" id="messageMapper">
+		<id column="am_id" property="amId" />
+		<result column="am_an_id" property="amAnId" />
+		<result column="am_emp_id" property="amEmpId" />
+		<result column="am_content" property="amContent" />
+		<result column="am_time" property="amTime" />
+		<result column="am_flag" property="amFlag" />
+		<collection property="emp" ofType="Emp">
+			<id column="emp_id" property="empId" />
+			<result column="emp_name" property="empName" />
+		</collection>
+	</resultMap>
+
+<!-- 软删除公告留言 -->
+	<update id="deleteMessage">
+		update announcement_message set am_flag=0 where am_id=#{amId}
+	</update>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 办公用品申请管理 -->
+<mapper namespace="com.woniuxy.oasystem.dao.OfficeSuppliesApplyDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultMap="empMap">
+		select *
+		from office_supplies_apply osa, emp e 
+		where osa.flag = 1 and osa.emp_id = e.emp_id
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<resultMap type="OfficeSuppliesApply" id="empMap">
+		<id column="osa_id" property="osaId"/>
+		<result column="os_number" property="osNumber"/>
+		<result column="number" property="number"/>
+		<result column="apply_time" property="applyTime"/>
+		<result column="review" property="review"/>
+		
+		<collection property="emp" ofType="Emp">
+			<result column="emp_name" property="empName"/>
+		</collection>
+	</resultMap>
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(distinct osa.osa_id) from office_supplies_apply osa, emp e
+		where osa.flag = 1 and osa.emp_id = e.emp_id
+		<include refid="conditionSql"/>
+	</select>
+	
+	
+	
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="osa.osNumber!= null and osa.osNumber!=''">
+				and os_number like concat('%',#{osa.osNumber},'%')
+				
+			</if>
+			<if test="osa.emp.empName!= null and osa.emp.empName!=''">
+				and e.emp_name like '%' #{osa.emp.empName} '%'
+			</if>
+			<if test="osa.applyTime!= null and osa.applyTime!=''">
+				and apply_time like '%' #{osa.applyTime} '%'
+			</if>
+			<if test="osa.review!= null and osa.review!=''">
+				and review like '%' #{osa.review} '%'
+			</if>
+	</sql>
+	<!-- 根据osaid删除 -->
+	<update id="deleteByOsaId">
+		update office_supplies_apply set flag = 0 where osa_id = #{osaId}
+	</update>
+	<!-- 根据osaid修改 -->
+	<update id="updateByOsaId">
+		update office_supplies_apply set 
+		os_number=#{osa.osNumber},apply_time=#{osa.applyTime},
+		number=#{osa.number},review=#{osa.review}
+		where osa_id = #{osa.osaId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into office_supplies_apply (os_number,emp_id,apply_time,number,review) 
+		values (#{osa.osNumber},#{osa.emp.empId},#{osa.applyTime},#{osa.number},#{osa.review})
+	</insert>
+</mapper>

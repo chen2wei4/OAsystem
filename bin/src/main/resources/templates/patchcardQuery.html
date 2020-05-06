@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>文档列表 - 光年(Light Year Admin)后台管理系统模板</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description" content="LightYear是一个基于Bootstrap v3.3.7的后台管理系统的HTML模板。">
+<meta name="author" content="yinqi">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/materialdesignicons.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+</head>
+  
+<body>
+  	<div class="lyear-layout-web">
+		<div class="lyear-layout-container">
+			<!--左侧导航-->
+			<div th:replace="common :: lefter"></div>
+			<!--End 左侧导航-->
+			<!--头部信息-->
+			<header class="lyear-layout-header">
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 后台首页 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header">
+						</ul>
+					</div>
+				</nav>
+			</header>
+  
+  
+  
+  
+    <!--End 头部信息-->
+    
+    <!--页面主要内容-->
+     <!--lyear-layout-sidebar-scroll带全选功能 -->
+    <main class="lyear-layout-content lyear-layout-sidebar-scroll">
+      
+      <div class="container-fluid">
+        
+        <div class="row">
+          <div class="col-lg-12">
+            
+              <div class="card">
+               
+                <!-- 表单 -->
+                <div class="card-toolbar clearfix">
+                <label for="tags"><h3>补签</h3></label> <br>
+                 <form th:action="@{/queryPatchcards}" method="post" class="row">
+                   <button class="btn btn-w-sm btn-primary">提交</button>
+               
+                <div class="form-group">
+                       <div class="col-xs-6">
+                       <input type="hidden" name="pageNum" th:value="${patchcardPager.pageIndex}">
+                         <label for="example-text-input" >姓名：</label> <input class="form-control" type="text" id="example-text-input" name="e" th:value="${e}" placeholder="文本..">
+                        </div>
+                       <div class="col-xs-6"></div>
+            
+                       <div class="col-xs-6">
+                        <label for="example-text-input" >部门：</label> <input class="form-control" type="text" id="example-text-input" name="d" th:value="${d}" placeholder="文本..">
+                         </div>
+                       <div class="col-xs-6"></div>
+                  </div>
+                  </form>
+                  
+                </div> 
+                  
+                  
+                  
+                             
+              <div class="card-body">
+                
+                <div class="table-responsive">
+                  
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>
+                          <label class="lyear-checkbox checkbox-primary">
+                            <input type="checkbox" id="check-all" value="0" name=""><span></span> 
+                          </label>
+                        </th>
+                        <th>编号</th>                     
+                        <th>原因</th>               
+                        <th>补签员工</th>
+                        <th>部门</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                     <!--补签体-->
+                    <tbody>
+                      <tr th:each="pd,pdStat:${pd}">
+                        <td>
+                          <label class="lyear-checkbox checkbox-primary">
+                            <input type="checkbox" name=""  th:value="${pd.patchcardId}"><span></span>
+                          </label>
+                        </td>
+                        <td th:text="${pd.patchcardId}"></td>
+                        <td th:text="${pd.patchcardContent}"></td>
+                         <td th:text="${pd.emp.empName}"></td>
+                         <td th:text="${pd.department.departmentName}"></td>
+                        <td th:text="${pd.patchcardTime}"></td>
+                        <td>
+                          <div class="btn-group">
+                            <a class="btn btn-xs btn-default" href="#!" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+                            <a class="btn btn-xs btn-default" href="#!" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tr align="center">
+                      <td colspan="7">
+                        <a th:href="@{/index}"><button class="btn btn-w-md btn-round btn-info">返回首页</button></a>
+                        <!-- <button class="btn btn-w-md btn-round btn-danger" th:onclick="'javascript:deletely('+${param}+')'">删除</button> -->
+                      <button class="btn btn-w-md btn-round btn-danger" th:onclick="'javascript:deletely()'">删除</button>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <!--分页-->
+                <div class="row">         
+                  <div class="col-md-12 col-md-offset-4">                 
+                    <ul class="pagination">
+                      <li><a th:href="@{/queryPatchcards?(e=${e},d=${d},pageNum=${patchcardPager.pageBegin})}">首页</a></li>
+                      <li><a th:href="@{/queryPatchcards?(e=${e},d=${d},pageNum=${patchcardPager.pageIndex}-1)}" th:if="${patchcardPager.pageIndex} gt 1">«上页</a></li>  
+                       <li th:each="i:${#numbers.sequence(patchcardPager.pageBegin,patchcardPager.pageEnd)}">
+                         <span class="active" th:if="${i} eq ${patchcardPager.pageIndex}" style="background-color: #c0c0c0;">[[${i}]]</span>
+                         <a th:href="@{/queryPatchcards?(e=${e},d=${d},pageNum=${i})}"  th:if="${i} ne ${patchcardPager.pageIndex}">[[${i}]]</a>
+                       </li>  
+                      <li><a th:href="@{/queryPatchcards?(e=${e},d=${d},pageNum=${patchcardPager.pageIndex}+1)}" th:if="${patchcardPager.pageIndex} lt ${patchcardPager.pageEnd}">下页»</a></li>
+                      <li><a th:href="@{/queryPatchcards?(e=${e},d=${d},pageNum=${patchcardPager.pageEnd})}">末页</a></li>
+                    </ul>      
+                  </div>
+                  <!-- 标记 -->
+                </div>
+                
+       
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="js/main.min.js"></script>
+<script type="text/javascript">
+$(function(){
+    $('.search-bar .dropdown-menu a').click(function() {
+        var field = $(this).data('field') || '';
+        $('#search-field').val(field);
+        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+    });
+});
+
+
+
+</script>
+</body>
+</html>
