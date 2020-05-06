@@ -14,9 +14,7 @@
 			<ul class="nav nav-drawer">
 				<li class="nav-item active"><a th:href="@{/index}"><i
 						class="mdi mdi-home"></i> 后台首页</a></li>
-				<li><a th:href="@{/announcement(pageIndex=1)}">通知公告</a>
-				</li>
-				<li><a th:href="@{/allReports}">报表</a></li>
+				<li><a th:href="@{/announcement(pageIndex=1)}">通知公告</a></li>
 				<li class="nav-item nav-item-has-subnav"><a
 					href="javascript:void(0)"><i
 						class="mdi mdi-format-align-justify"></i> 商务管理</a>
@@ -27,9 +25,8 @@
 						<li><a href="lyear_forms_switch.html">合同信息</a></li>
 					</ul></li>
 				<!-- 行政管理 -->
-					<li class="nav-item nav-item-has-subnav"><a
-					href="javascript:void(0)"><i
-						class="mdi mdi-server"></i> 行政管理</a>
+				<li class="nav-item nav-item-has-subnav"><a
+					href="javascript:void(0)"><i class="mdi mdi-server"></i> 行政管理</a>
 					<ul class="nav nav-subnav">
 						<li><a th:href="@{/car.html}">车辆管理</a></li>
 						<li><a th:href="@{/carApply.html}">车辆申请管理</a></li>
@@ -43,21 +40,25 @@
 						<li><a th:href="@{/boardroom.html}">会议室</a></li>
 						<li><a th:href="@{/administrativeArchives.html}">行政档案管理</a></li>
 					</ul></li>
-			   <!-- 事务管理 -->
-			 <li class="nav-item nav-item-has-subnav">
-              <a href="javascript:void(0)"><i class="mdi mdi-file-outline"></i> 事务管理</a>
-              <ul class="nav nav-subnav">
-                <li> <a th:href="@{/information}">留言</a> </li>
-                <li> <a th:href="@{/queryInformation?(did=${session.emp.empId},pageNum=1)}">留言查询</a> </li>
-                <li> <a th:href="@{/queryApplys?(pageNum=1)}">申请查询</a> </li>
-                <li> <a th:href="@{/apply_add}">事务申请</a></li>
-                <li> <a th:href="@{/queryReception?(empId=${session.emp.empId})}">接待查询</a></li>
-                <li> <a th:href="@{/reception_add}">新增接待</a></li>
-                <li> <a th:href="@{/patchcard_add}">补签</a></li>
-                <li> <a th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
-              </ul>
-            </li>	
-								
+				<!-- 事务管理 -->
+				<li class="nav-item nav-item-has-subnav"><a
+					href="javascript:void(0)"><i class="mdi mdi-file-outline"></i>
+						事务管理</a>
+					<ul class="nav nav-subnav">
+						<li><a th:href="@{/information}">留言</a></li>
+						<li><a
+							th:href="@{/queryInformation?(did=${session.emp.empId},pageNum=1)}">留言查询</a>
+						</li>
+						<li><a th:href="@{/queryApplys?(pageNum=1)}">申请查询</a></li>
+						<li><a th:href="@{/apply_add}">事务申请</a></li>
+						<li><a
+							th:href="@{/queryReception?(empId=${session.emp.empId})}">接待查询</a></li>
+						<li><a th:href="@{/reception_add}">新增接待</a></li>
+						<li><a th:href="@{/patchcard_add}">补签</a></li>
+						<li><a th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
+						<li><a th:href="@{/reportByReportFrom}">我的报告</a></li>
+					</ul></li>
+
 			</ul>
 		</nav>
 

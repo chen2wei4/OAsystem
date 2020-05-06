@@ -6,29 +6,77 @@
 	<!-- 根据reportId查询 -->
 	<select id="selectByReportId" resultMap="reportsMapper">
 		SELECT * FROM reports
-		r,report_type t WHERE r.type_id=t.type_id AND r.report_id=#{reportId}
+		r,report_type t,emp e WHERE r.type_id=t.type_id AND
+		r.report_from=e.emp_id AND r.report_id=#{reportId}
 		AND r.flag = 1
 	</select>
+	<!-- 根据reportDate查询 -->
+	<select id="selectByReportDate" resultMap="reportsMapper">
+		SELECT * FROM reports
+		r,report_type t,emp e WHERE r.type_id=t.type_id AND
+		r.report_from=e.emp_id AND r.report_date=#{reportDate}
+		AND r.flag = 1
+	</select>
+	<!-- resultMap -->
 	<resultMap type="Reports" id="reportsMapper">
 		<id column="report_Id" property="reportId" />
 		<result column="report_Name" property="reportName" />
 		<result column="report_Date" property="reportDate" />
 		<result column="report_Content" property="reportContent" />
 		<result column="report_Trouble" property="reportTrouble" />
-		<collection property="typeId" ofType="ReportType">
+		<collection property="reportType" ofType="ReportType">
 			<id column="type_Id" property="typeId" />
 			<result column="type_Name" property="typeName" />
 		</collection>
+		<collection property="reportFrom" ofType="Emp">
+			<id column="emp_Id" property="empId" />
+			<result column="emp_Name" property="empName" />
+		</collection>
 	</resultMap>
-	<!-- 分页查询 -->
+	<!-- 根据report_from分页查询 -->
+	<select id="selectReportsByReportFromAndConditionPage"
+		resultMap="reportsMapper">
+	SELECT * FROM reports r,report_type t,emp e WHERE r.type_id=t.type_id
+	AND r.report_from=e.emp_id AND r.flag = 1 AND report_from =
+	#{reports.reportFromId} <include refid="condition" /> limit #{pageIndex},#{pageSize}
+	</select>
+	<!-- 根据report_from查分页数量 -->
+	<select id="selectReportsByReportFromAndConditionPageCount"
+		resultType="int">
+		select count(*) from reports WHERE report_from =
+		#{reports.reportFromId} AND flag = 1
+		<include refid="condition" />
+	</select>
+	<!-- 分页查所有 -->
 	<select id="selectAllReportsByConditionPage"
 		resultMap="reportsMapper">
-		SELECT * FROM reports r,report_type t WHERE
-		r.type_id=t.type_id AND r.flag = 1 limit #{pageIndex},#{pageSize}
+		SELECT * FROM reports r,report_type t,emp e WHERE
+		r.type_id=t.type_id
+		AND r.report_from=e.emp_id AND r.flag = 1
+		<include refid="condition" />
+		limit #{pageIndex},#{pageSize}
 	</select>
-	<select id="selectReportsByConditionPageCount" resultType="int">
-		select count(*) from reports
+	<!-- 分页查所有数量 -->
+	<select id="selectAllReportsByConditionPageCount"
+		resultType="int">
+		select count(*) from reports WHERE flag = 1
+		<include refid="condition" />
 	</select>
+	<!-- 查询的条件 -->
+	<sql id="condition">
+		<if test="reports!=null">
+			<!-- <if test="reports.reportId!=null and reports.reportId!=''"> and report_id=#{reports.reportId} 
+				</if> -->
+			<if test="reports.typeId!=null and reports.typeId!=''">
+				and r.type_id = #{reports.typeId}
+			</if>
+			<if test="reports.reportName!=null and reports.reportName!=''">
+				and report_name like '%' #{reports.reportName} '%'
+			</if>
+			<!-- <if test="reports.reportFromId!=null and reports.reportFromId!=''"> 
+				and report_from=#{reports.reportFromId} </if> -->
+		</if>
+	</sql>
 	<!-- 查询所有 -->
 	<select id="selectAll" resultMap="reportsMapper">
 		SELECT * FROM reports
@@ -36,8 +84,9 @@
 	</select>
 	<!-- 新增 -->
 	<insert id="insertReports">
-		insert into Reports(report_name,report_date)
-		values(#{reportName},#{reportDate});
+		insert into
+		Reports(type_id,report_from,report_name,report_date,report_content,report_trouble)
+		values(#{typeId},#{reportFromId},#{reportName},#{reportDate},#{reportContent},#{reportTrouble});
 	</insert>
 	<!-- 假性删除，修改flag值为0 -->
 	<delete id="deleteReportsByReportId">
@@ -47,8 +96,8 @@
 	<!-- 修改 -->
 	<update id="updateReportsByReportId">
 		UPDATE reports SET
-		report_name=#{reportName},report_date=#{reportDate} WHERE report_id
-		=#{reportId}
+		type_id=#{typeId},report_from=#{reportFromId},report_name=#{reportName},report_date=#{reportDate},report_content=#{reportContent},report_trouble=#{reportTrouble}
+		WHERE report_id=#{reportId}
 	</update>
 </mapper>
 

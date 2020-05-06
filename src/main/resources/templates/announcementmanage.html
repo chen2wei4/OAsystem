@@ -54,21 +54,16 @@
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-toolbar clearfix">
-								<form class="pull-right search-bar" method="get"
-									th:action="@{/anmanage}" role="form">
-									<input type="hidden" name="pageIndex" value="1"> <select
-										name="anType" size="1" class="form-control"
-										id="example-select">
+								<form class="pull-right search-bar" method="get" th:action="@{/anmanage}" role="form">
+									<input type="hidden" name="pageIndex" value="1"> 
+									<select name="anType" size="1" class="form-control" id="example-select">
 										<option value="" th:selected="${condition.anType==null}">全部分类</option>
-										<option th:each="type:${types}" th:value="${type.atId}"
-											th:selected="${condition.anType==type.atId}">[[${type.atName}]]</option>
-									</select> <input type="hidden" class="form-control"
-										th:value="${session.emp.empId}" name="anEmpId"> <input
-										type="text" class="form-control" th:value="${condition.anName}" name="anName"
-										placeholder="请输入公告名称" />
+										<option th:each="type:${types}" th:value="${type.atId}" th:selected="${condition.anType==type.atId}">[[${type.atName}]]</option>
+									</select> 
+									<input type="hidden" class="form-control" th:value="${session.emp.empId}" name="anEmpId"> 
+									<input type="text" class="form-control" th:value="${condition.anName}" name="anName" placeholder="请输入公告名称" />
 									<button class="btn btn-label btn-primary" type="submit">
-										<label><i
-											class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认查询
+										<label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认查询
 									</button>
 								</form>
 								<div class="toolbar-btn-action">

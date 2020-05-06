@@ -31,7 +31,7 @@ public class AnnouncementFileController {
 		String fileName = annf.getAfName();// 被下载文件的名称
 		File file = new File(downloadFilePath);
 		if (file.exists()) {
-			response.setContentType("application/force-download");// 设置强制下载不打开            
+			response.setContentType("application/force-download");// 设置强制下载不打开            
 			response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
 			byte[] buffer = new byte[1024];
 			FileInputStream fis = null; //文件输入流
