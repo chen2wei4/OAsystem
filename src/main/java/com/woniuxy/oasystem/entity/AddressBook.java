@@ -12,12 +12,12 @@ public class AddressBook {
 	Emp addrbookPeople;//通讯录归属者
 	Integer addrbookType;//通讯录类型
 	String addrbookName;//备注名
-	int addrbookEmpId;//关联公司员工
+	Integer addrbookEmpId;//关联公司员工
 	String addrbookNumber;//通讯号码
 	String addrbookAddress;//通讯地址
-	int addrbookDep;//所属部门
-	int addrbookRoom;//所属办公室
-	int addrbookGroup;//所属团队
+	Integer addrbookDep;//所属部门
+	Integer addrbookRoom;//所属办公室
+	Integer addrbookGroup;//所属团队
 	Emp addrbookBoss;//上级领导
 	public AddressBook(Emp e,Emp boss,int type,String name,String number,String addr,
 			int dep,int room,int group){

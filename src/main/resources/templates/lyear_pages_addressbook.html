@@ -11,6 +11,10 @@
 <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
 <link th:href="@{/css/style.min.css}" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/js/jconfirm/jquery-confirm.min.css}">
+    <script th:src="@{/js/vue.js}"></script>
+    <script th:src="@{/js/axios.js}"></script>
 </head>
   
 <body>
@@ -58,7 +62,7 @@
                                    	 用户<span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">标题</a> </li>
+                                    <li> <a tabindex="-1" href="javascript:void(0)" data-field="title">用户</a> </li>
                                     <li> <a tabindex="-1" href="javascript:void(0)" data-field="cat_name">栏目</a> </li>
                                 </ul>
                             </div>
@@ -67,7 +71,6 @@
                     </form>
                     <div class="toolbar-btn-action">
                         <a class="btn btn-success m-r-5" th:href="@{/addBook}"><i class="mdi mdi-check"></i> 增加</a>
-                        <a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
                         <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
                         <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
                     </div>
@@ -95,7 +98,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="user:${rets.beanList}">
+                            <tr th:each="user,i:${rets.beanList}">
                                 <td>
                                     <label class="lyear-checkbox checkbox-primary">
                                         <input type="checkbox" name="ids[]" value="10"><span></span>
@@ -113,9 +116,10 @@
                                 <td th:text="1"></td>
                                 <td th:text="2"></td>
                                 <td>
+
                                     <div class="btn-group">
-                                        <a class="btn btn-xs btn-default" href="#!" title="" data-toggle="tooltip" data-original-title="编辑"><i class="mdi mdi-pencil"></i></a>
-                                        <a class="btn btn-xs btn-default" href="#!" title="" data-toggle="tooltip" data-original-title="删除"><i class="mdi mdi-window-close"></i></a>
+                                        <a class="btn btn-primary m-r-5" th:href="@{/editBook}+'?id='+${user.addrbookId}" title="" data-toggle="tooltip" data-original-title="编辑"><i class="mdi mdi-pencil"></i></a>
+                                        <a class="btn btn-primary m-r-5" href="#!" th:onclick="|deleteBook(${user.addrbookId})|" data-original-title="删除"><i class="mdi mdi-window-close"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -171,6 +175,20 @@ $(function(){
     	$("#delAllForm").submit();
     });
 });
+
+function deleteBook(id){
+    var ret = confirm("确认删除？")
+    if(ret==true){
+        $.post(
+            "/deleteBook",
+            "id="+id,
+            function(data){
+            }
+        )
+        location.reload();
+    }
+
+}
 </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.woniuxy.oasystem.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.woniuxy.oasystem.entity.Customer;
@@ -26,7 +27,7 @@ public class AddressBookServiceImpl implements AddressBookService{
 
 	@Override
 	public void addAddressBook(AddressBook addressBook) {
-		addrDao.addAddressBook(addressBook);
+		addrDao.addAddressBook(addressBook,addressBook.getAddrbookPeople().getEmpId());
 	}
 
 	@Override
@@ -36,17 +37,21 @@ public class AddressBookServiceImpl implements AddressBookService{
 
 	@Override
 	public void changeAddressBook(AddressBook addressBook) {
-		addrDao.changeAddressBook(addressBook);
+		addrDao.changeAddressBook(addressBook,addressBook.getAddrbookId(),addressBook.getAddrbookPeople().getEmpId());
 	}
-
 	@Override
 	public Integer getAddressBook(AddressBook addressBook) {
 		return addrDao.queryAddressBook(addressBook);
 	}
+	@Override
+	public Integer getAddressBookById(AddressBook addressBook,Integer id) {
+		return addrDao.queryAddressBookById(addressBook,id);
+	}
 
 	@Override
 	public PageBean<AddressBook> infoCustomers(AddressBook addressBook, Integer current) {
-		List<AddressBook> rets = addrDao.infoCustomers(addressBook,(current-1)*10);
+		List<AddressBook> rets=new ArrayList<AddressBook>();
+		rets = addrDao.infoCustomers(addressBook,(current-1)*10);
 		for(AddressBook ret:rets) {
 			if(!StringUtils.isEmpty(ret.getAddrbookPeople())){
 				Emp emp = empDao.getEmpId(ret.getAddrbookPeople().getEmpId());
@@ -57,11 +62,39 @@ public class AddressBookServiceImpl implements AddressBookService{
 				ret.setAddrbookBoss(emp);
 			}
 		}
+
 		Integer total = rets.size();
 		pb.setBeanList(rets);
 		pb.setPageSize(10);
 		pb.setPageIndex(current);
 		pb.setTotalRecord(getAddressBook(addressBook));
+		pb.setTotalPage((pb.getTotalRecord()%10==0)?(pb.getTotalRecord()/10):(pb.getTotalRecord()/10+1));
+		pb.setUrl("/info");
+		pb.setBeginPageAndEndPage();
+		return pb;
+	}
+
+	@Override
+	public PageBean<AddressBook> infoCustomersById(AddressBook addressBook, Integer current) {
+		List<AddressBook> rets= new ArrayList<AddressBook>();
+
+		rets = addrDao.infoCustomersById(addressBook,(current-1)*10,addressBook.getAddrbookPeople().getEmpId());
+		for(AddressBook ret:rets) {
+			if(!StringUtils.isEmpty(ret.getAddrbookPeople())){
+				Emp emp = empDao.getEmpId(ret.getAddrbookPeople().getEmpId());
+				ret.setAddrbookPeople(emp);
+			}
+			if(!StringUtils.isEmpty(ret.getAddrbookBoss())){
+				Emp emp = empDao.getEmpId(ret.getAddrbookBoss().getEmpId());
+				ret.setAddrbookBoss(emp);
+			}
+		}
+
+		Integer total = rets.size();
+		pb.setBeanList(rets);
+		pb.setPageSize(10);
+		pb.setPageIndex(current);
+		pb.setTotalRecord(getAddressBookById(addressBook,addressBook.getAddrbookPeople().getEmpId()));
 		pb.setTotalPage((pb.getTotalRecord()%10==0)?(pb.getTotalRecord()/10):(pb.getTotalRecord()/10+1));
 		pb.setUrl("/info");
 		pb.setBeginPageAndEndPage();

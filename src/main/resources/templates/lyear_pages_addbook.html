@@ -11,9 +11,13 @@
 <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 <link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
 <link th:href="@{/css/style.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/js/jconfirm/jquery-confirm.min.css}">
+    <script th:src="@{/js/vue.js}"></script>
+    <script th:src="@{/js/axios.js}"></script>
 </head>
   
 <body>
+
 <div class="lyear-layout-web">
   <div class="lyear-layout-container">
     <!--左侧导航-->
@@ -47,53 +51,55 @@
     <main class="lyear-layout-content">
 
 <form id="inputForm"  method="post"  class="form-horizontal p-15">
-    <input type="hidden" name="id" value="${addressbook.id!}"/>
     <table class="table table-bordered">
        <tbody>
             <tr>
-                <td class="width-15 active"><label class="pull-right">用户：</label></td>
+                <input id="addrbookId" type="hidden" th:value="${editdata!=null and editdata.addrbookId!=null?editdata.addrbookId:''}"/>
+                <td class="width-15 active"><label class="pull-right">通讯对象名：</label></td>
                 <td class="width-35">
-                    <input name="empId" value=""    class="form-control "/>
-            </td>
+                    <input id="addrbookName" th:value="${editdata!=null?editdata.addrbookName:''}"    class="form-control "/>
+                </td>
                 <td class="width-15 active"><label class="pull-right">所属部门：</label></td>
                 <td class="width-35">
-                    <input name="departmentId" value=""    class="form-control "/>
+                    <input id="departmentId" th:value="${editdata!=null?editdata.addrbookDep:''}"    class="form-control "/>
             </td>
             </tr>
             <tr>
                 <td class="width-15 active"><label class="pull-right">通讯类型：</label></td>
                 <td class="width-35">
-                    <input name="addrbookType" value=""    class="form-control "/>
-            </td>
-                <td class="width-15 active"><label class="pull-right">通讯对象名：</label></td>
-                <td class="width-35">
-                    <input name="addrbookName" value=""    class="form-control "/>
-            </td>
-            </tr>
-            <tr>
-                <td class="width-15 active"><label class="pull-right">通讯对象：</label></td>
-                <td class="width-35">
-                    <input name="addrbookEmpId" value=""    class="form-control "/>
-            </td>
-                <td class="width-15 active"><label class="pull-right">上级领导：</label></td>
-                <td class="width-35">
-                    <input name="empEmpId" value=""    class="form-control "/>
-            </td>
-            </tr>
-            <tr>
-                <td class="width-15 active"><label class="pull-right">通讯号：</label></td>
-                <td class="width-35">
-                    <input name="addrbookNumber" value=""    class="form-control "/>
-            </td>
+                    <select name="addrbookType" id="addrbookType" class="form-control1">
+                                    <option  th:value="1" th:text="公司通讯录" th:selected="true"/>
+                                    <option  th:value="2" th:text="业务通讯录"/>
+                                    <option  th:value="3" th:text="个人通讯录"/>
+
+                                </select>
+                </td>
                 <td class="width-15 active"><label class="pull-right">通讯地址：</label></td>
                 <td class="width-35">
-                    <input name="addrbookAddress" value=""    class="form-control "/>
+                    <input id="addrbookAddress" th:value="${editdata!=null?editdata.addrbookAddress:''}"    class="form-control "/>
+                </td>
+            </tr>
+            <tr>
+                <td class="width-15 active"><label class="pull-right">上级领导：</label></td>
+                <td  class="width-35">
+                            <select name="boss" id="boss" class="form-control1">
+                                <option th:each="emp,userStat:${emps}" th:value="${emp.empId}" th:text="${emp.empName}"
+                                        th:selected="${emp.empId == emp.empId}"></option>
+                            </select>
             </td>
+                <td class="width-15 active"><label class="pull-right">通讯号：</label></td>
+                <td class="width-35">
+                    <input id="addrbookNumber" th:value="${editdata!=null?editdata.addrbookNumber:''}"    class="form-control "/>
+                </td>
+            </tr>
+            <tr>
+
+
             </tr>
         </tbody>
     </table>
 </form>
-<button class="btn btn-primary m-r-5" th:onclick="save()">提交</button>
+<button id="save" class="btn btn-primary m-r-5" >提交</button>
       <form id="delForm" method="post">
       	<input type="hidden" name="_method" value="delete">
       </form>
@@ -124,17 +130,51 @@ $(function(){
     	alert(check[0].value);
     	$("#delAllForm").submit();
     });
+    $("#save").click(function(){
+        if($("#addrbookId").val()!=""){
+            $.ajax({
+                url:"[[@{/saveEdit}]]",
+                type:"POST",
+                data:{
+                    addrbookId:$("#addrbookId").val(),
+                    empId:$("#empId").val(),
+                    departmentId:$("#departmentId").val(),
+                    addrbookType:$("#addrbookType").val(),
+                    addrbookName:$("#addrbookName").val(),
+                    addrbookEmpId:$("#addrbookEmpId").val(),
+                    boss:$("#boss").val(),
+                    empEmpId:$("#empEmpId").val(),
+                    addrbookNumber:$("#addrbookNumber").val(),
+                    addrbookAddress:$("#addrbookAddress").val(),
+                },
+                success:function(data){
+
+                }
+            });
+        }else
+        {
+            $.ajax({
+                url:"[[@{/save}]]",
+                type:"POST",
+                data:{
+                    empId:$("#empId").val(),
+                    departmentId:$("#departmentId").val(),
+                    addrbookType:$("#addrbookType").val(),
+                    addrbookName:$("#addrbookName").val(),
+                    addrbookEmpId:$("#addrbookEmpId").val(),
+                    boss:$("#boss").val(),
+                    empEmpId:$("#empEmpId").val(),
+                    addrbookNumber:$("#addrbookNumber").val(),
+                    addrbookAddress:$("#addrbookAddress").val(),
+                },
+                success:function(data){
+                    alert("save12")
+                }
+            });
+        }
+    });
 });
 
-function save() {
-        $.ajax(
-        		type:"post",
-        		url:"[[@{/saveinfo}]]",
-        		data:"data",
-        		success:function(data){
-        			alert("ok");
-        		})
-	}
 </script>
 </body>
 </html>

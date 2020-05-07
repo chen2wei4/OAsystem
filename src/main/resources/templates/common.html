@@ -58,6 +58,19 @@
 						<li><a th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
 						<li><a th:href="@{/reportByReportFrom}">我的报告</a></li>
 					</ul></li>
+					<!-- 个人管理 -->
+				<li class="nav-item nav-item-has-subnav">
+						<a href="javascript:void(0)">
+							<i class="mdi mdi-format-align-justify"></i> 
+						个人管理
+						</a>
+					<ul class="nav nav-subnav">
+						<li> <a th:href="@{/myinfo}">个人信息</a> </li>
+		                <li> <a th:href="@{/info}">通讯录</a> </li>
+		                <li> <a th:href="@{/business/orders}">备忘录</a> </li>
+		                <li> <a th:href="@{/business/contracts}">报告</a> </li>
+					</ul>
+				</li>
 
 			</ul>
 		</nav>

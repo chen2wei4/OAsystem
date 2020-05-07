@@ -15,5 +15,7 @@ public interface AddressBookService {
 	void deleteAddressBook(AddressBook addressBook);
 	void changeAddressBook(AddressBook addressBook);
 	Integer getAddressBook(AddressBook addressBook);
+	Integer getAddressBookById(AddressBook addressBook,Integer id);
 	PageBean<AddressBook> infoCustomers(AddressBook addressBook, Integer currentPage);
+	PageBean<AddressBook> infoCustomersById(AddressBook addressBook, Integer currentPage);
 }
