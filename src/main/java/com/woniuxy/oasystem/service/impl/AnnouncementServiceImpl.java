@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.woniuxy.oasystem.dao.AnnouncementDao;
 import com.woniuxy.oasystem.dao.AnnouncementWatchedDao;
@@ -13,6 +14,7 @@ import com.woniuxy.oasystem.entity.PageBean;
 import com.woniuxy.oasystem.service.AnnouncementService;
 
 @Service
+@EnableTransactionManagement
 public class AnnouncementServiceImpl implements AnnouncementService {
 	@Autowired
 	AnnouncementDao annountcementDao;

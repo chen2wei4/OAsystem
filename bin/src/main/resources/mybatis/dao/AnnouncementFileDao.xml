@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：映射文件，命名空间必须用接口全限定名 -->
+<mapper namespace="com.woniuxy.oasystem.dao.AnnouncementFileDao">
+	
+	<!-- 插入新公告 -->
+	<insert id="insertFile">
+		insert into
+		announcement_file(af_name,af_address,af_an_id,af_flag)
+		values(#{afName},#{afAddress},#{afAnId},#{afFlag})
+	</insert>
+	<!-- 通过公告Id查询文件 -->
+	<select id="selectFileByAnId" resultType="AnnouncementFile">
+		select * from announcement_file where af_an_id=#{anId} and af_flag=1
+	</select>
+	<!-- 软删除文件 -->
+	<update id="deleteFileById">
+		update announcement_file set af_flag=0 where af_id=#{afId} 
+	</update>
+</mapper>

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.woniuxy.oasystem.dao.OfficeSuppliesApplyDao;
+import com.woniuxy.oasystem.entity.Meeting;
 import com.woniuxy.oasystem.entity.OfficeSupplies;
 import com.woniuxy.oasystem.entity.OfficeSuppliesApply;
 import com.woniuxy.oasystem.entity.PageBean;
@@ -34,6 +35,9 @@ public class OfficeSuppliesApplyServiceImpl implements OfficeSuppliesApplyServic
 		PageBean<OfficeSuppliesApply> pb = new PageBean<OfficeSuppliesApply>();
 		List<OfficeSuppliesApply> beanList = officeSuppliesApplyDao.findAllByPage(officeSuppliesApply, (pageIndex-1)*pageSize, pageSize);
 		pb.setBeanList(beanList);	
+		for (OfficeSuppliesApply l : pb.getBeanList()) {
+			System.out.println(l);
+		}
 		pb.setPageIndex(pageIndex);
 		pb.setPageSize(pageSize);
 		int totalRecord = officeSuppliesApplyDao.findAllByPageCount(officeSuppliesApply);

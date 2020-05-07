@@ -1,5 +1,7 @@
 package com.woniuxy.oasystem.entity;
 
+import org.springframework.stereotype.Component;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ import lombok.NoArgsConstructor;
  * @changeLog 1.创建 (2020年4月23日 下午2:56:00 [陈一玮]
  *            2.
  */
+@Component
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

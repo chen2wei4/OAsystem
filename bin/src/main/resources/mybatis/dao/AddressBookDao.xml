@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.AddressBookDao">
+	<insert id="addAddressBook">
+		insert into addressbook (
+		emp_id,
+		addrbook_type,
+		addrbook_name,
+		addrbook_number,
+		addrbook_address,
+		department_id,
+		room_id,
+		group_id,
+		emp_emp_id)
+		values (
+		#{addrbookPeople.empId},
+		#{addrbookType},
+		#{addrbookName},
+		#{addrbookNumber},
+		#{addrbookAddress},
+		#{addrbookDep},
+		#{addrbookRoom},
+		#{addrbookGroup},
+		#{addrbookBoss.empId})
+	</insert>
+	
+	<update id="deleteAddressBook">
+		update addressbook set flag=0
+			where addrbook_id=#{addressbookId} 
+	</update>
+	
+	<update id="changeAddressBook">
+		update addressbook 
+			<include refid="condition"></include>
+		where addrbook_id=#{addrbookId}
+	</update>
+	
+	<select id="infoCustomers" resultMap="AddressBookMap">
+		select*from addressbook
+			where
+			flag=1
+			limit #{current},10
+	</select>
+	<select id="queryAddressBook" resultType="java.lang.Integer">
+		select count(*) from addressbook
+			where
+			flag=1
+	</select>
+	<sql id="condition">
+		<trim suffixOverrides=",">
+				<if test="addressBook.addrbookPeople!='' and addressBook.addrbookPeople!=null">
+					emp_id=#{addrbookPeople.empId},
+				</if> 
+				<if test="addressBook.addrbookType!='' and addressBook.addrbookType!=null">
+					addrbook_type=#{addrbookType},
+				</if> 
+				<if test="addressBook.addrbookName!='' and addressBook.addrbookName!=null">
+					addrbook_name=#{addrbookName},
+				</if>
+				<if test="addressBook.addrbookNumber!='' and addressBook.addrbookNumber!=null">
+					addrbook_number=#{addrbookNumber},
+				</if> 
+				<if test="addressBook.addrbookAddress!='' and addressBook.addrbookAddress!=null">
+					addrbook_address=#{addrbookAddress},
+				</if> 
+				<if test="addressBook.addrbookDep!='' and addressBook.addrbookDep!=null">
+					department_id=#{addrbookDep},
+				</if> 
+				<if test="addressBook.addrbookRoom!='' and addressBook.addrbookRoom!=null">
+					room_id=#{addrbookRoom},
+				</if> 
+				<if test="addressBook.addrbookGroup!='' and addressBook.addrbookGroup!=null">
+					group_id=#{addrbookGroup},
+				</if> 
+				<if test="addressBook.addrbookBoss!='' and addressBook.addrbookBoss!=null">
+					emp_emp_id=#{addrbookBoss.empId},
+				</if> 					 
+			</trim>
+	</sql>
+	
+	<resultMap id="AddressBookMap" type="AddressBook">
+		<id column="addrbook_id" property="addrbookId"/>
+		<result column="department_id" property="addrbookDep"/>
+		<result column="room_id" property="addrbookRoom"/>
+		<result column="group_id" property="addrbookGroup"/>
+		<result column="addrbook_type" property="addrbookType"/>
+		<result column="addrbook_name" property="addrbookName"/>
+		<result column="addrbook_number" property="addrbookNumber"/>
+		<result column="addrbook_address" property="addrbookAddress"/>
+		<result column="emp_id" property="addrbookPeople.empId"/>
+		<result column="emp_emp_id" property="addrbookBoss.empId"/>
+	</resultMap>
+</mapper>

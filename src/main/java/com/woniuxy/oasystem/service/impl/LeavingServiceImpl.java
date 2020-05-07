@@ -41,6 +41,7 @@ public class LeavingServiceImpl implements LeavingService {
 
 	@Override
 	public void modifyLeaving(Leaving leaving) {
+		System.out.println("Service中的leaving:" + leaving.toString());
 		leavingDao.modifyLeaving(leaving);
 		
 	}

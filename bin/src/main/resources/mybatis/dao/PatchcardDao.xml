@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.PatchcardDao">
+<!-- 补签 -->
+ <insert id="addPatchcard">
+ insert into patchcard values(null,#{patchcard.department.departmentId},#{patchcard.emp.empId},#{patchcard.patchcardContent},null,1)
+ </insert>
+ 
+ 
+ 
+ 
+  <!-- 查看所有补签到 -->
+  <select id="queryPatchcards" resultMap="queryyPatchcardsMapper">
+       select * from  <include refid="queryPatchcard"/> 
+    
+  </select>
+
+<resultMap type="Patchcard" id="queryyPatchcardsMapper">
+         <id column="patchcard_id" property="patchcardId" />
+         <result column="patchcard_content" property="patchcardContent"/>
+         <result column="patchcard_time" property="patchcardTime"/>
+         <association property="emp" javaType="Emp">
+             <id  column="emp_id" property="empId"/>
+             <result column="emp_name" property="empName"/>   
+         </association>
+         <association property="department" javaType="Department">
+               <id  column="department_id" property="departmentId"/>
+               <result column="department_name" property="departmentName"/>              
+         </association>
+</resultMap>
+    
+    <!-- 查询补签sql片段 -->
+    <sql id="queryPatchcard">
+     patchcard pc,department dt,emp e
+        <where>
+        pc.patchcard_eid=e.emp_id  
+        and pc.patchcard_did=dt.department_id 
+        and pc.flag=1
+      
+         <if test="empName !=null and empName !=''">
+                   and e.emp_name like '%${empName}%'
+                   <!-- like  '%' #{empName} '%' --> 
+         </if>
+          <if test="departmentName!=null and departmentName!=''">
+                 and dt.department_name=#{departmentName}
+           </if>
+        </where>
+    </sql>
+</mapper>

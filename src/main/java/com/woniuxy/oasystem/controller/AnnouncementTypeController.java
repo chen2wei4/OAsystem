@@ -32,6 +32,8 @@ public class AnnouncementTypeController {
 		return "addannouncement";
 		}catch(Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","查询公告类别出错请联系管理员");
 			//发生异常打到错误页
 			return "lyear_pages_error";
 					
@@ -57,6 +59,8 @@ public class AnnouncementTypeController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			//发生异常打到错误页
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","查询公告类别出错请联系管理员");
 			return "lyear_pages_error";
 					
 		}
@@ -71,6 +75,8 @@ public class AnnouncementTypeController {
 		return "redirect:/selectallantype";
 		}catch(Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","添加失败请联系管理员");
 			//发生异常打到错误页
 			return "lyear_pages_error";
 					
@@ -87,6 +93,8 @@ public class AnnouncementTypeController {
 		return "updateannouncementtype";
 	}catch(Exception e) {
 		e.printStackTrace();
+		model.addAttribute("errorcode", 500);
+		model.addAttribute("error","查询出错请联系管理员");
 		//发生异常打到错误页
 		return "lyear_pages_error";
 				
@@ -95,13 +103,15 @@ public class AnnouncementTypeController {
 
 	// 修改公告类别
 	@PutMapping("/updateantype")
-	public String updateAnnouncement(AnnouncementType anType) {
+	public String updateAnnouncement(AnnouncementType anType,Model model) {
 		try {
 		// 修改公告
 		announcementTypeService.UpdateAntypeById(anType);
 		return "redirect:/selectallantype";
 		}catch(Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","修改出错请联系管理员");
 			//发生异常打到错误页
 			return "lyear_pages_error";
 					
@@ -118,6 +128,8 @@ public String delAnnouncementType(AnnouncementType at, Model model) {
 	}catch(Exception e) {
 		e.printStackTrace();
 		//发生异常打到错误页
+		model.addAttribute("errorcode", 500);
+		model.addAttribute("error","删除失败请联系管理员");
 		return "lyear_pages_error";
 				
 	}
@@ -131,6 +143,8 @@ try {
 }catch(Exception e) {
 	e.printStackTrace();
 	//发生异常打到错误页
+	model.addAttribute("errorcode", 500);
+	model.addAttribute("error","启用出错请联系管理员");
 	return "lyear_pages_error";
 			
 }

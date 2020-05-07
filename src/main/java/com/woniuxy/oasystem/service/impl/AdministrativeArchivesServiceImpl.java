@@ -2,6 +2,7 @@ package com.woniuxy.oasystem.service.impl;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,11 @@ public class AdministrativeArchivesServiceImpl implements AdministrativeArchives
 	@Override
 	public void insert(AdministrativeArchives administrativeArchives) {
 		administrativeArchivesDao.insert(administrativeArchives);
+	}
+
+	@Override
+	public void insertFile(String fileName, String fileAddress,Integer aaId) {
+		administrativeArchivesDao.insertFile(fileName,fileAddress,aaId);
 	}
 
 	

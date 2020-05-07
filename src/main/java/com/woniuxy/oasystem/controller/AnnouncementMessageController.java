@@ -1,6 +1,5 @@
 package com.woniuxy.oasystem.controller;
 
-
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +64,9 @@ public class AnnouncementMessageController {
 		return "announcementcontent";
 		}catch(Exception e) {
 			e.printStackTrace();
-			//发生异常打到错误页
+			// 展示错误信息
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","留言失败请联系管理员");
 			return "lyear_pages_error";
 					
 		}

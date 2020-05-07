@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.GroupDao">
+	<insert id="addGroup">
+		insert into `group` (group_name,group_boss) values(#{groupName},#{groupBoss.empId})
+	</insert>
+	
+	<delete id="deleteGroup">
+		delete from `group` where group_id=#{groupId}
+	</delete>
+	
+	<update id="changeGroup">
+		update `group` 
+					<trim prefix="set" suffixOverrides=",">
+						<if test="groupName!='' and groupName!=null">
+							group_name=#{groupName},
+						</if> 
+						<if test="groupBoss!='' and groupBoss!=null">
+							group_boss=#{groupBoss.empId},
+						</if> 
+					</trim>
+		where group_id=#{groupId}
+	</update>
+	
+	<select id="queryGroup" resultType="Group">
+		select*from `group`
+		<where>
+			<choose>
+				<when test="groupId!='' and groupId!=null">
+					group_id=#{groupId}
+				</when>
+				<when test="groupName!='' and groupName!=null">
+					group_name=#{groupName}"
+				</when>
+				<when test="groupBoss!='' and groupBoss!=null">
+					group_boss=#{groupBoss}
+				</when>
+			</choose>
+		</where>
+	</select>
+</mapper>

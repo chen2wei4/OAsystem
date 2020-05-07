@@ -20,11 +20,30 @@
 	<div class="lyear-layout-web">
 		<div class="lyear-layout-container">
 			<!--左侧导航-->
-
+			<div th:replace="common :: lefter"></div>
 			<!--End 左侧导航-->
 
 			<!--头部信息-->
+			<header class="lyear-layout-header">
 
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 车辆管理 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header"></ul>
+
+					</div>
+				</nav>
+
+			</header>
 			<!--End 头部信息-->
 
 			<!--页面主要内容-->
@@ -49,13 +68,12 @@
 				                        <li> <a tabindex="-1" href="#" data-field="parkingSpace">停车位</a> </li>
 				                      </ul>
 				                    </div>
-				                    <input type="text" class="form-control" id="condition" data-field="license" name="keyword" placeholder="请输入" @change="search()">
+				                    <input type="text" class="form-control" id="condition" data-field="license" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
 				                  </div>
 				                </form>
 								<div class="toolbar-btn-action">
 									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
-										class="mdi mdi-plus"></i> 新增</a> <a class="btn btn-danger"
-										href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+										class="mdi mdi-plus"></i> 新增</a> 
 								</div>
 							</div>
 							<!--正文-->
@@ -65,9 +83,7 @@
 									<table class="table table-bordered">
 										<thead>
 											<tr>
-												<th><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" id="check-all"><span></span>
-												</label></th>
+												
 												<th>车牌</th>
 												<th>维护状态</th>
 												<th>使用状态</th>
@@ -77,9 +93,7 @@
 										</thead>
 										<tbody>
 											<tr v-for="item in list">
-												<td><label class="lyear-checkbox checkbox-primary">
-														<input type="checkbox" name="ids[]" value="item.carId"><span></span>
-												</label></td>
+												
 												<td>{{item.license}}</td>
 												<td>{{item.maintenance}}</td>
 												<td>{{item.useState}}</td>
@@ -132,16 +146,41 @@
 	      list:[]//数据
 	    },
 	    methods:{
-	      //展示所有数据
+	    	//展示所有数据
 	    	send(pageIndex){
-	        axios({
-	        	url:'[[@{/car/list}]]',
-	        	method:'post',
-	        	data:{ "pageIndex":pageIndex }
-	        }).then(res=>{
-	        	this.list=res.data.data.beanList;
-	        	this.pb=res.data.data
-	        })
+	    		var that=this;
+		    	  //获取查询条件
+		    	  var sort = $("#condition").attr('data-field');
+			  	  var param = $("#condition").val();
+			  	  var license,maintenance,useState,parkingSpace;
+			  	  if(sort=="license"){license=param};
+			  	  if(sort=="maintenance"){maintenance=param};
+			  	  if(sort=="useState"){useState=param};
+			  	  if(sort=="parkingSpace"){parkingSpace=param};
+			  	//发送查询请求 
+	            axios({
+				        	url:'[[@{/car/list}]]',
+				        	method:'post',
+				        	data:{
+				        			"t":{
+				        				"license":license,
+					        			"maintenance":maintenance,
+					        			"useState":useState,
+					        			"parkingSpace":parkingSpace
+				        			},
+				        			"pageIndex":pageIndex
+				        		}
+				        }).then(res=>{
+				        	this.list=res.data.data.beanList;
+				        	this.pb=res.data.data;
+				        	this.stateCode= res.data.stateCode;
+				        	var message=res.data.message;
+				        	var sc = this.stateCode.toString();
+				        	sc = sc.substring(0,1);
+				        	if(sc==4||sc==5){
+				        		location.href="[[@{/exception.html}]]"			
+				        		}
+				        })	 
 	      },
 	      //根据ID删除
 	      del(carId,pageIndex){
@@ -239,10 +278,6 @@
 	    	        '<div class="form-group">' +
 	    	        '<label> 车牌号 </label>' +
 	    	        '<input id="license" type="text" class="name form-control" required />' +
-	    	        '<label> 维护状态 </label>' +
-	    	        '<input id="maintenance" type="text" class="name form-control" required />' +
-	    	        '<label> 使用状态 </label>' +
-	    	        '<input id="useState" type="text" class="name form-control" required />' +
 	    	        '<label> 停车位 </label>' +
 	    	        '<input id="parkingSpace" type="text" class="name form-control" required />' +
 	    	        '</div>' +
@@ -253,10 +288,8 @@
 	    	                btnClass: 'btn-blue',
 	    	                action: function () {
 	    	                	var license=$("#license").val();
-    							var maintenance=$("#maintenance").val();
-    							var useState=$("#useState").val();
     							var parkingSpace=$("#parkingSpace").val();
-    							if(!license||!maintenance||!useState||!parkingSpace){
+    							if(!license||!parkingSpace){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
@@ -267,8 +300,8 @@
     						        	data:{
     						        			
     						        			"license":license,
-    						        			"maintenance":maintenance,
-    						        			"useState":useState,
+    						        			"maintenance":"完好",
+    						        			"useState":"未使用",
     						        			"parkingSpace":parkingSpace
     						        		}
     						        }).then(res=>{
@@ -291,33 +324,6 @@
 			        $('#condition').attr('data-field',field);
 			        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
 			    });
-	      },
-	      search(){
-	    	  var that=this;
-	    	  //获取查询条件
-	    	  var sort = $("#condition").attr('data-field');
-		  	  var param = $("#condition").val();
-		  	  var license,maintenance,useState,parkingSpace;
-		  	  if(sort=="license"){license=param};
-		  	  if(sort=="maintenance"){maintenance=param};
-		  	  if(sort=="useState"){useState=param};
-		  	  if(sort=="parkingSpace"){parkingSpace=param};
-		  	//发送查询请求 
-              axios({
-			        	url:'[[@{/car/list}]]',
-			        	method:'post',
-			        	data:{
-			        			"t":{
-			        				"license":license,
-				        			"maintenance":maintenance,
-				        			"useState":useState,
-				        			"parkingSpace":parkingSpace
-			        			}
-			        		}
-			        }).then(res=>{
-			        	this.list=res.data.data.beanList;
-			        	this.pb=res.data.data
-			        })	 
 	      }
 	    },
 	    //页面加载时调用

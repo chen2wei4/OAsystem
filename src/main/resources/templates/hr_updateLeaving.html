@@ -73,8 +73,8 @@
                     </thead>
                     <tbody>
                       <form>
-                        <!-- <td style="display:none" id="leavingId"></td>
-                        <td style="display:none" id="empId"></td> -->
+                        <td style="display:none" id="leavingId"></td>
+                        <td style="display:none" id="empId"></td>
                         <td><input type="text" style="width: 100%;" placeholder="请输入员工姓名" readonly="readonly" id="empName"></td>
                         <td><input type="text" style="width: 100%;" placeholder="请输入请假日期(必填)" id="leavingDate"></td>
                         <td><input type="text" style="width: 100%;" placeholder="请输入请假天数(必填)" id="leavingTime"></td>
@@ -168,7 +168,7 @@ function submit(){
 	      },
 	      dataType:"json",
 	      success:function(data){
-	    	  alert(data);
+	    	  alert(data.result);
 	      	}
 	      });
 }

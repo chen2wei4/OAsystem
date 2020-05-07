@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.ContractDao">
+	<!-- 查询分页合同信息 -->
+	<select id="showContracts" resultMap="ContractSelectMap">
+		select * from contract where flag=1 <include refid="ContractSelectFactor"/> limit #{currentPage},10
+	</select>
+	<resultMap type="Contract" id="ContractSelectMap">
+		<id column="contract_id" property="contractId"/>
+		<result column="contract_name" property="contractName"/>
+		<result column="contract_number" property="contractNumber"/>
+		<result column="contract_status" property="contractStatus"/>
+		<result column="contract_money" property="contractMoney"/>
+		<result column="contract_setdate" property="contractSetDate"/>
+		<result column="contract_getdate" property="contractGetDate"/>
+		<result column="contract_director" property="contractDirector"/>
+		<result column="customername" property="customerName"/>
+		<result column="flag" property="flag"/>
+	</resultMap>
+	<!-- 查询合同的总数据条数 -->
+	<select id="getContractTotalData" resultType="int">
+		select count(*) from contract where flag=1 <include refid="ContractSelectFactor"/>
+	</select>
+	<!-- 通过合同号查询合同id -->
+	<select id="getContractIdByNumber" resultType="int">
+		select contract_id from contract where flag=1 and contract_number like concat('%',#{contractNumber},'%')
+	</select>
+	<!-- 通过合同号查询合同id -->
+	<select id="getOneContractIdByNumber" resultType="int">
+		select contract_id from contract where flag=1 and contract_number=#{contractNumber}
+	</select>
+	<!-- 查询合同信息的sql片段复用 -->
+	<sql id="ContractSelectFactor">
+		<if test="contract.contractName!=null and contract.contractName!=''">
+		  and contract_name like '%' #{contract.contractName} '%'
+		</if>
+		<if test="contract.contractNumber!=null and contract.contractNumber!=''">
+		  and contract_number like '%' #{contract.contractNumber} '%'
+		</if>
+		<if test="contract.contractStatus!=null and contract.contractStatus!=''">
+		  and contract_status like '%' #{contract.contractStatus} '%'
+		</if>
+		<if test="contract.customerName!=null and contract.customerName!=''">
+		  and customername like '%' #{contract.customerName} '%'
+		</if>
+		<if test="contract.contractDirector!=null and contract.contractDirector!=''">
+		  and contract_director like '%' #{contract.contractDirector} '%'
+		</if>
+	</sql>
+	<!-- 新增一条合同信息 -->
+	<insert id="newContract">
+		insert into contract(contract_id,contract_name,contract_status,customername,contract_money,contract_setdate,contract_getdate,
+		contract_director,contract_number) values(null,#{contract.contractName},'未完成',
+		#{contract.customerName},#{contract.contractMoney},#{contract.contractSetDate},#{contract.contractGetDate},
+		#{contract.contractDirector},#{contract.contractNumber})
+		<selectKey keyProperty="contract.contractId" resultType="int" order="AFTER">
+			SELECT @@identity
+		</selectKey>
+	</insert>
+	<!-- 查询一条指定的合同信息 -->
+	<select id="showContract" resultType="Contract">
+		select*from contract where flag=1 and contract_id = #{contractId}
+	</select>
+	<!-- 更改一条合同信息 -->
+	<update id="updateContract">
+		update contract set contract_name=#{contract.contractName},customername=#{contract.customerName},
+		contract_money=#{contract.contractMoney},contract_setdate=#{contract.contractSetDate},
+		contract_getdate=#{contract.contractGetDate},contract_director=#{contract.contractDirector},
+		contract_number=#{contract.contractNumber} where contract_id=#{contract.contractId} and flag=1
+	</update>
+	<!-- 删除复选框选中的合同信息 -->
+	<update id="deleteCheckedContract">
+		update contract set flag=0 
+		<where>
+			<if test="ids!=null and ids.length>0">
+				and contract_id in
+				<foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+			</if>
+		</where>
+	</update>
+		<!-- 删除一条合同信息 -->
+	<update id="deleteContract">
+		update contract set flag=0 where contract_id=#{contractId}
+	</update>
+  </mapper>

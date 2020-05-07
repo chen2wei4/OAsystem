@@ -7,6 +7,11 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,32 +48,10 @@ public class EmpController {
 	 */
 	@RequestMapping("/emp/login")
 	public String getEmp(String username,String password,String captcha,Model model,HttpSession session) {
-		Emp emp=null;
 		//数据非空判断
 		if(username==null||password==null||captcha==null||
-				username.equals("")||password.equals("")||captcha.equals("")) {
+			username.equals("")||password.equals("")||captcha.equals("")) {
 			model.addAttribute("loginMsg", "请正确输入用户名、密码以及验证码");
-			return "/lyear_pages_login";
-		}
-		//判断用户名是数字，手机号，还是邮箱，然后通过相对应的方法进行查询
-		if(username.matches(RegexUtil.isMath)&&!username.matches(RegexUtil.isCellNumber)) {
-			emp=empService.getEmpId(Integer.valueOf(username));
-		}else if(username.matches(RegexUtil.isCellNumber)) {
-			emp=empService.getEmpCellNumber(username);
-		}else if(username.matches(RegexUtil.isEmail)) {
-			emp=empService.getEmpEmail(username);
-		}
-		//如果上述账号查询不到账户信息，则用户名不存在
-		if(emp==null){
-			System.out.println("用户名不存在");
-			model.addAttribute("loginMsg", "用户名不存在");
-			return "/lyear_pages_login";
-		}
-		//如果上述账号查询到的密码与输入的密码不同，则密码错误
-		if(!emp.getEmpPassword().equals(password)) {
-			System.out.println(password);
-			System.out.println(emp.getEmpPassword());
-			model.addAttribute("loginMsg", "密码错误");
 			return "/lyear_pages_login";
 		}
 		//如果密码和账号都正确，验证码不正确，则验证码错误，大小写识别
@@ -78,10 +61,37 @@ public class EmpController {
 			model.addAttribute("loginMsg", "验证码错误");
 			return "/lyear_pages_login";
 		}
+		Subject subject = SecurityUtils.getSubject();
+		UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+		try {
+			subject.login(token);
+			Emp emp=null;
+			username = (String) subject.getPrincipal();
+			if(username.matches(RegexUtil.isMath)&&!username.matches(RegexUtil.isCellNumber)) {
+				emp=empService.getEmpId(Integer.valueOf(username));
+			}else if(username.matches(RegexUtil.isCellNumber)) {
+				emp=empService.getEmpCellNumber(username);
+			}else if(username.matches(RegexUtil.isEmail)) {
+				emp=empService.getEmpEmail(username);
+			}
+			if(emp.getEmpTel()!=null&&(emp.getEmpTel().length()==11)) {
+			String tel1 = emp.getEmpTel().substring(0, 3);
+			String tel2 = "******";
+			String tel3 = emp.getEmpTel().substring(9, 11);
+			emp.setEmpTel(tel1+tel2+tel3);
+		}
 		//将账号信息存储在session域中
 		System.out.println(emp);
 		session.setAttribute("emp", emp);
-		return "/index";
+			return "/index";
+		} catch (UnknownAccountException e) {
+			System.out.println("未知用户名");
+			model.addAttribute("loginMsg", "用户名不存在");
+		}catch (IncorrectCredentialsException e) {
+			System.out.println("密码不正确");
+			model.addAttribute("loginMsg", "密码错误");
+		}
+		return "/lyear_pages_login";
 	}
 	/**
 	 * 
@@ -96,6 +106,13 @@ public class EmpController {
 	@RequestMapping("/emp/newpwd")
 	public String changePwd(String oldpwd,String newpwd,String confirmpwd,Model model,
 			HttpSession session) {
+		if(!oldpwd.matches(RegexUtil.isPwd)) {
+			model.addAttribute("newPwdMsg", "请输入8-16位数字字母组成的旧密码");
+			return "/lyear_pages_edit_pwd";
+		}else if(newpwd.matches(RegexUtil.isPwd)) {
+			model.addAttribute("newPwdMsg", "请输入8-16位数字字母组成的新密码");
+			return "/lyear_pages_edit_pwd";
+		}
 		Emp emp = (Emp) session.getAttribute("emp");
 		//获取真实密码和职工id
 		String trueOldPwd = emp.getEmpPassword();
