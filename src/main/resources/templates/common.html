@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
 <!--左侧导航-->
 <aside class="lyear-layout-sidebar" th:fragment="lefter">
 
@@ -19,10 +19,10 @@
 					href="javascript:void(0)"><i
 						class="mdi mdi-format-align-justify"></i> 商务管理</a>
 					<ul class="nav nav-subnav">
-						<li><a th:href="@{/business/customers}">客户信息</a></li>
-						<li><a href="lyear_forms_radio.html">我的客户</a></li>
-						<li><a href="lyear_forms_checkbox.html">订单信息</a></li>
-						<li><a href="lyear_forms_switch.html">合同信息</a></li>
+						<li> <a th:href="@{/business/customers}">客户信息</a> </li>
+                <li> <a th:href="@{/business/mycustomers}">我的客户</a> </li>
+                <li> <a th:href="@{/business/orders}">订单信息</a> </li>
+                <li> <a th:href="@{/business/contracts}">合同信息</a> </li>
 					</ul></li>
 				<!-- 行政管理 -->
 				<li class="nav-item nav-item-has-subnav"><a

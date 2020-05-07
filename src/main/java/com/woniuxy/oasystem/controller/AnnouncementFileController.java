@@ -26,7 +26,7 @@ public class AnnouncementFileController {
 	AnnouncementFileService announcementFileService;
 
 	@RequestMapping("/downloadFile")
-	public String downloadFile2(AnnouncementFile annf, HttpServletResponse response) {
+	public String downloadFile2(AnnouncementFile annf, HttpServletResponse response ,Model model) {
 		String downloadFilePath = annf.getAfAddress();// 被下载的文件在服务器中的路径,
 		String fileName = annf.getAfName();// 被下载文件的名称
 		File file = new File(downloadFilePath);
@@ -48,6 +48,9 @@ public class AnnouncementFileController {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+				model.addAttribute("errorcode", 500);
+				model.addAttribute("error","文件下载出错请联系管理员");
+				return "lyear_pages_error";
 			}finally {
 				if (bis != null) {
 					try {

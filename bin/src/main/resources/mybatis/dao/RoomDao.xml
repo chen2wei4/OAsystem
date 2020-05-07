@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.RoomDao">
+	<insert id="addRoom">
+		insert into room (room_area) values(#{roomArea})
+	</insert>
+	
+	<delete id="deleteRoom">
+		delete from room where room_id=#{roomId}
+	</delete>
+	
+	<update id="changeRoom">
+		update room set room_area=#{roomArea} where room_id=#{roomId}
+	</update>
+	
+	<select id="queryRoom" resultType="Room">
+		select*from room
+			<trim prefix="where" suffixOverrides="and">
+				<if test="roomArea!='' and roomArea!=null">
+					room_area like concat("%",#{roomId},"%") and
+				</if>
+				<if test="roomId!='' and roomId!=null">
+					room_id=#{roomId} and
+				</if>
+			</trim>
+	</select>
+</mapper>

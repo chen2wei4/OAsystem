@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 办公用品请购 -->
+<mapper namespace="com.woniuxy.oasystem.dao.OfficeSuppliesBuyDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultMap="empMap">
+		select * 
+		from office_supplies_buy osb,emp e
+		where osb.flag = 1 and osb.emp_id = e.emp_id
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<resultMap type="OfficeSuppliesBuy" id="empMap">
+		<id column="osb_id" property="osbId"/>
+		<result column="content" property="content"/>
+		<result column="buy_time" property="buyTime"/>
+		<result column="state" property="state"/>
+		
+		<collection property="emp" ofType="Emp">
+			<result column="emp_name" property="empName"/>
+		</collection>
+	</resultMap>
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(distinct osb_id) 
+		from office_supplies_buy osb,emp e
+		where osb.flag = 1 and osb.emp_id = e.emp_id
+		<include refid="conditionSql"/>
+	</select>
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="osb.emp.empName!= null and osb.emp.empName!=''">
+				and emp_Name like concat('%',#{osb.emp.empName},'%')
+			</if>
+			<if test="osb.buyTime!= null and osb.buyTime!=''">
+				and buy_time like '%' #{osb.buyTime} '%'
+			</if>
+			<if test="osb.state!= null and osb.state!=''">
+				and state like '%' #{osb.state} '%'
+			</if>
+	</sql>
+	<!-- 根据osbid删除 -->
+	<update id="deleteByOsbId">
+		update office_supplies_buy set flag = 0 where osb_id = #{osbId}
+	</update>
+	<!-- 根据osbid修改 -->
+	<update id="updateByOsbId">
+		update office_supplies_buy set 
+		content=#{osb.content},buy_time=#{osb.buyTime},state=#{osb.state}
+		where osb_id = #{osb.osbId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into office_supplies_buy (emp_id,content,buy_time,state) 
+		values (#{osb.emp.empId},#{osb.content},#{osb.buyTime},#{osb.state})
+	</insert>
+</mapper>

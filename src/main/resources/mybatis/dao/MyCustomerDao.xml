@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.MyCustomerDao">
+	<!-- 查询分页客户信息 -->
+	<select id="showMyCustomers" resultMap="myCustomersSelectMap">
+		select * from customer where flag=1 and customer_director=#{customerDirector} <include refid="myCustomerSelectFactor"/> 
+		limit #{currentPage},10
+	</select>
+	<resultMap type="Customer" id="myCustomersSelectMap">
+		<id column="customer_id" property="customerId"/>
+		<result column="customer_name" property="customerName"/>
+		<result column="customer_sex" property="customerSex"/>
+		<result column="customer_company" property="customerCompany"/>
+		<result column="customer_position" property="customerPosition"/>
+		<result column="customer_tel" property="customerTel"/>
+		<result column="customer_email" property="customerEmail"/>
+		<result column="customer_director" property="customerDirector"/>
+		<result column="customer_time" property="customerTime"/>
+		<result column="flag" property="flag"/>
+		<association property="customerType" javaType="CustomerType" select="selectCustomerType" column="customer_type_id"/>
+	</resultMap>
+	<!-- 根据客户类型id查询指定客户类型 -->
+	<select id="selectCustomerType" resultType="CustomerType">
+		select * from customer_type where flag=1 and customer_type_id=#{customer_type_id}
+	</select>
+	<!-- 查询客户的总数据条数 -->
+	<select id="getMyCustomerTotalData" resultType="int">
+		select count(*) from customer where flag=1 and customer_director=#{customerDirector} <include refid="myCustomerSelectFactor"/>
+	</select>
+	<!-- 查询客户信息的sql片段复用 -->
+	<sql id="myCustomerSelectFactor">
+		<if test="customer.customerName!=null and customer.customerName!=''">
+		  and customer_name like '%' #{customer.customerName} '%'
+		</if>
+		<if test="customer.customerCompany!=null and customer.customerCompany!=''">
+		  and customer_company like '%' #{customer.customerCompany} '%'
+		</if>
+		<if test="customer.customerPosition!=null and customer.customerPosition!=''">
+		  and customer_position like '%' #{customer.customerPosition} '%'
+		</if>
+		<if test="customer.customerSex!=null and customer.customerSex!=''">
+		  and customer_sex like '%' #{customer.customerSex} '%'
+		</if>
+	</sql>
+  </mapper>

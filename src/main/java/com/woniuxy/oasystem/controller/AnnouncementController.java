@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,7 +65,8 @@ public class AnnouncementController {
 		model.addAttribute("types", list);
 		return "announcementpages";
 		}catch(Exception e) {
-			e.printStackTrace();
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","查询出错请联系管理员");
 			//发生异常打到错误页
 			return "lyear_pages_error";
 		}
@@ -86,7 +88,6 @@ public class AnnouncementController {
 		announcementWatchedService.addWatchedMessage(an.getAnId(), emp.getEmpId(), new Date());
 		// 查看当前公告的留言板
 		List<AnnouncementMessage> messages = announcementMessageService.ShowAnnouncementMessage(an.getAnId());
-		System.out.println(messages);
 		// 展示信息
 		model.addAttribute("files", files);
 		model.addAttribute("ancontent", announcement);
@@ -95,6 +96,8 @@ public class AnnouncementController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			//发生异常打到错误页
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","查询出错请联系管理员");
 			return "lyear_pages_error";
 					
 		}
@@ -126,6 +129,8 @@ public class AnnouncementController {
 		return "announcementmanage";
 		}catch(Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","查询出错请联系管理员");
 			//发生异常打到错误页
 			return "lyear_pages_error";
 					
@@ -142,6 +147,8 @@ public class AnnouncementController {
 		return "redirect:/anmanage";
 		}catch(Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","删除出错请联系管理员");
 			//发生异常打到错误页
 			return "lyear_pages_error";
 					
@@ -176,6 +183,9 @@ public class AnnouncementController {
 					announcementFileService.addAnnouncementFile(announcementFile);
 				} catch (Exception e) {
 					e.printStackTrace();
+					model.addAttribute("errorcode", 500);
+					model.addAttribute("error","添加附件出错请联系管理员");
+					//发生异常打到错误页
 				}
 
 			}
@@ -184,6 +194,8 @@ public class AnnouncementController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			//发生异常打到错误页
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","添加公告出错请联系管理员");
 			return "lyear_pages_error";
 					
 		}
@@ -207,6 +219,8 @@ public class AnnouncementController {
 		return "updateannouncement";
 		}catch(Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","查询出错请联系管理员");
 			//发生异常打到错误页
 			return "lyear_pages_error";
 					
@@ -224,6 +238,8 @@ public class AnnouncementController {
 		return "addannouncement";
 		}catch(Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","添加出错请联系管理员");
 			//发生异常打到错误页
 			return "lyear_pages_error";
 					
@@ -235,7 +251,7 @@ public class AnnouncementController {
 	 */
 	@RequestMapping("/updateannouncement")
 	public String updateAnnouncement(@RequestParam(value = "files", required = false) MultipartFile[] files,
-			Announcement ann) {
+			Announcement ann,Model model) {
 		try {
 		// 修改公告本身的内容
 		announcementService.updateAnnouncement(ann);
@@ -259,6 +275,10 @@ public class AnnouncementController {
 					announcementFileService.addAnnouncementFile(announcementFile);
 				} catch (Exception e) {
 					e.printStackTrace();
+					model.addAttribute("errorcode", 500);
+					model.addAttribute("error","修改文件出错请联系管理员");
+					//发生异常打到错误页
+					return "lyear_pages_error";
 				}
 
 			}
@@ -267,6 +287,8 @@ public class AnnouncementController {
 		return "redirect:/anmanage";
 		}catch(Exception e) {
 			e.printStackTrace();
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","修改公告出错请联系管理员");
 			//发生异常打到错误页
 			return "lyear_pages_error";
 					
