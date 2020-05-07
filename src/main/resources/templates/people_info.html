@@ -48,11 +48,86 @@
 
         <!--页面主要内容-->
         <main class="lyear-layout-content">
-            peopleinfo
 
+            <form id="inputForm"  method="post"  class="form-horizontal p-15">
+                <table class="table table-bordered">
 
-
-
+                    <tbody>
+                    <tr>
+                        <th colspan="4" style="text-align: center;">个人信息</th>
+                    </tr>
+                    <tr>
+                        <td class="width-15 active"><label class="pull-right">职工工号：</label></td>
+                        <td class="width-35">
+                            <input id="empId" readonly="true" th:value="${emp!=null?emp.empId:''}"    class="form-control "/>
+                        </td>
+                        <td class="width-15 active"><label class="pull-right">职工部门：</label></td>
+                        <td class="width-35">
+                            <select name="departmentId" readonly="true" id="boss" class="form-control1">
+                                            <option th:each="dep:${deps}" th:value="${dep.departmentId}" th:text="${dep.departmentName}"
+                                                    th:selected="${dep.departmentId == did}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width-15 active"><label class="pull-right">职工姓名：</label></td>
+                        <td class="width-35">
+                            <input id="empName" th:value="${emp!=null?emp.empName:''}"    class="form-control "/>
+                        </td>
+                        <td class="width-15 active"><label class="pull-right">出生日期：</label></td>
+                        <td class="width-35">
+                            <input id="empDate" th:value="${emp!=null?emp.empDate:''}"    class="form-control "/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width-15 active"><label class="pull-right">职工性别：</label></td>
+                        <td  class="width-35">
+                                    <select id="empSex" class="form-control1">
+                                        <option th:value="1" th:text="男" th:selected="${emp.empSex == 1}"></option>
+                                        <option th:value="2" th:text="女" th:selected="${emp.empSex == 2}"></option>
+                                    </select>
+                        </td>
+                        <td class="width-15 active"><label class="pull-right">电话号码：</label></td>
+                        <td class="width-35">
+                            <input id="addrbookNumber" th:value="${emp!=null?emp.empTel:''}"    class="form-control "/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width-15 active"><label class="pull-right">邮箱：</label></td>
+                        <td  class="width-35">
+                                    <input id="empEmail" th:value="${emp!=null?emp.empEmail:''}"    class="form-control "/>
+                        </td>
+                        <td class="width-15 active"><label class="pull-right">身份证号：</label></td>
+                        <td class="width-35">
+                            <input id="empIdnumber" th:value="${emp!=null?emp.empIdnumber:''}"    class="form-control "/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width-15 active"><label class="pull-right">入职日期：</label></td>
+                        <td  class="width-35">
+                                   <input id="empHiredate" readonly="true" th:value="${emp!=null?emp.empHiredate:''}"    class="form-control "/>
+                        </td>
+                        <td class="width-15 active"><label class="pull-right">学历：</label></td>
+                        <td class="width-35">
+                            <select id="empEducation" disabled="true" class="form-control1">
+                                            <option th:value="1" th:text="本科" th:selected="${emp.empEducation == 1}"></option>
+                                            <option th:value="2" th:text="专科" th:selected="${emp.empEducation == 2}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width-15 active"><label class="pull-right">政治面貌：</label></td>
+                        <td  class="width-35">
+                            <select id="empPoliticalStatus" disabled="true" class="form-control1">
+                                            <option th:value="1" th:text="党员" th:selected="${emp.empPoliticalStatus == 1}"></option>
+                                            <option th:value="2" th:text="群众" th:selected="${emp.empPoliticalStatus == 2}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button id="save" class="btn btn-primary m-r-5" >提交</button>
+            </form>
         </main>
         <!--End 页面主要内容-->
     </div>
@@ -63,7 +138,35 @@
 <script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.min.js}"></script>
 <script type="text/javascript">
+    $("#save").click(function(){
+        if(confirm("确认修改？")==true){
 
+            $.ajax({
+                url:"[[@{/editmyinfo}]]",
+                type:"POST",
+                data:{
+                    addrbookId:$("#addrbookId").val(),
+                    empId:$("#empId").val(),
+                    departmentId:$("#departmentId").val(),
+                    empName:$("#empName").val(),
+                    empDate:$("#empDate").val(),
+                    empSex:$("#empSex").val(),
+                    addrbookNumber:$("#addrbookNumber").val(),
+                    empEmail:$("#empEmail").val(),
+                    addrbookNumber:$("#addrbookNumber").val(),
+                    empIdnumber:$("#empIdnumber").val(),
+                    empHiredate:$("#empHiredate").val(),
+                    empEducation:$("#empEducation").val(),
+                    empPoliticalStatus:$("#empPoliticalStatus").val(),
+                },
+                success:function(data){
+
+                }
+            });
+            document.location = "/myinfo";
+        }
+
+    });
 </script>
 </body>
 </html>

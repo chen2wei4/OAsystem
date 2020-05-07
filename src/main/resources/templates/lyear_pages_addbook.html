@@ -50,56 +50,56 @@
     <!--页面主要内容-->
     <main class="lyear-layout-content">
 
-<form id="inputForm"  method="post"  class="form-horizontal p-15">
-    <table class="table table-bordered">
-       <tbody>
-            <tr>
-                <input id="addrbookId" type="hidden" th:value="${editdata!=null and editdata.addrbookId!=null?editdata.addrbookId:''}"/>
-                <td class="width-15 active"><label class="pull-right">通讯对象名：</label></td>
-                <td class="width-35">
-                    <input id="addrbookName" th:value="${editdata!=null?editdata.addrbookName:''}"    class="form-control "/>
-                </td>
-                <td class="width-15 active"><label class="pull-right">所属部门：</label></td>
-                <td class="width-35">
-                    <input id="departmentId" th:value="${editdata!=null?editdata.addrbookDep:''}"    class="form-control "/>
-            </td>
-            </tr>
-            <tr>
-                <td class="width-15 active"><label class="pull-right">通讯类型：</label></td>
-                <td class="width-35">
-                    <select name="addrbookType" id="addrbookType" class="form-control1">
-                                    <option  th:value="1" th:text="公司通讯录" th:selected="true"/>
-                                    <option  th:value="2" th:text="业务通讯录"/>
-                                    <option  th:value="3" th:text="个人通讯录"/>
+        <form id="inputForm"  method="post"  class="form-horizontal p-15">
+            <table class="table table-bordered">
+               <tbody>
+                    <tr>
+                        <input id="addrbookId" type="hidden" th:value="${editdata!=null and editdata.addrbookId!=null?editdata.addrbookId:''}"/>
+                        <td class="width-15 active"><label class="pull-right">通讯对象名：</label></td>
+                        <td class="width-35">
+                            <input id="addrbookName" th:value="${editdata!=null?editdata.addrbookName:''}"    class="form-control "/>
+                        </td>
+                        <td class="width-15 active"><label class="pull-right">所属部门：</label></td>
+                        <td class="width-35">
+                            <input id="departmentId" th:value="${editdata!=null?editdata.addrbookDep:''}"    class="form-control "/>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td class="width-15 active"><label class="pull-right">通讯类型：</label></td>
+                        <td class="width-35">
+                            <select name="addrbookType" id="addrbookType" class="form-control1">
+                                            <option  th:value="1" th:text="公司通讯录" th:selected="${editdata.addrbookType==1}"/>
+                                            <option  th:value="2" th:text="业务通讯录" th:selected="${editdata.addrbookType==2}"/>
+                                            <option  th:value="3" th:text="个人通讯录" th:selected="${editdata.addrbookType==3}"/>
 
-                                </select>
-                </td>
-                <td class="width-15 active"><label class="pull-right">通讯地址：</label></td>
-                <td class="width-35">
-                    <input id="addrbookAddress" th:value="${editdata!=null?editdata.addrbookAddress:''}"    class="form-control "/>
-                </td>
-            </tr>
-            <tr>
-                <td class="width-15 active"><label class="pull-right">上级领导：</label></td>
-                <td  class="width-35">
-                            <select name="boss" id="boss" class="form-control1">
-                                <option th:each="emp,userStat:${emps}" th:value="${emp.empId}" th:text="${emp.empName}"
-                                        th:selected="${emp.empId == emp.empId}"></option>
-                            </select>
-            </td>
-                <td class="width-15 active"><label class="pull-right">通讯号：</label></td>
-                <td class="width-35">
-                    <input id="addrbookNumber" th:value="${editdata!=null?editdata.addrbookNumber:''}"    class="form-control "/>
-                </td>
-            </tr>
-            <tr>
+                                        </select>
+                        </td>
+                        <td class="width-15 active"><label class="pull-right">通讯地址：</label></td>
+                        <td class="width-35">
+                            <input id="addrbookAddress" th:value="${editdata!=null?editdata.addrbookAddress:''}"    class="form-control "/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="width-15 active"><label class="pull-right">上级领导：</label></td>
+                        <td  class="width-35">
+                                    <select name="boss" id="boss" class="form-control1">
+                                        <option th:each="emp,userStat:${emps}" th:value="${emp.empId}" th:text="${emp.empName}"
+                                                th:selected="${emp.empId == emp.empId}"></option>
+                                    </select>
+                    </td>
+                        <td class="width-15 active"><label class="pull-right">通讯号：</label></td>
+                        <td class="width-35">
+                            <input id="addrbookNumber" th:value="${editdata!=null?editdata.addrbookNumber:''}"    class="form-control "/>
+                        </td>
+                    </tr>
+                    <tr>
 
 
-            </tr>
-        </tbody>
-    </table>
-</form>
-<button id="save" class="btn btn-primary m-r-5" >提交</button>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+            <button id="save" class="btn btn-primary m-r-5" >提交</button>
       <form id="delForm" method="post">
       	<input type="hidden" name="_method" value="delete">
       </form>
@@ -146,6 +146,7 @@ $(function(){
                     empEmpId:$("#empEmpId").val(),
                     addrbookNumber:$("#addrbookNumber").val(),
                     addrbookAddress:$("#addrbookAddress").val(),
+                    addrbookDep:$("#departmentId").val(),
                 },
                 success:function(data){
 
@@ -166,12 +167,14 @@ $(function(){
                     empEmpId:$("#empEmpId").val(),
                     addrbookNumber:$("#addrbookNumber").val(),
                     addrbookAddress:$("#addrbookAddress").val(),
+                    addrbookDep:$("#departmentId").val(),
                 },
                 success:function(data){
-                    alert("save12")
+
                 }
             });
         }
+        document.location = "/info";
     });
 });
 

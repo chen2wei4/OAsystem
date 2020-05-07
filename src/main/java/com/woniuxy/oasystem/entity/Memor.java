@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Memor {
-	int memorId;
+	Integer memorId;
 	Emp memorFrom;
 	String memorContent;
 	String memorTime;

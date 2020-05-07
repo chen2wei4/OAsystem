@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.MyInfoDao">
+    <update id="ChangeInfo">
+        update emp
+            set
+        <trim suffixOverrides=",">
+            <if test="emp.department!='' and emp.department!=null">
+                department_id=#{emp.department.departmentId},
+            </if>
+            <if test="emp.empName!='' and emp.empName!=null">
+                emp_name=#{emp.empName},
+            </if>
+            <if test="emp.empDate!='' and emp.empDate!=null">
+                emp_date=#{emp.empDate},
+            </if>
+            <if test="emp.empSex!='' and emp.empSex!=null">
+                emp_sex=#{emp.empSex},
+            </if>
+            <if test="emp.empTel!='' and emp.empTel!=null">
+                emp_tel=#{emp.empTel},
+            </if>
+            <if test="emp.empEmail!='' and emp.empEmail!=null">
+                emp_email=#{emp.empEmail},
+            </if>
+            <if test="emp.empHiredate!='' and emp.empHiredate!=null">
+                emp_hiredate=#{emp.empHiredate},
+            </if>
+            <if test="emp.empEducation!='' and emp.empEducation!=null">
+                emp_education=#{emp.empEducation},
+            </if>
+            <if test="emp.empPoliticalStatus!='' and emp.empPoliticalStatus!=null">
+                emp_political_status=#{emp.empPoliticalStatus},
+            </if>
+        </trim>
+        where emp_id=${emp.empId}
+    </update>
+    <select id="getEmpById" resultType="Emp">
+        select * from emp where emp_id=${id}
+    </select>
+</mapper>

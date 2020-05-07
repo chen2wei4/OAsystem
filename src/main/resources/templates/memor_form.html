@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>信息 - 光年(Light Year Admin)后台管理系统模板</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description" content="LightYear是一个基于Bootstrap v3.3.7的后台管理系统的HTML模板。">
+<meta name="author" content="yinqi">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/js/jconfirm/jquery-confirm.min.css}">
+    <script th:src="@{/js/vue.js}"></script>
+    <script th:src="@{/js/axios.js}"></script>
+</head>
+<body>
+
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <div th:replace="common :: lefter"></div>
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <header class="lyear-layout-header">
+
+            <nav class="navbar navbar-default">
+                <div class="topbar">
+
+                    <div class="topbar-left">
+                        <div class="lyear-aside-toggler">
+                            <span class="lyear-toggler-bar"></span>
+                            <span class="lyear-toggler-bar"></span>
+                            <span class="lyear-toggler-bar"></span>
+                        </div>
+                        <span class="navbar-page-title"> 备忘信息 </span>
+                    </div>
+
+                    <!-- 导航栏信息 -->
+                    <ul class="topbar-right" th:replace="common :: header"></ul>
+                </div>
+            </nav>
+
+        </header>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+        <form id="inputForm"  method="post"  class="form-horizontal p-15">
+            <table class="table table-bordered">
+                <tbody>
+                <tr>
+                    <input id="memorId" type="hidden" th:value="${editdata!=null and editdata.memorId!=null?editdata.memorId:''}"/>
+                    <td class="width-15 active"><label class="pull-right">备忘内容：</label></td>
+                    <td class="width-35">
+                        <textarea class="form-control" id="memorContent" name="seo_description" rows="5" value=""></textarea>
+                    </td>
+                    <td class="width-15 active"><label class="pull-right">备忘日期：</label></td>
+                    <td class="width-35">
+                        <input id="memorTime" th:value="${editdata!=null?editdata.addrbookDep:''}"    class="form-control "/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="width-15 active"><label class="pull-right">备忘分类：</label></td>
+                    <td class="width-35">
+                        <input id="memorType" th:value="${editdata!=null?editdata.addrbookAddress:''}"    class="form-control "/>
+                    </td>
+                </tr>
+
+
+                </tbody>
+            </table>
+        </form>
+        <button id="save" class="btn btn-primary m-r-5" >提交</button>
+        <!--End 页面主要内容-->
+        </main>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.min.js}"></script>
+<script type="text/javascript">
+    function deleteMemor(id){
+        var ret = confirm("确认删除？")
+        if(ret==true){
+            $.post(
+                "/memor/delete",
+                "id="+id,
+                function(data){
+                }
+            )
+            location.reload();
+        }
+    }
+
+
+    $("#save").click(function(){
+        if($("#memorId").val()!=""){
+            $.ajax({
+                url:"[[@{/saveEdit}]]",
+                type:"POST",
+                data:{
+                    memorId:$("#memorId").val(),
+                    memorContent:$("#memorContent").val(),
+                    memorTime:$("#memorTime").val(),
+                    memorType:$("#memorType").val(),
+                },
+                success:function(data){
+
+                }
+            });
+        }else
+        {
+            $.ajax({
+                url:"[[@{/memor/save}]]",
+                type:"POST",
+                data:{
+                    memorContent:$("#memorContent").val(),
+                    memorTime:$("#memorTime").val(),
+                    memorType:$("#memorType").val(),
+                },
+                success:function(data){
+
+                }
+            });
+        }
+        document.location = "/memor";
+    });
+</script>
+</body>
+</html>

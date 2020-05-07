@@ -24,6 +24,7 @@ public class AddressBookController {
 	@Autowired
 	AddressBookDao addrDao;
 
+
 	@RequestMapping("/info")
 	@ResponseBody
 	ModelAndView Index(Integer currentPage, HttpSession session) {
@@ -32,7 +33,7 @@ public class AddressBookController {
 		ModelAndView mv=new ModelAndView();
 		AddressBook addressBook=new AddressBook();//查询条件 此处为空 获取所有
 		Emp e= (Emp) session.getAttribute("emp");
-		String name = ((Emp) session.getAttribute("emp")).getEmpName();
+		String name = e.getEmpName();
 		PageBean<AddressBook> rets=new PageBean<AddressBook>();
 		if(name.equals("admin")){
 			rets = addressBookService.infoCustomers(addressBook,currentPage);//使用空查询
@@ -66,7 +67,7 @@ public class AddressBookController {
 		AddressBook condition=new AddressBook();
 		condition.setAddrbookId(id);
 		List<Emp> emps=empDao.getEmps();
-		AddressBook ret = addrDao.infoCustomers(condition, 1).get(1);
+		AddressBook ret = addrDao.getaddrBookById(id);
 		mv.addObject("emps", emps);
 		mv.addObject("editdata", ret);
 		mv.setViewName("lyear_pages_addbook");

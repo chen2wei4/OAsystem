@@ -33,6 +33,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			addrbook_emp_id=#{empId}
 			limit #{current},10
 	</select>
+	<select id="getaddrBookById" resultMap="AddressBookMap">
+		select*from addressbook
+			where
+			flag=1
+			and
+			addrbook_id=#{empId}
+	</select>
 	<select id="queryAddressBook" resultType="java.lang.Integer">
 		select count(*) from addressbook
 			where
@@ -158,7 +165,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!--				set emp_id=#{addressBook.addrbookPeople.empId},-->
 <!--			</if>-->
 			<if test="addressBook.addrbookPeople!='' and addressBook.addrbookPeople!=null">
-				set addrbook_emp_id=#{addressEmpId},
+				 addrbook_emp_id=#{addressEmpId},
 			</if>
 
 			<if test="addressBook.addrbookType!='' and addressBook.addrbookType!=null">

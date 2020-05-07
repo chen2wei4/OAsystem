@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>信息 - 光年(Light Year Admin)后台管理系统模板</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description" content="LightYear是一个基于Bootstrap v3.3.7的后台管理系统的HTML模板。">
+<meta name="author" content="yinqi">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/js/jconfirm/jquery-confirm.min.css}">
+    <script th:src="@{/js/vue.js}"></script>
+    <script th:src="@{/js/axios.js}"></script>
+</head>
+<body>
+
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <div th:replace="common :: lefter"></div>
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <header class="lyear-layout-header">
+
+            <nav class="navbar navbar-default">
+                <div class="topbar">
+
+                    <div class="topbar-left">
+                        <div class="lyear-aside-toggler">
+                            <span class="lyear-toggler-bar"></span>
+                            <span class="lyear-toggler-bar"></span>
+                            <span class="lyear-toggler-bar"></span>
+                        </div>
+                        <span class="navbar-page-title"> 备忘信息 </span>
+                    </div>
+
+                    <!-- 导航栏信息 -->
+                    <ul class="topbar-right" th:replace="common :: header"></ul>
+                </div>
+            </nav>
+
+        </header>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="card-body">
+                <div class="toolbar-btn-action">
+                    <a class="btn btn-success m-r-5" th:href="@{/addMemor}"><i class="mdi mdi-check"></i>增加</a>
+                    <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>
+                                <label class="lyear-checkbox checkbox-primary">
+                                    <input type="checkbox" id="check-all"><span></span>
+                                </label>
+                            </th>
+                            <th>备忘内容</th>
+                            <th>备忘日期</th>
+                            <th>备忘分类</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="ret,i:${rets.beanList}">
+                            <td>
+                                <label class="lyear-checkbox checkbox-primary">
+                                    <input type="checkbox" name="ids[]" value="10"><span></span>
+                                </label>
+                            </td>
+                            <td th:text="${ret.memorContent}"></td>
+                            <td th:text="${ret.memorTime}"></td>
+                            <td th:text="${ret.memorType}"></td>
+                            <td>
+
+                                <div class="btn-group">
+                                    <a class="btn btn-primary m-r-5" th:href="@{memor/edit}+'?id='+${ret.memorId}" title="" data-toggle="tooltip" data-original-title="编辑"><i class="mdi mdi-pencil"></i></a>
+                                    <a class="btn btn-primary m-r-5" href="#!" th:onclick="|deleteMemor(${ret.memorId})|" data-original-title="删除"><i class="mdi mdi-window-close"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <ul class="pagination" >
+                    <li th:class="${rets.pageIndex ==1}?disabled">
+                        <a th:href="${rets.pageIndex ==1}?'javaScript:void(0)':${rets.url}+'?currentPage='+${rets.pageIndex-1}">«</a>
+                    </li>
+                    <li th:class="${rets.pageIndex == i} ?active" th:each="i:${#numbers.sequence(1,rets.totalPage)}"  th:switch="${rets.pageIndex}">
+                        <a th:case="${i}">[[${i}]]</a>
+                        <a th:href="${rets.url}+'?currentPage='+${i}"  th:case="*">[[${i}]]</a>
+                    </li>
+                    <li th:class="${rets.pageIndex ==rets.totalPage}?disabled">
+                        <a th:href="${rets.pageIndex ==rets.totalPage}?'javaScript:void(0)':${rets.url}+'?currentPage='+${rets.pageIndex+1}">»</a>
+                    </li>
+                </ul>
+
+            </div>
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.min.js}"></script>
+<script type="text/javascript">
+    $("#save").click(function(){
+        if(confirm("确认修改？")==true){
+
+            $.ajax({
+                url:"[[@{/editmyinfo}]]",
+                type:"POST",
+                data:{
+                    addrbookId:$("#addrbookId").val(),
+                    empId:$("#empId").val(),
+                    departmentId:$("#departmentId").val(),
+                    empName:$("#empName").val(),
+                    empDate:$("#empDate").val(),
+                    empSex:$("#empSex").val(),
+                    addrbookNumber:$("#addrbookNumber").val(),
+                    empEmail:$("#empEmail").val(),
+                    addrbookNumber:$("#addrbookNumber").val(),
+                    empIdnumber:$("#empIdnumber").val(),
+                    empHiredate:$("#empHiredate").val(),
+                    empEducation:$("#empEducation").val(),
+                    empPoliticalStatus:$("#empPoliticalStatus").val(),
+                },
+                success:function(data){
+
+                }
+            });
+            document.location = "/myinfo";
+        }
+
+    });
+
+    function deleteMemor(id){
+        var ret = confirm("确认删除？")
+        if(ret==true){
+            $.post(
+                "/memor/delete",
+                "id="+id,
+                function(data){
+                }
+            )
+            location.reload();
+        }
+
+    }
+</script>
+</body>
+</html>

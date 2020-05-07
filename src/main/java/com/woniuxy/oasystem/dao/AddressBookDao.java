@@ -11,5 +11,6 @@ public interface AddressBookDao {
 	void changeAddressBook(@Param("addressBook")AddressBook addressBook,@Param("empId")Integer empId,@Param("addressEmpId")Integer addressEmpId);
 	Integer queryAddressBook(@Param("addressBook")AddressBook addressBook);
 	Integer queryAddressBookById(@Param("addressBook")AddressBook addressBook,@Param("empId")Integer id);
-	List<AddressBook> infoCustomersById(@Param("aa")AddressBook addressBook, @Param("current")Integer i, @Param("empId")Integer empId);
+	List<AddressBook> infoCustomersById(@Param("addressBook")AddressBook addressBook, @Param("current")Integer i, @Param("empId")Integer empId);
+	AddressBook getaddrBookById(@Param("empId")Integer empId);
 }

@@ -7,12 +7,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into memor (memor_from,memor_content,memor_time,
 		memor_type) 
 		values 
-		(#{memorFrom.empId},#{memorContent},#{memorTime},#{memorType})
+		(#{memor.memorFrom.empId},#{memor.memorContent},#{memor.memorTime},#{memor.memorType})
 	</insert>
 	
-	<delete id="deleteMemor">
-		delete from memor where memor_id=#{memorId}
-	</delete>
+	<update id="deleteMemor">
+		update memor set flag=0 where memor_id=#{memor.memorId}
+	</update>
 	
 	<update id="changeMemor">
 		update memor
@@ -27,16 +27,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where memor_id=#{memorId}
 	</update>
 	
-	<select id="queryMemor" resultType="Memor">
-		select*from memor
-		<where>
-				1=1
-			<if test="memorId!='' and memorId!=null">
-				,memor_id=#{memorId}
+	<select id="queryMemor" resultMap="MemorMap">
+		select*from memor where
+		<trim suffixOverrides=",">
+			<if test="memor.memorId!='' and memor.memorId!=null">
+				memor_id=#{memor.memorId} and
 			</if>
-			<if test="roomArea!='' and roomArea!=null">
-				,room_area like "%#{roomId}%"
+			<if test="memor.memorFrom!='' and memor.memorFrom!=null">
+				memor_from=#{memor.memorFrom} and
 			</if>
-		</where>
+			<if test="memor.memorContent!='' and memor.memorContent!=null">
+				memor_content=#{memor.memorContent} and
+			</if>
+			<if test="memor.memorTime!='' and memor.memorTime!=null">
+				memor_time=#{memor.memorTime} and
+			</if>
+			<if test="memor.memorType!='' and memor.memorType!=null">
+				memor_type=#{memor.memorType} and
+			</if>
+			flag=1
+		</trim>
+			limit ${page},10
 	</select>
+	<resultMap id="MemorMap" type="Memor">
+		<id column="memorId" property="memor_id"/>
+		<result column="memor_from" property="memorFrom.empId"/>
+		<result column="memor_content" property="memorContent"/>
+		<result column="memor_time" property="memorTime"/>
+		<result column="memor_type" property="memorType"/>
+	</resultMap>
 </mapper>
