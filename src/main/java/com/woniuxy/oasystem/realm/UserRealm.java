@@ -64,6 +64,9 @@ public class UserRealm extends AuthorizingRealm{
 		
 		//事务模块权限叠加
 		 administrativePermissions=affair(administrativePermissions);
+		 //公告模块权限
+		 administrativePermissions=affairann(administrativePermissions);
+
 		authorizationInfo.addStringPermissions(administrativePermissions);
 		
 		authorizationInfo.addStringPermission("customer:delete");
@@ -153,4 +156,18 @@ public class UserRealm extends AuthorizingRealm{
 		}
 		return  permissions;
 	}	
+
+	//公告权限
+		public Collection<String> affairann(Collection<String> permissions){
+			//获得当前员工权限
+			Integer roleId=emp.getRole().getRoleId();
+			if(roleId==1) {
+				//管理员
+			permissions.add("announcement:manage");
+			permissions.add("announcement:select");
+			}else {
+			permissions.add("announcement:select");		
+			}
+			return  permissions;
+		}
 } 
