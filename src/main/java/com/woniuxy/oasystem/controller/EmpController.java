@@ -222,7 +222,7 @@ public class EmpController {
 		{
 			pageIndex = 1;
 		}
-		int pageSize = 1;
+		int pageSize = 5;
 		PageBean<Emp> pageBean = empService.selectEmpByPage(emp, pageIndex, pageSize);
 		return pageBean;
 	}

@@ -52,8 +52,8 @@ public class SignInServiceImpl implements SignInService {
 		Date currentTime = null;
 		try {
 			currentTime = new SimpleDateFormat("HH:mm:ss").parse(checkInTime); // 当前签到时间
-			beginTime = new SimpleDateFormat("HH:mm:ss").parse("08:30:00"); // 签到起始时间
-			endTime = new SimpleDateFormat("HH:mm:ss").parse("09:30:00"); // 签到结束时间
+			beginTime = new SimpleDateFormat("HH:mm:ss").parse("21:30:00"); // 签到起始时间
+			endTime = new SimpleDateFormat("HH:mm:ss").parse("22:30:00"); // 签到结束时间
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
