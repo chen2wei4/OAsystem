@@ -3,7 +3,7 @@ kaptcha:
   height: 40
   width: 150
   content:
-    length: 1
+    length: 4
     source: 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ
     space: 3
   font:
@@ -29,3 +29,5 @@ spring:
   jackson:     
     date-format: "yyyy-MM-dd"     
     time-zone: "GMT+8" 
+
+ 

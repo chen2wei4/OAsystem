@@ -14,7 +14,15 @@
 			<ul class="nav nav-drawer">
 				<li class="nav-item active"><a th:href="@{/index}"><i
 						class="mdi mdi-home"></i> 后台首页</a></li>
-				<li><a th:href="@{/announcement(pageIndex=1)}">通知公告</a></li>
+				<!-- 通知公告 -->
+				<li class="nav-item nav-item-has-subnav"><a
+					href="javascript:void(0)"><i
+						class="mdi mdi-scale-bathroom"></i> 通知公告</a>
+					<ul class="nav nav-subnav">
+						<li> <a th:href="@{/announcement(pageIndex=1)}">查看公告</a> </li>
+                <li th:if="${session.emp.role.roleId==1}"> <a th:href="@{/anmanage(pageIndex=1)}">公告管理</a> </li>
+                <li th:if="${session.emp.role.roleId==1}"> <a th:href="@{/selectallantype(pageIndex=1)}">公告类别管理</a> </li>
+					</ul></li>
 				<li class="nav-item nav-item-has-subnav"><a
 					href="javascript:void(0)"><i
 						class="mdi mdi-format-align-justify"></i> 商务管理</a>

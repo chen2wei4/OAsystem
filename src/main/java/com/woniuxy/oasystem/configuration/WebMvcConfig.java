@@ -29,6 +29,44 @@ public class WebMvcConfig {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addViewControllers(ViewControllerRegistry registry) {
+				// localhost:8080/返回登陆页面
+				registry.addViewController("/").setViewName("/lyear_pages_login");
+				// localhost:8080/index返回主页
+				registry.addViewController("/index").setViewName("/index");
+				// localhost:8080/newpwd进入修改密码页面
+				registry.addViewController("/newpwd").setViewName("/lyear_pages_edit_pwd");
+				// localhost:8080/newpwd进入绑定账号页面
+				registry.addViewController("/bindaccount").setViewName("/lyear_pages_bind_account");
+				// localhost:8080/organizationchart进入显示组织架构图页面
+				registry.addViewController("/organizationchart").setViewName("/lyear_pages_organization_chart");
+				// localhost:8080/organizationchart进入显示组织架构图页面
+				registry.addViewController("/addcustomer").setViewName("/lyear_pages_addcustomer");
+				// 公告相关
+				registry.addViewController("/addaantype").setViewName("addantype");
+				registry.addViewController("/anmanage").setViewName("announcementmanage");
+				registry.addViewController("/anmanagetype").setViewName("announcementtypemanage");
+				//车辆管理相关
+				registry.addViewController("/car.html").setViewName("car");
+				registry.addViewController("/carApply.html").setViewName("carApply");
+				registry.addViewController("/returnRegister.html").setViewName("returnRegister");
+				//会议管理相关
+				registry.addViewController("/meeting.html").setViewName("meeting");
+				registry.addViewController("/meetingApply.html").setViewName("meetingApply");
+				registry.addViewController("/boardroom.html").setViewName("boardroom");
+				//办公用品管理相关
+				registry.addViewController("/officeSupplies.html").setViewName("officeSupplies");
+				registry.addViewController("/officeSuppliesApply.html").setViewName("officeSuppliesApply");
+				registry.addViewController("/officeSuppliesReturn.html").setViewName("officeSuppliesReturn");
+				registry.addViewController("/officeSuppliesBuy.html").setViewName("officeSuppliesBuy");
+				//行政档案管理相关
+				registry.addViewController("/administrativeArchives.html").setViewName("administrativeArchives");
+				//跳转异常页面
+				registry.addViewController("/exception.html").setViewName("exception");
+				//事务模块
+				registry.addViewController("/information").setViewName("information");
+				registry.addViewController("/apply_add").setViewName("apply_add");
+				registry.addViewController("/reception_add").setViewName("reception_add");
+				registry.addViewController("/patchcard_add").setViewName("patchcard_add");
 					//localhost:8080/返回登陆页面
 					registry.addViewController("/").setViewName("/lyear_pages_login");
 					//localhost:8080/index返回主页
