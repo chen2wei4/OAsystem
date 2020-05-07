@@ -52,7 +52,7 @@ public class PatchcardServiceImp implements PatchcardService{
 	public Pager queryPatchcards(String empName,String departmentName,Integer pageNum) {
 					
 		 // 掉用分页方法当前页，及每页数
-		PageHelper.startPage(pageNum,3);
+		PageHelper.startPage(pageNum,4);
 		//写在分页下面,条件是姓名，和部门id
 		 List<Patchcard> pt=PatchcardDao.queryPatchcards(empName, departmentName);
 		

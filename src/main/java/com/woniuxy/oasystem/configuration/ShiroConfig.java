@@ -55,8 +55,11 @@ public class ShiroConfig {
 		filterMap.put("/render", "anon");
 		filterMap.put("/emp/logoff", "logout");
 		filterMap.put("/**", "authc");
+		//authc
+		//无认证访问页面
 		shiroFilterFactoryBean.setLoginUrl("/");
-//		shiroFilterFactoryBean.setUnauthorizedUrl("/lyear_pages_error.html");
+		//无授权访问页面
+		//shiroFilterFactoryBean.setUnauthorizedUrl("/lyear_pages_login.html");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 		return shiroFilterFactoryBean;
 	}
@@ -74,6 +77,7 @@ public class ShiroConfig {
 //	}
 	//配置thymeleaf支持权限标签的核心类
 	//Dialect
+	@Bean
 	public ShiroDialect shiroDialect() {
 		return new ShiroDialect();
 	}

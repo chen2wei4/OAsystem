@@ -5,6 +5,7 @@ package com.woniuxy.oasystem.controller;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,6 +52,7 @@ public class ReceptionController {
 	}
 	
 	//新增申请
+	@RequiresPermissions("reception:add")
 	@RequestMapping("/addReception")
 	public String addReception(Integer empId,String receptionTime,String receptionContent,Model model){
 		//查询该员工是已经有接待任务

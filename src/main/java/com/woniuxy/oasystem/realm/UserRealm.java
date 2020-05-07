@@ -39,13 +39,16 @@ public class UserRealm extends AuthorizingRealm{
 		System.out.println("doGetAuthorizationInfo");
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 		Collection<String> permissions=new ArrayList<String>();
-		permissions.add("customer:insert");
-		permissions.add("customer:select");
+//		permissions.add("customer:insert");
+//		permissions.add("customer:select");
 //		permissions.add("customer:delete");
-		permissions.add("customer:update");
-//		authorizationInfo.addStringPermissions(permissions);
-		authorizationInfo.addStringPermission("customer:delete");
-		authorizationInfo.addStringPermission("customer:select");
+//		permissions.add("customer:update");
+
+//		authorizationInfo.addStringPermission("customer:delete");
+//		authorizationInfo.addStringPermission("customer:select");
+		//事务模块权限叠加
+		 permissions=affair(permissions);
+		authorizationInfo.addStringPermissions(permissions);
 		return authorizationInfo;
 	}
 
@@ -71,5 +74,24 @@ public class UserRealm extends AuthorizingRealm{
 		
 		AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principal, credentials, this.getName());
 		return authenticationInfo;
+	}
+	
+	//事务权限
+	public Collection<String> affair(Collection<String> permissions){
+		//获得当前员工权限
+		Integer roleId=emp.getRole().getRoleId();
+		if(roleId==1) {
+			//管理员
+		permissions.add("apply:add");
+		permissions.add("patchcard:query");
+		permissions.add("reception:add");
+		}else if(roleId==2) {
+			
+			
+		}else {
+			
+			
+		}
+		return  permissions;
 	}
 }

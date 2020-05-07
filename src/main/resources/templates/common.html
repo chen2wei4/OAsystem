@@ -39,29 +39,22 @@
 						<li><a th:href="@{/meetingApply.html}">会议申请</a></li>
 						<li><a th:href="@{/boardroom.html}">会议室</a></li>
 						<li><a th:href="@{/administrativeArchives.html}">行政档案管理</a></li>
-					</ul></li>
-				<!-- 事务管理 -->
-				<li class="nav-item nav-item-has-subnav"><a
-					href="javascript:void(0)"><i class="mdi mdi-file-outline"></i>
-						事务管理</a>
-					<ul class="nav nav-subnav">
-						<li><a th:href="@{/information}">留言</a></li>
-						<li><a
-							th:href="@{/queryInformation?(did=${session.emp.empId},pageNum=1)}">留言查询</a>
-						</li>
-						<li><a th:href="@{/queryApplys?(pageNum=1)}">申请查询</a></li>
-						<li><a th:href="@{/apply_add}">事务申请</a></li>
-						<li><a
-							th:href="@{/queryReception?(empId=${session.emp.empId})}">接待查询</a></li>
-						<li><a th:href="@{/reception_add}">新增接待</a></li>
-						<li><a th:href="@{/patchcard_add}">补签</a></li>
-						<li><a th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
 						<li><a th:href="@{/reportByReportFrom}">我的报告</a></li>
 					</ul></li>
-
+				<!-- 事务管理 -->
+				<li class="nav-item nav-item-has-subnav"><a href="javascript:void(0)"><i class="mdi mdi-file-outline"></i>事务管理</a>
+					<ul class="nav nav-subnav">
+						<li><a th:href="@{/information}">留言</a></li>
+						<li><a th:href="@{/queryInformation?(did=${session.emp.empId},pageNum=1)}">留言查询</a></li>
+						<li><a shiro:hasPermission="apply:add" th:href="@{/queryApplys?(pageNum=1)}">申请查询</a></li>
+						<li><a  th:href="@{/apply_add}">事务申请</a></li>
+						<li><a th:href="@{/queryReception?(empId=${session.emp.empId})}">接待查询</a></li>
+						<li><a  shiro:hasPermission="reception:add" th:href="@{/reception_add}">新增接待</a></li>
+						<li><a th:href="@{/patchcard_add}">补签</a></li>
+						<li><a shiro:hasPermission="patchcard:query" th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
+					</ul></li>
 			</ul>
 		</nav>
-
 		<div class="sidebar-footer">
 			<p class="copyright">
 				Copyright © 2020 蜗牛学院JAVA65期二组</a>
