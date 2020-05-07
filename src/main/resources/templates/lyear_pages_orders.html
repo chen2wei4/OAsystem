@@ -54,8 +54,10 @@
             <div class="card" >
               <div class="card-toolbar clearfix">
               <div class="toolbar-btn-action col-md-2">
-                  <a class="btn btn-primary m-r-5" th:href="@{/addorder}"><i class="mdi mdi-plus"></i> 新增</a>
-                  <a class="btn btn-danger delall" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+                  <a class="btn btn-primary m-r-5" th:href="@{/addorder}"
+                  shiro:hasPermission="order:insert"><i class="mdi mdi-plus"></i> 新增</a>
+                  <a class="btn btn-danger delall" href="#!"
+                  shiro:hasPermission="order:delete"><i class="mdi mdi-window-close" ></i> 删除</a>
                 </div>
                 
                 <form class="form-horizontal" th:action="@{/business/orders}" method="get">
@@ -97,7 +99,7 @@
                   <table class="table table-bordered">
                     <thead>
                       <tr>
-                        <th>
+                        <th shiro:hasPermission="order:select1">
                           <label class="lyear-checkbox checkbox-primary">
                             <input type="checkbox" id="check-all"><span></span>
                           </label>
@@ -113,7 +115,7 @@
                     </thead>
                     <tbody>
                       <tr th:each="order,orderStatus:${pb.beanList}" th:id="${order.orderId}" th:attr="status=${orderStatus.count}">
-                        <td>
+                        <td  shiro:hasPermission="order:select1">
                           <label class="lyear-checkbox checkbox-primary">
                             <input type="checkbox" name="ids[]" th:value="${order.orderId}"><span></span>
                           </label>
@@ -131,10 +133,12 @@
                         <td th:text="${order.orderStatus}" th:attr="status=${order.orderId}"></td>
                         <td>
                           <div class="btn-group">
-                            <a class="btn btn-xs btn-default" th:href="@{/business/order/}+${order.orderId}" title="编辑" data-toggle="tooltip">
+                            <a class="btn btn-xs btn-default" th:href="@{/business/order/}+${order.orderId}" title="编辑" data-toggle="tooltip"
+                             shiro:hasPermission="order:update">
                             <i class="mdi mdi-pencil"></i>
                             </a>
-                            <a class="btn btn-xs btn-default del" href="#!" title="删除" data-toggle="tooltip" th:attr="deluri=@{/business/orders/}+${order.orderId}">
+                            <a class="btn btn-xs btn-default del" href="#!" title="删除" data-toggle="tooltip" th:attr="deluri=@{/business/orders/}+${order.orderId}"
+                             shiro:hasPermission="order:delete">
                             <i class="mdi mdi-window-close"></i>
                             </a>
                             <!--  th:href="@{/business/customerdetail/}+${customer.customerId}" -->

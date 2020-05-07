@@ -7,6 +7,8 @@ package com.woniuxy.oasystem.configuration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
@@ -64,10 +66,10 @@ public class ShiroConfig {
 		return shiroFilterFactoryBean;
 	}
 	//配置授权缓存，使用内置的缓存
-//	@Bean
-//	public MemoryConstrainedCacheManager cacheManager() {
-//		return new MemoryConstrainedCacheManager();
-//	}
+	@Bean
+	public MemoryConstrainedCacheManager cacheManager() {
+		return new MemoryConstrainedCacheManager();
+	}
 //	//配置凭证匹配器
 //	public HashedCredentialsMatcher credentialsMatcher() {
 //		HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();

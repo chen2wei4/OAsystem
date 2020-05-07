@@ -54,8 +54,10 @@
             <div class="card" >
               <div class="card-toolbar clearfix">
               <div class="toolbar-btn-action col-xs-2">
-                  <a class="btn btn-primary m-r-5" th:href="@{/addcontract}"><i class="mdi mdi-plus"></i> 新增</a>
-                  <a class="btn btn-danger delall" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+                  <a class="btn btn-primary m-r-5" th:href="@{/addcontract}"
+                  shiro:hasPermission="contract:insert"><i class="mdi mdi-plus"></i> 新增</a>
+                  <a class="btn btn-danger delall" href="#!"
+                  shiro:hasPermission="contract:delete"><i class="mdi mdi-window-close"></i> 删除</a>
                 </div>
                 <div>
                 <div>
@@ -100,7 +102,7 @@
                   <table class="table table-bordered">
                     <thead>
                       <tr>
-                        <th>
+                        <th shiro:hasPermission="contract:delete">
                           <label class="lyear-checkbox checkbox-primary">
                             <input type="checkbox" id="check-all"><span></span>
                           </label>
@@ -116,7 +118,7 @@
                     </thead>
                     <tbody>
                       <tr th:each="contract,contractStatus:${pb.beanList}" th:id="${contract.contractId}" th:attr="status=${contractStatus.count}">
-                        <td>
+                        <td shiro:hasPermission="contract:delete">
                           <label class="lyear-checkbox checkbox-primary">
                             <input type="checkbox" name="ids[]" th:value="${contract.contractId}"><span></span>
                           </label>
@@ -133,10 +135,12 @@
                         <td th:text="${contract.contractStatus}" th:attr="status=${contract.contractId}"></td>
                         <td>
                           <div class="btn-group">
-                            <a class="btn btn-xs btn-default" th:href="@{/business/contracts/}+${contract.contractId}" title="编辑" data-toggle="tooltip">
+                            <a shiro:hasPermission="contract:update" 
+                            class="btn btn-xs btn-default" th:href="@{/business/contracts/}+${contract.contractId}" title="编辑" data-toggle="tooltip">
                             <i class="mdi mdi-pencil"></i>
                             </a>
-                            <a class="btn btn-xs btn-default del" href="#!" title="删除" data-toggle="tooltip" th:attr="deluri=@{/business/contracts/}+${contract.contractId}">
+                            <a shiro:hasPermission="contract:delete" 
+                            class="btn btn-xs btn-default del" href="#!" title="删除" data-toggle="tooltip" th:attr="deluri=@{/business/contracts/}+${contract.contractId}">
                             <i class="mdi mdi-window-close"></i>
                             </a>
                             <!--  th:href="@{/business/customerdetail/}+${customer.customerId}" -->
