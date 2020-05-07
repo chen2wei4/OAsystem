@@ -38,39 +38,8 @@ public class UserRealm extends AuthorizingRealm{
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		System.out.println("doGetAuthorizationInfo");
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-		
-		
-		Collection<String> permissions=new ArrayList<String>();
-		permissions.add("customer:insert");
-		permissions.add("customer:select");
-//		permissions.add("customer:delete");
-		permissions.add("customer:update");
-//		authorizationInfo.addStringPermissions(permissions);
-		//行政部门权限
-		Collection<String> administrativePermissions=new ArrayList<String>();
-		if(emp.getRole().getRoleName().equals("员工")) {
-			administrativePermissions.add("worker:select");
-			administrativePermissions.add("worker:insert");
-			administrativePermissions.add("worker:update");
-			administrativePermissions.add("worker:delete");
-			administrativePermissions.add("worker:upload");
-		}else if(emp.getRole().getRoleName().equals("行政部门")) {
-			administrativePermissions.add("AdministrativeManager:select");
-			administrativePermissions.add("AdministrativeManager:insert");
-			administrativePermissions.add("AdministrativeManager:update");
-			administrativePermissions.add("AdministrativeManager:delete");
-			administrativePermissions.add("AdministrativeManager:upload");
-		}
-		
-		//事务模块权限叠加
-		 administrativePermissions=affair(administrativePermissions);
-		 //公告模块权限
-		 administrativePermissions=affairann(administrativePermissions);
-
-		authorizationInfo.addStringPermissions(administrativePermissions);
-		
-		authorizationInfo.addStringPermission("customer:delete");
-		authorizationInfo.addStringPermission("customer:select");
+		Collection<String> permissions = getPermissions(emp.getRole().getRoleId());
+		authorizationInfo.addStringPermissions(permissions);
 		return authorizationInfo;
 	}
 
