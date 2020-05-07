@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +55,7 @@ public class OrderController {
 	 * @changeLog 1.创建 (2020年5月3日 下午4:14:13 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("order:select")
 	@GetMapping("business/orders")
 	public String showOrders(Model model,Order order,Integer currentPage,String contractNumber,HttpServletRequest req) {
 		if(currentPage==null) {
@@ -84,6 +87,7 @@ public class OrderController {
 	 * @changeLog 1.创建 (2020年5月4日 上午12:52:19 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("order:insert")
 	@PostMapping("/business/orders")
 	public String addContract(Order order,Integer orderTypeId,String contractNumber,Model model) {
 		//对前端传参进行数据合法性检查
@@ -109,6 +113,7 @@ public class OrderController {
 	 * @changeLog 1.创建 (2020年4月27日 下午6:18:44 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("order:delete")
 	@DeleteMapping("/business/orders")
 	public String deleteAllCustomer(@RequestParam(value = "ids[]" ,required = false)Integer[] ids)  {
 		System.out.println(ids);
@@ -123,6 +128,7 @@ public class OrderController {
 	 * @changeLog 1.创建 (2020年4月27日 上午9:38:10 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("order:update")
 	@GetMapping("/business/order/{orderId}")
 	public String showContract(@PathVariable("orderId")Integer orderId,Model model) {
 		Order order = orderService.showOrder(orderId);
@@ -137,6 +143,7 @@ public class OrderController {
 	 * @changeLog 1.创建 (2020年4月27日 上午10:38:58 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("order:update")
 	@PutMapping("/business/orders")
 	public String updateContract(Order order,Integer orderTypeId,String contractNumber,Model model) {
 		String orderNumber = order.getOrderNumber();
@@ -159,6 +166,7 @@ public class OrderController {
 	 * @changeLog 1.创建 (2020年4月27日 下午6:17:57 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("order:delete")
 	@DeleteMapping("/business/orders/{orderId}")
 	public String deleteCustomer(@PathVariable("orderId")Integer orderId) {
 		orderService.deleteOrder(orderId);
@@ -229,6 +237,8 @@ public class OrderController {
 		if(ex instanceof OrderException) {
 			System.out.println("OrderException");
 			mv.setViewName("/lyear_pages_error404");
+		}if(ex instanceof UnauthorizedException) {
+			mv.setViewName("redirect:/business/orders");
 		}
 		return mv;
 	}
