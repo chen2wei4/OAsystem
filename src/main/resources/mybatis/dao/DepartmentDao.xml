@@ -3,9 +3,12 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.woniuxy.oasystem.dao.DepartmentDao">
 <!-- 查找部门 -->
-
 <select id="queryAllDepartments" resultType="Department">
     select * from department
 </select>
 
+	<!-- 展示部门信息(下拉列表内) -->
+	<select id="displayDepartment" resultType="department">
+		select * from department where flag=1
+	</select>
 </mapper>

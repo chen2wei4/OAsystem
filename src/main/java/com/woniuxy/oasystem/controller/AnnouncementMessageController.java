@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +36,7 @@ public class AnnouncementMessageController {
 	/*
 	 * 添加公告留言
 	 */
+	@RequiresPermissions("announcement:select")
 	@RequestMapping("/insertanmessage")
 	public String announcementContent(HttpServletRequest req, AnnouncementMessage am, Model model) {
 		try {
@@ -75,6 +77,7 @@ public class AnnouncementMessageController {
 	/*
 	 * 删除公告留言
 	 */
+	@RequiresPermissions("announcement:manage")
 	@ResponseBody
 	@RequestMapping("/deletemessage")
 	public ResponseResult<AnnouncementMessage> deleteannouncementMessage(HttpServletRequest req, AnnouncementMessage am,

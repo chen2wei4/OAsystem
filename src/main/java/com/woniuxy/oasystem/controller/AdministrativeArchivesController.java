@@ -3,6 +3,7 @@ package com.woniuxy.oasystem.controller;
 import java.io.File;
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,6 +46,7 @@ public class AdministrativeArchivesController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
+	
 	public CommonResult<PageBean<AdministrativeArchives>> findAll(@RequestBody Vo<AdministrativeArchives> vo) {
 		
 		if(vo.t==null) {
@@ -71,6 +73,7 @@ public class AdministrativeArchivesController {
 	 */
 	@RequestMapping("deleteByAaId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:delete")
 	public CommonResult<PageBean<AdministrativeArchives>> deleteByAaId(Integer aaId) {
 		try {
 			administrativeArchivesService.deleteByAaId(aaId);
@@ -90,6 +93,7 @@ public class AdministrativeArchivesController {
 	 */
 	@RequestMapping("updateByAaId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:update")
 	public CommonResult<PageBean<AdministrativeArchives>> updateByAaId(@RequestBody AdministrativeArchives administrativeArchives) {
 		try {
 			administrativeArchivesService.updateByAaId(administrativeArchives);
@@ -108,6 +112,7 @@ public class AdministrativeArchivesController {
 	 */
 	@RequestMapping("insert")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:insert")
 	public CommonResult<PageBean<AdministrativeArchives>> insert(@RequestBody AdministrativeArchives administrativeArchives) {
 		try {
 			administrativeArchivesService.insert(administrativeArchives);
@@ -124,6 +129,7 @@ public class AdministrativeArchivesController {
 	 */
 	@RequestMapping("upload")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:upload")
 	public CommonResult upload(@RequestParam("file")MultipartFile file,@RequestParam(value="aaId",required = false)Integer aaId){
 		System.out.println(aaId);
 		try {

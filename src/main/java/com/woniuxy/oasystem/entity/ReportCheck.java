@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReportCheck {
 	private Integer checkId;
-	private Date checkDate;
+	private Integer reportIdd;
+	private Integer empIdd;
 	private String checkComment;
+	private Date checkDate;
 	private Integer flag;
-	private Reports reports;
-	private Emp emp;
+	private Reports reportId;
+	private Emp empId;
 }

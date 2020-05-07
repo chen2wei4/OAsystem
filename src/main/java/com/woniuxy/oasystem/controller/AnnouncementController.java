@@ -3,6 +3,8 @@ package com.woniuxy.oasystem.controller;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -41,6 +43,7 @@ public class AnnouncementController {
 	/*
 	 * 通过条件查询当前类别所有公告
 	 */
+	@RequiresPermissions("announcement:select")
 	@RequestMapping("/announcement")
 	public String ShowanByType(HttpServletRequest req, Announcement an, Integer pageIndex, Model model) {
 		if (pageIndex == null) {
@@ -75,6 +78,7 @@ public class AnnouncementController {
 	/*
 	 * 通过Id查公告详细内容
 	 */
+	@RequiresPermissions("announcement:select")
 	@RequestMapping("/ancontent")
 	public String announcementContent(HttpServletRequest req, Announcement an, Model model) {
 		try {
@@ -106,6 +110,7 @@ public class AnnouncementController {
 	/*
 	 * 通过角色ID查询所有公告跳转管理
 	 */
+	@RequiresPermissions("announcement:manage")
 	@RequestMapping("/anmanage")
 	public String announcementByEmp(Announcement an, Integer pageIndex, HttpServletRequest req, Model model) {
 		try {
@@ -140,6 +145,7 @@ public class AnnouncementController {
 	/*
 	 * 软删除公告
 	 */
+	@RequiresPermissions("announcement:manage")
 	@RequestMapping("/delan")
 	public String delAnnouncement(HttpServletRequest req, Integer anId, Model model) {
 		try {
@@ -156,6 +162,7 @@ public class AnnouncementController {
 		}
 
 	// 添加公告
+	@RequiresPermissions("announcement:manage")
 	@RequestMapping("/addannouncement")
 	public String addannouncement(@RequestParam(value = "files", required = false) MultipartFile[] files,
 			HttpServletRequest req, Announcement ann, Model model) {
@@ -204,6 +211,7 @@ public class AnnouncementController {
 	/*
 	 * // 修改公告前的查询
 	 */
+	@RequiresPermissions("announcement:manage")
 	@RequestMapping("/updatean")
 	public String updateShowAnById(Announcement an, Model model) { // 查询公告信息 Announcement announcement =
 		try {
@@ -228,6 +236,7 @@ public class AnnouncementController {
 		}
 
 // 	添加公告前的查询
+	@RequiresPermissions("announcement:manage")
 	@RequestMapping("/addan")
 	public String addShowAnById(Model model) {
 		try {
@@ -249,6 +258,7 @@ public class AnnouncementController {
 	/*
 	 * 修改公告
 	 */
+	@RequiresPermissions("announcement:manage")
 	@RequestMapping("/updateannouncement")
 	public String updateAnnouncement(@RequestParam(value = "files", required = false) MultipartFile[] files,
 			Announcement ann,Model model) {

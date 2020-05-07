@@ -27,10 +27,10 @@ import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 @Configuration
 public class ShiroConfig {
 	@Bean
-	public UserRealm userRealm(CacheManager cacheManager) {
+	public UserRealm userRealm() {
 		UserRealm userRealm = new UserRealm();
 //		CacheManager cacheManager,CredentialsMatcher credentialsMatcher
-		userRealm.setCacheManager(cacheManager);
+//		userRealm.setCacheManager(cacheManager);
 //		userRealm.setCredentialsMatcher(credentialsMatcher);
 		return userRealm;
 	}
@@ -57,7 +57,11 @@ public class ShiroConfig {
 		filterMap.put("/render", "anon");
 		filterMap.put("/emp/logoff", "logout");
 		filterMap.put("/**", "authc");
+		//authc
+		//无认证访问页面
 		shiroFilterFactoryBean.setLoginUrl("/");
+		//无授权访问页面
+		//shiroFilterFactoryBean.setUnauthorizedUrl("/lyear_pages_login.html");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 		return shiroFilterFactoryBean;
 	}

@@ -2,7 +2,7 @@ package com.woniuxy.oasystem.controller;
 
 import java.util.List;
 
-
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +23,7 @@ public class AnnouncementTypeController {
 
 
 	// 添加公告前的查看所有公告类别
+	@RequiresPermissions("announcement:select")
 	@RequestMapping("/selecttypeByAtId")
 	public String addAnShowAllantype(AnnouncementType antype,Model model) {
 		try {
@@ -41,6 +42,7 @@ public class AnnouncementTypeController {
 		}
 
 	// 查看所有公告类别发到管理页面
+	@RequiresPermissions("announcement:select")
 	@RequestMapping("/selectallantype")
 	public String ShowAllantypeByType(AnnouncementType antype,Integer pageIndex,Model model) {
 		try {
@@ -66,6 +68,7 @@ public class AnnouncementTypeController {
 		}
 		}
 	// 添加类别公告
+	@RequiresPermissions("announcement:manage")
 	@PostMapping("/addantype")
 	public String addannouncementType(AnnouncementType antype, Model model) {
 		try {
@@ -84,6 +87,7 @@ public class AnnouncementTypeController {
 	}
 
 	// 修改公告类别前的查询
+	@RequiresPermissions("announcement:select")
 	@RequestMapping("/updantype")
 	public String updateShowAnTypeById(AnnouncementType at, Model model) {
 	try {
@@ -102,6 +106,7 @@ public class AnnouncementTypeController {
 	}
 
 	// 修改公告类别
+	@RequiresPermissions("announcement:manage")
 	@PutMapping("/updateantype")
 	public String updateAnnouncement(AnnouncementType anType,Model model) {
 		try {
@@ -120,6 +125,7 @@ public class AnnouncementTypeController {
 	
 // 	软删除公告类别
 @RequestMapping("/delantype")
+@RequiresPermissions("announcement:manage")
 public String delAnnouncementType(AnnouncementType at, Model model) {
 	try {	
 	// 删除
@@ -136,6 +142,7 @@ public String delAnnouncementType(AnnouncementType at, Model model) {
 }
 //	启用公告类别
 @RequestMapping("/startantype")
+@RequiresPermissions("announcement:manage")
 public String startAnnouncementType(AnnouncementType at, Model model) {
 try {
 	announcementTypeService.StartAntypeById(at.getAtId());

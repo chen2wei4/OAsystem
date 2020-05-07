@@ -2,6 +2,9 @@ package com.woniuxy.oasystem.controller;
 
 import static com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY;
 
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.SecurityUtils;
@@ -13,8 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.woniuxy.oasystem.entity.Department;
 import com.woniuxy.oasystem.entity.Emp;
+import com.woniuxy.oasystem.entity.PageBean;
 import com.woniuxy.oasystem.service.EmpService;
 import com.woniuxy.oasystem.util.RegexUtil;
 /**
@@ -199,5 +205,83 @@ public class EmpController {
 	public String logOff(HttpSession session) {
 		session.removeAttribute("emp");
 		return "/lyear_pages_login";
+	}
+	
+	/**
+	 * 分页展示职工信息
+	 * @param emp
+	 * @param pageIndex
+	 * @return
+	 * @changeLog 	1. 创建 (2020年4月30日 下午5:17:21 [王培霖])  </br>
+	 *                      	2.
+	 */
+	@RequestMapping("/emp/list")
+	@ResponseBody
+	public PageBean<Emp> listAllEmp(Emp emp, Integer pageIndex) {
+		if (pageIndex == null)
+		{
+			pageIndex = 1;
+		}
+		int pageSize = 5;
+		PageBean<Emp> pageBean = empService.selectEmpByPage(emp, pageIndex, pageSize);
+		return pageBean;
+	}
+	
+	/**
+	 * 模糊查询职工信息
+	 * @param request
+	 * @param emp
+	 * @param pageIndex
+	 * @return
+	 * @changeLog 	1. 创建 (2020年4月30日 下午10:29:16 [王培霖])  </br>
+	 *                      	2.
+	 */
+	@RequestMapping("/emp/search")
+	@ResponseBody
+	public PageBean<Emp> searchEmp(HttpServletRequest request, Emp emp, Integer pageIndex) {
+		String parameter = request.getParameter("parameter");
+		String intervieweeGender = request.getParameter("intervieweeGender");
+		String departmentId = request.getParameter("departmentId");
+		String educationBackground = request.getParameter("intervieweeEducationBackground");
+		Integer positionId = null;
+		if (!"".equals(departmentId)) {
+			positionId = Integer.parseInt(departmentId);
+		}
+		if (pageIndex == null)
+		{
+			pageIndex = 1;
+		}
+		int pageSize = 5;
+		PageBean<Emp> pageBean = empService.searchEmp(parameter, intervieweeGender, educationBackground, positionId, emp, pageIndex, pageSize);
+		return pageBean;
+	}
+	
+	/**
+	 * 修改员工信息
+	 * @param request
+	 * @return
+	 * @changeLog 	1. 创建 (2020年4月30日 下午11:47:12 [王培霖])  </br>
+	 *                      	2.
+	 */
+	@RequestMapping("/emp/updateEmp")
+	@ResponseBody
+	public HashMap<String, String> searchEmp(HttpServletRequest request) {
+		HashMap<String, String> message = new HashMap<String, String>();
+		// empId和departmentId一定存在，此处不用捕获异常
+		Integer empId = Integer.parseInt(request.getParameter("empId"));
+		Integer departmentId = Integer.parseInt(request.getParameter("departmentId"));
+		String empName = request.getParameter("empName");
+		String empDate = request.getParameter("empDate");
+		String empGender = request.getParameter("empGender");
+		String empTel = request.getParameter("empTel");
+		String empHiredate = request.getParameter("empHiredate");
+		String empEmail = request.getParameter("empEmail");
+		String empEducation = request.getParameter("empEducation");
+		String empPoliticalStatus = request.getParameter("empPoliticalStatus");
+		Department department = new Department(departmentId, null, 1);
+		Emp emp = new Emp(empId, null, null, department, empName, empDate, empGender, empTel, empEmail, null, empHiredate, empEducation, empPoliticalStatus, 1);
+		empService.modifyEmp(emp);
+		message.put("result", "更新成功！");
+		return message;
 	}
 }
