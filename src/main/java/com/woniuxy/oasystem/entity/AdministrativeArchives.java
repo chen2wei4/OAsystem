@@ -27,7 +27,8 @@ import lombok.NoArgsConstructor;
 public class AdministrativeArchives {
 private Integer aaId;//主键
 private String name;//档案名
-private String file;//文件地址
+private String fileName;//文件名字
+private String fileAddress;//文件地址
 @DateTimeFormat(pattern = "yyyy-MM-dd")
 @JsonFormat(pattern = "yyyy-MM-dd")
 private Date time;//入档时间

@@ -65,6 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		customer_tel=#{customer.customerTel},customer_email=#{customer.customerEmail},customer_director=#{customer.customerDirector},
 		customer_type_id=#{customerTypeId} where customer_id=#{customer.customerId} and flag=1
 	</update>
+	<!-- 删除一条客户信息 -->
 	<update id="deleteCustomer">
 	 	update customer set flag=0 where customer_id=#{customer.customerId}
 	</update>

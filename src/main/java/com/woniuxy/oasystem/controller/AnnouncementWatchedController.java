@@ -2,7 +2,7 @@ package com.woniuxy.oasystem.controller;
 
 import java.util.List;
 
-
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +29,7 @@ public class AnnouncementWatchedController {
 	@Autowired
 	AnnouncementMessageService announcementMessageService;
 	// 查看观看人员名单
+	@RequiresPermissions("announcement:manage")
 	@RequestMapping("/announcementwatched")
 	public String AnnouncementWatched(Announcement ann,Model model) {
 		try {
@@ -43,6 +44,8 @@ public class AnnouncementWatchedController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			//发生异常打到错误页
+			model.addAttribute("errorcode", 500);
+			model.addAttribute("error","查看观看人员出错请联系管理员");
 			return "lyear_pages_error";
 					
 		}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 会议管理 -->
+<mapper namespace="com.woniuxy.oasystem.dao.AdministrativeArchivesDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultType="AdministrativeArchives">
+		select * from administrative_archives where flag = 1 
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(*) from administrative_archives 
+		where flag = 1
+		<include refid="conditionSql"/>
+	</select>
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="aa.name!= null and aa.name!=''">
+				and name like '%' #{aa.name} '%'
+			</if>
+			<if test="aa.time!= null and aa.time!=''">
+				and time like '%' #{aa.time} '%'
+			</if>
+			<if test="aa.sort!= null and aa.sort!=''">
+				and sort like '%' #{aa.sort} '%'
+			</if>	
+	</sql>
+	<!-- 根据AaId删除 -->
+	<update id="deleteByAaId">
+		update administrative_archives set flag = 0 where aa_id = #{aaId}
+	</update>
+	<!-- 根据AaId修改 -->
+	<update id="updateByAaId">
+		update administrative_archives set 
+		name=#{aa.name},time=#{aa.time},sort=#{aa.sort}
+		where aa_id = #{aa.aaId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into administrative_archives (name,time,sort) 
+		values (#{aa.name},#{aa.time},#{aa.sort})
+	</insert>
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.SignInDao">
+	<insert id="addCheckIn">
+		insert into sign_in (emp_id, sign_time, sign_result, flag) values (#{empId}, null, 1, 1)
+ 	</insert>
+ 	
+ 	<select id="verifyCheckIn" resultType="signIn">
+ 		select * from sign_in where convert(sign_time, datetime) like concat(#{checkInDate},'%') and emp_id=#{empId}
+ 	</select>
+</mapper>

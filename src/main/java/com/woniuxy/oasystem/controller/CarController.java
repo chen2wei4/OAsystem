@@ -2,6 +2,7 @@ package com.woniuxy.oasystem.controller;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,6 +41,7 @@ public class CarController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
+	
 	public CommonResult<PageBean<Car>> findAll(@RequestBody Vo<Car> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {
@@ -67,6 +69,7 @@ public class CarController {
 	 */
 	@RequestMapping("deleteByCarId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:delete")
 	public CommonResult<PageBean<Car>> deleteByCarId(Integer carId) {
 		try {
 			carService.deleteByCarId(carId);
@@ -85,6 +88,7 @@ public class CarController {
 	 */
 	@RequestMapping("updateByCarId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:update")
 	public CommonResult<PageBean<Car>> updateByCarId(@RequestBody Car car) {
 		try {
 			carService.updateByCarId(car);
@@ -103,6 +107,7 @@ public class CarController {
 	 */
 	@RequestMapping("insert")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:insert")
 	public CommonResult<PageBean<Car>> insert(@RequestBody Car car) {
 		try {
 			carService.insert(car);

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.InformationDao">
+<!-- 发送留言#{empId}, ,
+
+-->
+ <insert id="addInformation" parameterType="java.util.List">
+   insert into information(information_eid,information_did,information_content) values
+  <foreach collection="bemp" item="bemp" separator=",">
+  (#{information.emp.empId},#{bemp.empId},#{information.informationContent})
+  </foreach>
+ </insert>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  <!-- 查看所有被留言 -->
+  <select id="queryInformations" resultMap="queryyInformationsMapper">
+       select * from <include refid="queryInformation"/> 
+    
+  </select>
+
+<resultMap type="Information" id="queryyInformationsMapper">
+         <id column="information_id" property="informationId" />
+         <result column="information_content" property="informationContent"/>
+         <result column="information_time" property="informationTime"/>
+         <result  column="information_eid" property="emp.empId"/>
+         <association property="bemp" javaType="Emp">
+             <id  column="emp_id" property="empId"/>
+             <result column="emp_name" property="empName"/>
+         </association>
+</resultMap>
+    
+    
+    <!-- 查询被留言sql片段 -->
+    <sql id="queryInformation">
+       information it,emp e
+       <where>
+       e.emp_id=it.information_did
+        and   #{did}=it.information_did
+        and   it.flag=1 order by information_id asc
+       </where> 
+    </sql>
+    
+    <!-- 删除申请 -->
+    <update id="deleteInformation">
+       update information set flag=0 where information_id in
+     <foreach collection="list" item="informationIds" open="(" close=")" separator=",">
+       #{informationIds}
+    </foreach>
+    </update>
+    
+    
+</mapper>

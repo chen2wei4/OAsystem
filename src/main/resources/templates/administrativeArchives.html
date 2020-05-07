@@ -72,7 +72,7 @@
 				                  </div>
 				                </form>
 								<div class="toolbar-btn-action">
-									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
+									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)" shiro:hasPermission="AdministrativeManager:insert" ><i
 										class="mdi mdi-plus"></i> 新增</a>
 								</div>
 							</div>
@@ -95,15 +95,19 @@
 											<tr v-for="item in list">
 												
 												<td>{{item.name}}</td>
-												<td>{{item.file}}</td>
+												<td>
+														<a v-show="item.fileName!=null" :href="'/Path/'+item.fileName">{{item.fileName}}</a>
+														<input type="file" :id="'fileupload'+item.aaId"/>
+														<input type="button" value="上传" @click="upload(item.aaId,pb.pageEnd)"/>
+												</td>
 												<td>{{item.time}}</td>
 												<td>{{item.sort}}</td>
 												<td>
 													<div class="btn-group">
 														<a class="btn btn-xs btn-default " href="#!"
-															title="编辑" data-toggle="tooltip" @click="update(item,pb.pageIndex)"><i class="mdi mdi-pencil"></i></a>
+															title="编辑" data-toggle="tooltip" @click="update(item,pb.pageIndex)" shiro:hasPermission="AdministrativeManager:update" ><i class="mdi mdi-pencil"></i></a>
 														<a class="btn btn-xs btn-default " href="#!" title="删除"
-															data-toggle="tooltip" @click="del(item.aaId,pb.pageIndex)">
+															data-toggle="tooltip" @click="del(item.aaId,pb.pageIndex)" shiro:hasPermission="AdministrativeManager:delete" >
 														<i class="mdi mdi-window-close"></i></a>
 													</div>
 												</td>
@@ -143,7 +147,9 @@
 	    el:"#content",
 	    data:{
 	      pb:"",//页码信息
-	      list:[]//数据
+	      list:[],//数据
+	      stateCode:"",//状态码
+	      message:""//信息
 	    },
 	    methods:{
 	    	//展示所有数据
@@ -171,6 +177,14 @@
 				        }).then(res=>{
 				        	this.list=res.data.data.beanList;
 				        	this.pb=res.data.data
+				        	this.stateCode= res.data.stateCode;
+				        	var message=res.data.message;
+				        	var sc = this.stateCode.toString();
+				        	sc = sc.substring(0,1);
+				        	if(sc==4||sc==5){
+				        		location.href="[[@{/exception.html}]]"			
+				        		}
+				        	
 				        })	 
 	      },
 	      //根据ID删除
@@ -276,7 +290,7 @@
 	    	                action: function () {
 	    	                	var name=$("#name").val();
     							var sort=$("#sort").val();
-	    	                    if(!name||!file||!sort){
+	    	                    if(!name||!sort){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
@@ -298,6 +312,7 @@
 						        			"sort":sort
     						        		}
     						        }).then(res=>{
+    						        	
     						        	alert(res.data.message);
     						        	that.send(pageEnd);
     						        })
@@ -317,6 +332,22 @@
 			        $('#condition').attr('data-field',field);
 			        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
 			    });
+	      },
+	      upload(aaId,pageEnd){
+	    	  var file =  document.getElementById('fileupload'+aaId).files[0];//获取id上传的file
+	    	  var param = new FormData();
+	    	  param.append("file",file);
+	    	  param.append("aaId",aaId);
+	    	  axios({
+	    		  url:'[[@{/administrativeArchives/upload}]]',
+    			  method:'post',
+    			  data:param,
+    			  headers:{'Content-Type':'multipart/form-data'}
+    			}).then(res=>{
+    			  alert(res.data.message);
+    			  this.send(pageEnd);
+    			})
+	    	 
 	      }
 	    },
 	    //页面加载时调用

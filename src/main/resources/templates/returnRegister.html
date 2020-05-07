@@ -187,7 +187,14 @@
 				        		}
 				        }).then(res=>{
 				        	this.list=res.data.data.beanList;
-				        	this.pb=res.data.data
+				        	this.pb=res.data.data;
+				        	this.stateCode= res.data.stateCode;
+				        	var message=res.data.message;
+				        	var sc = this.stateCode.toString();
+				        	sc = sc.substring(0,1);
+				        	if(sc==4||sc==5){
+				        		location.href="[[@{/exception.html}]]"			
+				        		}
 				        })	 
 	      },
 	      //根据ID删除

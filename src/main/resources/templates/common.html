@@ -14,49 +14,29 @@
 			<ul class="nav nav-drawer">
 				<li class="nav-item active"><a th:href="@{/index}"><i
 						class="mdi mdi-home"></i> 后台首页</a></li>
-				<li><a th:href="@{/announcement(pageIndex=1)}">通知公告</a></li>
+				<!-- 通知公告 -->
+				<li class="nav-item nav-item-has-subnav"><a
+					href="javascript:void(0)"><i class="mdi mdi-scale-bathroom"></i>
+						通知公告</a>
+					<ul class="nav nav-subnav">
+						<li><a th:href="@{/announcement(pageIndex=1)}">查看公告</a></li>
+						<li shiro:hasPermission="announcement:manage"><a
+							th:href="@{/anmanage(pageIndex=1)}">公告管理</a></li>
+						<li shiro:hasPermission="announcement:manage"><a
+							th:href="@{/selectallantype(pageIndex=1)}">公告类别管理</a></li>
+					</ul></li>
 				<li class="nav-item nav-item-has-subnav"><a
 					href="javascript:void(0)"><i
 						class="mdi mdi-format-align-justify"></i> 商务管理</a>
 					<ul class="nav nav-subnav">
 						<li><a th:href="@{/business/customers}">客户信息</a></li>
-						<li><a href="lyear_forms_radio.html">我的客户</a></li>
-						<li><a href="lyear_forms_checkbox.html">订单信息</a></li>
-						<li><a href="lyear_forms_switch.html">合同信息</a></li>
+						<li><a th:href="@{/business/mycustomers}"
+							shiro:hasPermission="customer:select1">我的客户</a></li>
+						<li><a th:href="@{/business/orders}">订单信息</a></li>
+						<li><a th:href="@{/business/contracts}">合同信息</a></li>
 					</ul></li>
-				<!-- 行政管理 -->
-				<li class="nav-item nav-item-has-subnav"><a
-					href="javascript:void(0)"><i class="mdi mdi-server"></i> 行政管理</a>
-					<ul class="nav nav-subnav">
-						<li><a th:href="@{/car.html}">车辆管理</a></li>
-						<li><a th:href="@{/carApply.html}">车辆申请管理</a></li>
-						<li><a th:href="@{/returnRegister.html}">车辆归还登记</a></li>
-						<li><a th:href="@{/officeSupplies.html}">办公用品管理</a></li>
-						<li><a th:href="@{/officeSuppliesApply.html}">办公用品申请</a></li>
-						<li><a th:href="@{/officeSuppliesReturn.html}">办公用品归还</a></li>
-						<li><a th:href="@{/officeSuppliesBuy.html}">办公用品请购</a></li>
-						<li><a th:href="@{/meeting.html}">会议管理</a></li>
-						<li><a th:href="@{/meetingApply.html}">会议申请</a></li>
-						<li><a th:href="@{/boardroom.html}">会议室</a></li>
-						<li><a th:href="@{/administrativeArchives.html}">行政档案管理</a></li>
-					</ul></li>
-				<!-- 事务管理 -->
-				<li class="nav-item nav-item-has-subnav"><a
-					href="javascript:void(0)"><i class="mdi mdi-file-outline"></i>
-						事务管理</a>
-					<ul class="nav nav-subnav">
-						<li><a th:href="@{/information}">留言</a></li>
-						<li><a
-							th:href="@{/queryInformation?(did=${session.emp.empId},pageNum=1)}">留言查询</a>
-						</li>
-						<li><a th:href="@{/queryApplys?(pageNum=1)}">申请查询</a></li>
-						<li><a th:href="@{/apply_add}">事务申请</a></li>
-						<li><a
-							th:href="@{/queryReception?(empId=${session.emp.empId})}">接待查询</a></li>
-						<li><a th:href="@{/reception_add}">新增接待</a></li>
-						<li><a th:href="@{/patchcard_add}">补签</a></li>
-						<li><a th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
-					</ul></li>
+
+				<!-- 报告管理 -->
 				<li class="nav-item nav-item-has-subnav"><a
 					href="javascript:void(0)"><i class="mdi mdi-menu"></i>报告管理</a>
 					<ul class="nav nav-subnav">
@@ -79,9 +59,58 @@
 								<li><a th:href="@{/addReportTypePageJumps}">新增报告类型</a></li>
 							</ul></li>
 					</ul></li>
+				<!-- 人事模块 -->
+				<li class="nav-item nav-item-has-subnav"><a
+					href="javascript:void(0)"><i class="mdi mdi-human"></i> 人事模块</a>
+					<ul class="nav nav-subnav">
+						<li><a href="/emp">员工信息</a></li>
+						<li><a href="/emptyPosition">空缺职位记录</a></li>
+						<li><a href="/intervieweeInfo">面试人员信息</a></li>
+						<li><a href="/interview">面试记录</a></li>
+						<li><a href="/leaving">请假记录</a></li>
+						<li><a href="/businessTrip">差旅记录</a></li>
+						<li><a href="/checkIn">考勤记录</a></li>
+					</ul></li>
+				<!-- 行政管理 -->
+				<li class="nav-item nav-item-has-subnav"><a
+					href="javascript:void(0)"><i class="mdi mdi-server"></i> 行政管理</a>
+					<ul class="nav nav-subnav">
+						<li><a th:href="@{/car.html}">车辆管理</a></li>
+						<li><a th:href="@{/carApply.html}">车辆申请管理</a></li>
+						<li><a shiro:hasPermission="AdministrativeManager:select"
+							th:href="@{/returnRegister.html}">车辆归还登记</a></li>
+						<li><a th:href="@{/officeSupplies.html}">办公用品管理</a></li>
+						<li><a th:href="@{/officeSuppliesApply.html}">办公用品申请</a></li>
+						<li><a shiro:hasPermission="AdministrativeManager:select"
+							th:href="@{/officeSuppliesReturn.html}">办公用品归还</a></li>
+						<li><a th:href="@{/officeSuppliesBuy.html}">办公用品请购</a></li>
+						<li><a th:href="@{/meeting.html}">会议管理</a></li>
+						<li><a th:href="@{/meetingApply.html}">会议申请</a></li>
+						<li><a th:href="@{/boardroom.html}">会议室</a></li>
+						<li><a th:href="@{/administrativeArchives.html}">行政档案管理</a></li>
+						<li><a shiro:hasPermission="AdministrativeManager:select"
+							th:href="@{/administrativeArchives.html}">行政档案管理</a></li>
+					</ul></li>
+				<!-- 事务管理 -->
+				<li class="nav-item nav-item-has-subnav"><a
+					href="javascript:void(0)"><i class="mdi mdi-file-outline"></i>事务管理</a>
+					<ul class="nav nav-subnav">
+						<li><a th:href="@{/information}">留言</a></li>
+						<li><a
+							th:href="@{/queryInformation?(did=${session.emp.empId},pageNum=1)}">留言查询</a></li>
+						<li><a shiro:hasPermission="apply:add"
+							th:href="@{/queryApplys?(pageNum=1)}">申请查询</a></li>
+						<li><a th:href="@{/apply_add}">事务申请</a></li>
+						<li><a
+							th:href="@{/queryReception?(empId=${session.emp.empId})}">接待查询</a></li>
+						<li><a shiro:hasPermission="reception:add"
+							th:href="@{/reception_add}">新增接待</a></li>
+						<li><a th:href="@{/patchcard_add}">补签</a></li>
+						<li><a shiro:hasPermission="patchcard:query"
+							th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
+					</ul></li>
 			</ul>
 		</nav>
-
 		<div class="sidebar-footer">
 			<p class="copyright">
 				Copyright © 2020 蜗牛学院JAVA65期二组</a>

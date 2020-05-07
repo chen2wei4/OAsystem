@@ -49,7 +49,7 @@ public class ReportTypeController {
 		}
 	}
 
-	// 新增报表页面跳转
+	// 新增报告种类页面跳转
 	@GetMapping(value = "/addReportTypePageJumps")
 	public String addReportTypePageJumps(Model model) {
 		try {
@@ -59,19 +59,18 @@ public class ReportTypeController {
 		}
 	}
 
-	// 新增报表
+	// 新增报告种类
 	@PostMapping(value = "/addReportType")
 	public String addReportType(HttpServletRequest req, @ModelAttribute ReportType reportType, Model model) {
 		try {
 			reportTypeService.insertReportType(reportType);
-			// 通过时间查到刚添加的报表跳转到报表详情页
 			return "index";
 		} catch (Exception e) {
 			return "lyear_pages_error";
 		}
 	}
 
-	// 修改报表页面跳转
+	// 修改报告种类页面跳转
 	@GetMapping(value = "/updateReportTypePageJumps")
 	public String updateReportTypePageJumps(Model model, Integer typeId) {
 		try {
@@ -85,12 +84,12 @@ public class ReportTypeController {
 		}
 	}
 
-	// 修改报表
+	// 修改报告种类
 	@PostMapping(value = "/updateReportType")
 	public String updateReportType(HttpServletRequest req, @ModelAttribute ReportType reportType, Model model) {
 		try {
 			reportTypeService.updateReportTypeByTypeId(reportType);
-			// 通过时间查到刚修改的报表跳转到报表详情页
+			System.out.println("修改成功");
 			return "index";
 		} catch (Exception e) {
 			return "lyear_pages_error";

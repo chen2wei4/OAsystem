@@ -61,4 +61,63 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   	<select id="getEmps" resultMap="EmpSelectMap">
   		select * from emp where  flag=1
   	</select>
+  	
+  	<!-- 分页展示员工 by王培霖 -->
+  	<select id="selectEmpByPage" resultMap="empMapper">
+  		select emp_id, department_id, emp_name, emp_date, emp_sex, emp_tel, emp_email, emp_idnumber, emp_hiredate, 
+  		emp_education, emp_political_status from emp where emp.flag=1
+  		limit #{pageIndex}, #{pageSize}
+  	</select>
+  	<resultMap type="Emp" id="empMapper">
+  		<id column="emp_id" property="empId"/>
+  		<result column="emp_name" property="empName"/>
+  		<result column="emp_date" property="empDate"/>
+  		<result column="emp_sex" property="empSex"/>
+  		<result column="emp_tel" property="empTel"/>
+  		<result column="emp_email" property="empEmail"/>
+  		<result column="emp_idnumber" property="empIdnumber"/>
+  		<result column="emp_hiredate" property="empHiredate"/>
+  		<result column="emp_education" property="empEducation"/>
+  		<result column="emp_political_status" property="empPoliticalStatus"/>
+  		<association property="department" javaType="Department" select="selectDepartment" column="department_id"/>
+  	</resultMap>
+  	
+  	<!-- 模糊查询职员信息 by王培霖 -->
+  	<select id="searchEmp" resultMap="empMapper">
+  		select emp_id, department_id, emp_name, emp_date, emp_sex, emp_tel, emp_email, emp_idnumber, emp_hiredate, 
+  		emp_education, emp_political_status from emp where emp.flag=1
+  		<include refid="conditionSql"/>
+  		limit #{pageIndex}, #{pageSize}
+  	</select>
+  	<sql id="conditionSql">
+		<if test="parameter!=null and parameter!=''">
+			and emp_name like concat('%',#{parameter},'%')
+		</if>
+		<if test="departmentId!=null and departmentId!=''">
+			and emp.department_id=#{departmentId}
+		</if>
+		<if test="empGender!=null and empGender!=''">
+			and emp_sex=#{empGender}
+		</if>
+		<if test="educationBackground!=null and educationBackground!=''">
+			and emp_education=#{educationBackground}
+		</if>
+	</sql>
+	
+	<!-- 根据当前条件查询总数据条数 -->
+	<select id="countByPage" resultType="int">
+		select count(*) from emp inner join department on emp.department_id=department.department_id where emp.flag=1
+		<include refid="conditionSql"/>
+	</select>
+	
+	<!-- 修改员工信息 -->
+	<update id="modifyEmp">
+		update emp set emp_name=#{empName}, emp_date=#{empDate}, emp_sex=#{empSex}, emp_tel=#{empTel}, emp_email=#{empEmail}, emp_hiredate=#{empHiredate}, 
+		emp_education=#{empEducation}, emp_political_status=#{empPoliticalStatus}, department_id=#{department.departmentId} where emp_id=#{empId}
+	</update>
+	
+	<!-- 验证员工工号，判断该员工是否存在 by王培霖 -->
+	<select id="verifyEmpIdNumber" resultType="emp">
+		select * from emp where emp_idnumber=#{empIdNumber}
+	</select>
   </mapper>

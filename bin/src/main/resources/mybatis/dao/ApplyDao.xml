@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.ApplyDao">
+<!-- 新增申请-->
+ <insert id="addApply">
+   insert into apply(apply_eid,apply_atid,apply_content) values
+      (#{empId},#{applytypeId},#{applyContent})
+ </insert>
+ 
+ 
+ 
+ <!-- 查看所有申请 -->
+  <select id="queryApplys" resultMap="queryApplysMapper">
+       select * from <include refid="queryApplys"/> 
+    
+  </select>
+
+<resultMap type="Apply" id="queryApplysMapper">
+         <id column="apply_id" property="applyId" />
+         <result column="apply_content" property="applyContent"/>
+         <result column="apply_time" property="applyTime"/>
+         <result  column="apply_check" property="applyCheck"/>
+         <association property="emp" javaType="Emp">
+             <id  column="emp_id" property="empId"/>
+             <result column="emp_name" property="empName"/>
+         </association>
+         <association property="applytype" javaType="Applytype">
+             <id  column="applytype_id" property="applytypeId"/>
+             <result column="applytype_name" property="applytypeName"/>
+         </association>
+</resultMap>
+    
+    
+    <!-- 查询所有申请 -->
+    <sql id="queryApplys">
+       apply a,applytype at,emp e where a.apply_eid=e.emp_id
+       and a.apply_atid =at.applytype_id
+       and a.flag=1 order by apply_id asc
+    </sql>
+  
+   
+   <!-- 删除申请 -->
+    <update id="deleteApplys">
+        update apply  set flag=0 where apply_id in
+     <foreach collection="list" item="applyIds" open="(" close=")" separator=",">
+       #{applyIds}
+    </foreach>
+    </update>
+    
+   <!-- 批准申请 -->
+    <update id="approvals">
+        update apply  set apply_check=1 where apply_id in
+    <foreach collection="list" item="applyIds" open="(" close=")" separator=",">
+       #{applyIds}
+    </foreach>
+    </update>
+</mapper>

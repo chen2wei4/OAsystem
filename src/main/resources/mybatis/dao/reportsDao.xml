@@ -152,4 +152,3 @@
 		report_id=#{reportId}
 	</update>
 </mapper>
-

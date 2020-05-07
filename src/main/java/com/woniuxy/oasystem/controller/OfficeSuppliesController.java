@@ -1,5 +1,6 @@
 package com.woniuxy.oasystem.controller;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,7 @@ public class OfficeSuppliesController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
+
 	public CommonResult<PageBean<OfficeSupplies>> findAll(@RequestBody Vo<OfficeSupplies> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {
@@ -59,6 +61,7 @@ public class OfficeSuppliesController {
 	 */
 	@RequestMapping("deleteByOsId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:delete")
 	public CommonResult<PageBean<OfficeSupplies>> deleteByOsId(Integer osId) {
 		try {
 			officeSuppliesService.deleteByOsId(osId);
@@ -77,6 +80,7 @@ public class OfficeSuppliesController {
 	 */
 	@RequestMapping("updateByOsId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:update")
 	public CommonResult<PageBean<OfficeSupplies>> updateByOsId(@RequestBody OfficeSupplies officeSupplies) {
 		try {
 			officeSuppliesService.updateByOsId(officeSupplies);
@@ -94,6 +98,7 @@ public class OfficeSuppliesController {
 	 */
 	@RequestMapping("insert")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:insert")
 	public CommonResult<PageBean<OfficeSupplies>> insert(@RequestBody OfficeSupplies officeSupplies) {
 		try {
 			officeSuppliesService.insert(officeSupplies);

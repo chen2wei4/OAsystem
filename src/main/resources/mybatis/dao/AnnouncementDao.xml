@@ -31,7 +31,7 @@
 		emp.emp_id=announcement.an_emp_id
 		and
 		announcement_type.at_id=announcement.an_type
-		and an_flag=1
+		and an_flag=1 and at_flag=1
 		<include refid="condition" />
 	</select>
 	<!-- 通过条件查询公告 -->
@@ -42,7 +42,7 @@
 		emp.emp_id=announcement.an_emp_id
 		and
 		announcement_type.at_id=announcement.an_type
-		and an_flag=1
+		and an_flag=1 and at_flag=1
 		<include refid="condition" />
 		limit #{pagelimit},#{pageSize}
 	</select>

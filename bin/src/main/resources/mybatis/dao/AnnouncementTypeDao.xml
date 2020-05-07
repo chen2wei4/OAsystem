@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace：映射文件，命名空间必须用接口全限定名 -->
+<mapper namespace="com.woniuxy.oasystem.dao.AnnouncementTypeDao">
+	<!-- 插入新的公告类别 -->
+	<insert id="insertAnnouncementType">
+		insert into announcement_type
+		values(null,#{atName},#{atFlag},#{atDescription})
+	</insert>
+	<!-- 修改公告类别 -->
+	<update id="updateAnnouncementTypeById">
+		update announcement_type set at_name=#{atName} , at_description=#{atDescription} where
+		at_id=#{atId}
+	</update>
+	<!-- 启用 -->
+	<update id="StartAnnouncementType">
+		update announcement_type set at_flag=1 where
+		at_id=#{atId}
+	</update>
+	<!-- 软删除 -->
+	<update id="deleteAnnouncementType">
+		update announcement_type set at_flag=0 where
+		at_id=#{atId}
+	</update>
+	<!-- 通过条件查看公告类型数量 -->
+	<select id="selectAnnouncementCountByCondition"
+		resultType="Integer">
+		select count(*) from announcement_type
+		where 1=1
+		<include refid="condition" />
+	</select>
+	<!-- 通过条件查询公告 -->
+	<select id="selectAnnouncementTypeByType"
+		resultType="AnnouncementType">
+		select * from announcement_type
+		where
+		1=1
+		<include refid="condition" />
+		limit #{pagelimit},#{pageSize}
+	</select>
+	<!-- 条件查询公用语句 -->
+	<sql id="condition">
+		<if test="antype!=null">
+			<if test="antype.atId!=null and antype.atId!=''">
+				and at_id=#{antype.atId}
+			</if>
+			<if test="antype.atName!=null and antype.atName!=''">
+				and at_name like '%' #{antype.atName} '%'
+			</if>
+			<if test="antype.atFlag!=null and antype.atFlag!=''">
+				and at_flag=#{antype.atFlag}
+			</if>
+		</if>
+	</sql>
+			<!-- 查询所有启用的type -->
+		<select id="selectAnnouncementType"
+		resultType="AnnouncementType">
+		select * from announcement_type
+		where
+		at_flag=1
+	</select>
+	
+</mapper>
