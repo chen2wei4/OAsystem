@@ -95,7 +95,11 @@
 											<tr v-for="item in list">
 												
 												<td>{{item.name}}</td>
-												<td>{{item.file}}</td>
+												<td>
+														<a v-show="item.fileName!=null" :href="'/Path/'+item.fileName">{{item.fileName}}</a>
+														<input type="file" :id="'fileupload'+item.aaId"/>
+														<input type="button" value="上传" @click="upload(item.aaId,pb.pageEnd)"/>
+												</td>
 												<td>{{item.time}}</td>
 												<td>{{item.sort}}</td>
 												<td>
@@ -286,7 +290,7 @@
 	    	                action: function () {
 	    	                	var name=$("#name").val();
     							var sort=$("#sort").val();
-	    	                    if(!name||!file||!sort){
+	    	                    if(!name||!sort){
 	    	                        $.alert('请输入完整信息');
 	    	                        return false;
 	    	                    }
@@ -329,15 +333,22 @@
 			        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
 			    });
 	      },
-	      //跳转异常页面方法
-	      exception(){
+	      upload(aaId,pageEnd){
+	    	  var file =  document.getElementById('fileupload'+aaId).files[0];//获取id上传的file
+	    	  var param = new FormData();
+	    	  param.append("file",file);
+	    	  param.append("aaId",aaId);
 	    	  axios({
-	    		  url:'',
-	    		  method:'',
-	    		  data
-	    	  })
+	    		  url:'[[@{/administrativeArchives/upload}]]',
+    			  method:'post',
+    			  data:param,
+    			  headers:{'Content-Type':'multipart/form-data'}
+    			}).then(res=>{
+    			  alert(res.data.message);
+    			  this.send(pageEnd);
+    			})
+	    	 
 	      }
-	      
 	    },
 	    //页面加载时调用
 	    created(){

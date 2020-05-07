@@ -25,4 +25,6 @@ public interface AdministrativeArchivesDao {
 	void updateByAaId(@Param("aa")AdministrativeArchives administractiveArchives);
 	//添加行政档案
 	void insert(@Param("aa")AdministrativeArchives administractiveArchives);
+	//添加文件名和文件地址
+	void insertFile(@Param("fileName")String fileName,@Param("fileAddress")String fileAddress,@Param("aaId")Integer aaId);
 }

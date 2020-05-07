@@ -27,5 +27,8 @@ public interface AdministrativeArchivesService {
 
 	// 添加行政档案
 	void insert(AdministrativeArchives administrativeArchives);
+	
+	//添加文件名和文件地址
+	void insertFile(String fileName,String fileAddress,Integer aaId);
 
 }

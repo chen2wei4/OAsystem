@@ -2,8 +2,11 @@ package com.woniuxy.oasystem.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * 
@@ -20,6 +23,8 @@ public class WebMvcConfig {
 	 * @return WebMvcConfigurer对象，可以用来配置路径映射
 	 * @changeLog 1.创建 (2020年4月23日 下午2:36:39 [陈一玮]
 	 */
+	
+	
 	@Bean
 	public WebMvcConfigurer oaConfigurer() {
 		return new WebMvcConfigurer() {
