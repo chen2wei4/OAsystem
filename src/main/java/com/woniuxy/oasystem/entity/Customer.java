@@ -31,10 +31,4 @@ public class Customer {
 	private String customerDirector; //客户负责人
 	private Date customerTime; //客户信息创建时间
 	private Integer flag; //软删除
-	public Customer(String customerName,String customerCompany,String customerPosition,String customerDirector) {
-		this.customerName = customerName;
-		this.customerCompany = customerCompany;
-		this.customerPosition = customerPosition;
-		this.customerDirector = customerDirector;
-	}
 }

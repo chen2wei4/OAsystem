@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.woniuxy.oasystem.dao.CustomerDao;
 import com.woniuxy.oasystem.entity.Customer;
 import com.woniuxy.oasystem.entity.PageBean;
+import com.woniuxy.oasystem.exception.CustomerException;
 import com.woniuxy.oasystem.service.CustomerService;
 /**
  * 
@@ -63,6 +64,9 @@ public class CustomerServiceImp implements CustomerService {
 	@Override
 	public Customer showCustomer(Integer customerId) {
 		Customer customer = customerDao.showCustomer(customerId);
+		if(customer==null) {
+			throw new CustomerException("客户已被删除或客户id输入错误");
+		}
 		return customer;
 	}
 

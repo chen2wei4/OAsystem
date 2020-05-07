@@ -1,5 +1,6 @@
 package com.woniuxy.oasystem.controller;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.woniuxy.oasystem.entity.AdministrativeArchives;
@@ -113,6 +116,38 @@ public class AdministrativeArchivesController {
 			return new CommonResult<PageBean<AdministrativeArchives>>(500,"添加失败",null);
 		}
 	}
-	
-	
+	/**
+	 * 
+	 * TODO 文件上传
+	 * @return
+	 * @changeLog 	1. 创建 (2020年5月5日 [张钰平])
+	 */
+	@RequestMapping("upload")
+	@ResponseBody
+	public CommonResult upload(@RequestParam("file")MultipartFile file,@RequestParam(value="aaId",required = false)Integer aaId){
+		System.out.println(aaId);
+		try {
+			if(file.isEmpty()) {
+				return new CommonResult(500,"文件是空的",null);
+			}
+			String fileName = file.getOriginalFilename();
+			String suffixName = fileName.substring(fileName.lastIndexOf("."));
+			//防止文件重复 获取当前时间给文件重命名
+	        long timeT = System.currentTimeMillis();
+			//设置文件上传路径
+			String filePath = "C:/Users/小陽/Desktop/picture/";
+			String path = filePath + timeT+suffixName;
+			File dest = new File(path);
+			//检测是否存在目录
+			if(!dest.getParentFile().exists()) {
+				dest.getParentFile().mkdirs();//新建文件夹
+			}
+			file.transferTo(dest);//文件写入
+			administrativeArchivesService.insertFile(fileName,path,aaId);
+			return new CommonResult(200,"上传成功",null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new CommonResult(500,"上传失败",null);
+		}
+	}
 }
