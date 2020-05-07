@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.LeavingDao">
+	<!-- 添加请假记录 -->
+	<insert id="addLeaving">
+		insert into leaving (emp_id, leaving_date, leaving_time, vacation_type, leaving_reason) 
+		values (#{empId}, #{leavingDate}, #{leavingTime}, #{vacationType}, #{leavingReason})
+	</insert>
+	
+	<!-- 删除请假记录 -->
+	<update id="deleteLeaving">
+		update leaving set flag=0 where leaving_id=#{leavingId}
+	</update>
+	
+	<!-- 展示请假记录 -->
+	<select id="displayLeaving" resultType="leaving">
+		select leaving_id, leaving.emp_id, emp_name, leaving_date, leaving_time, vacation_type, vacation_name, leaving_reason from leaving 
+		inner join emp on leaving.emp_id=emp.emp_id 
+		inner join vacation on vacation.vacation_id=leaving.vacation_type where leaving.flag=1
+	</select>
+	
+	<!-- 模糊查询请假记录 -->
+	<select id="searchLeaving" resultType="leaving">
+		select leaving_id, leaving.emp_id, emp_name, leaving_date, leaving_time, vacation_type, vacation_name, leaving_reason from leaving 
+		inner join emp on leaving.emp_id=emp.emp_id 
+		inner join vacation on vacation.vacation_id=leaving.vacation_type where leaving.flag=1
+		<include refid="conditionSql"/>
+		limit #{pageIndex}, #{pageSize}
+	</select>
+	<sql id="conditionSql">
+		<if test="parameter!=null and parameter!=''">
+			and emp_name like concat('%',#{parameter},'%')
+		</if>
+	</sql>
+	
+	<!-- 修改请假记录 -->
+	<update id="modifyLeaving">
+		update leaving set leaving_date=#{leavingDate}, leaving_time=#{leavingTime}, vacation_type=#{vacationType}, leaving_reason=#{leavingReason}
+		where leaving_id=#{leavingId}
+	</update>
+	
+	<!-- 根据当前条件查询总数据条数 -->
+	<select id="countByPage" resultType="int">
+		select count(*) from leaving inner join emp on emp.emp_id=leaving.emp_id where leaving.flag=1
+		<include refid="conditionSql"/>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="selectLeavingByPage" resultType="Leaving">
+		select leaving_id, leaving.emp_id, emp_name, leaving_date, leaving_time, vacation_type, vacation_name, leaving_reason from leaving 
+		inner join emp on leaving.emp_id=emp.emp_id 
+		inner join vacation on vacation.vacation_id=leaving.vacation_type where leaving.flag=1
+		limit #{pageIndex}, #{pageSize}
+	</select>
+	
+</mapper>

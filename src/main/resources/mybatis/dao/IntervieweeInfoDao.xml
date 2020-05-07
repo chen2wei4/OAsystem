@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.IntervieweeInfoDao">
+	<!-- 添加求职人员信息 -->
+	<insert id="addIntervieweeInfo">
+		insert into interviewee_info 
+		(position_id, interviewee_name, interviewee_age, interviewee_gender, interviewee_education_background, interviewee_graduate_institution, interviewee_major, interviewee_phone, flag)
+		values
+		(#{positionId}, #{intervieweeName}, #{intervieweeAge}, #{intervieweeGender}, #{intervieweeEducationBackground}, #{intervieweeGraduateInstitution}, #{intervieweeMajor}, #{intervieweePhone}, 1)
+	</insert>
+	
+	<!-- 删除求职人员信息 -->
+	<update id="deleteIntervieweeInfo">
+		update interviewee_info set flag = 0 where interviewee_id=#{intervieweeId}
+	</update>
+	
+	<!-- 展示求职人员信息 -->
+	<select id="displayIntervieweeInfo" resultType="intervieweeInfo">
+		select interviewee_id, interviewee_info.position_id, position_name, interviewee_name, interviewee_age, interviewee_gender, 
+		interviewee_education_background, interviewee_graduate_institution, interviewee_major, interviewee_phone from interviewee_info 
+		inner join empty_position on interviewee_info.position_id=empty_position.position_id where interviewee_info.flag=1
+	</select>
+	
+	<!-- 模糊查询求职人员信息 -->
+	<select id="searchIntervieweeInfo" resultType="intervieweeInfo">
+		select interviewee_id, interviewee_info.position_id, position_name, interviewee_name, interviewee_age, interviewee_gender, 
+		interviewee_education_background, interviewee_graduate_institution, interviewee_major, interviewee_phone from interviewee_info 
+		inner join empty_position on interviewee_info.position_id=empty_position.position_id where interviewee_info.flag=1
+		<include refid="conditionSql"/>
+		limit #{pageIndex}, #{pageSize}
+	</select>
+	<sql id="conditionSql">
+		<if test="parameter!=null and parameter!=''">
+			and interviewee_name like concat('%',#{parameter},'%')
+		</if>
+		<if test="intervieweeGender!=null and intervieweeGender!=''">
+			and interviewee_gender=#{intervieweeGender}
+		</if>
+		<if test="educationBackground!=null and educationBackground!=''">
+			and interviewee_education_background=#{educationBackground}
+		</if>
+		<if test="positionId!=null and positionId!=''">
+			and interviewee_info.position_id=#{positionId}
+		</if>
+	</sql>
+	
+	<!-- 根据面试人姓名和电话验证此人是否存在 -->
+	<select id="verityIntervieweeInfo" resultType="intervieweeInfo">
+		select * from interviewee_info where interviewee_name=#{intervieweeName} and interviewee_phone=#{intervieweePhone}
+	</select>
+	
+	<!-- 变更面试人信息 -->
+	<update id="modifyIntervieweeInfo">
+		update interviewee_info set position_id=#{positionId}, interviewee_name=#{intervieweeName}, interviewee_age=#{intervieweeAge}, interviewee_gender=#{intervieweeGender}, interviewee_education_background=#{intervieweeEducationBackground},
+		interviewee_graduate_institution=#{intervieweeGraduateInstitution}, interviewee_major=#{intervieweeMajor}, interviewee_phone=#{intervieweePhone} where interviewee_id=#{intervieweeId}
+	</update>
+	
+	<!-- 根据当前条件查询总数据条数 -->
+	<select id="countByPage" resultType="int">
+		select count(*) from interviewee_info inner join empty_position on interviewee_info.position_id=empty_position.position_id where interviewee_info.flag=1
+		<include refid="conditionSql"/>
+	</select>
+	
+	<!-- 分页查询面试人信息 -->
+	<select id="selectIntervieweeInfoByPage" resultType="intervieweeInfo">
+		select interviewee_id, interviewee_info.position_id, position_name, interviewee_name, interviewee_age, interviewee_gender, 
+		interviewee_education_background, interviewee_graduate_institution, interviewee_major, interviewee_phone from interviewee_info 
+		inner join empty_position on interviewee_info.position_id=empty_position.position_id where interviewee_info.flag=1
+		limit #{pageIndex}, #{pageSize}
+	</select>
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.BusinessTripDao">
+	<!-- 新增差旅记录 -->
+	<insert id="addBusinessTrip">
+		insert into business_trip (trip_id, emp_id, trip_date, trip_time, trip_location, trip_reason) 
+		values (#{tripId}, #{empId}, #{tripDate}, #{tripTime}, #{tripLocation}, #{tripReason})
+	</insert>
+	
+	<!-- 删除差旅记录 -->
+	<update id="deleteBusinessTrip">
+		update business_trip set flag=0 where trip_id=#{tripId}
+	</update>
+	
+	<!-- 展示差旅记录 -->
+	<select id="displayBusinessTrip" resultType="businessTrip">
+		select trip_id, business_trip.emp_id, emp_name, trip_date, trip_time, trip_location, trip_reason 
+		from business_trip inner join emp on business_trip.emp_id=emp.emp_id where business_trip.flag=1
+	</select>
+	
+	<!-- 模糊查询差旅记录 -->
+	<select id="searchBusinessTrip" resultType="businessTrip">
+		select trip_id, business_trip.emp_id, emp_name, trip_date, trip_time, trip_location, trip_reason 
+		from business_trip inner join emp on business_trip.emp_id=emp.emp_id where business_trip.flag=1
+		<include refid="conditionSql"/>
+		limit #{pageIndex}, #{pageSize}
+	</select>
+	<sql id="conditionSql">
+		<if test="parameter!=null and parameter!=''">
+			and emp_name like concat('%',#{parameter},'%')
+		</if>
+	</sql>
+	
+	<!-- 修改差旅记录 -->
+	<update id="modifyBusinessTrip">
+		update business_trip set emp_id=#{empId}, trip_date=#{tripDate}, trip_time=#{tripTime}, trip_location=#{tripLocation}, trip_reason=#{tripReason} where trip_id=#{tripId}
+	</update>
+	
+	<!-- 根据当前条件查询总数据条数 -->
+	<select id="countByPage" resultType="int">
+		select count(*) from business_trip inner join emp on emp.emp_id=business_trip.emp_id where business_trip.flag=1
+		<include refid="conditionSql"/>
+	</select>
+	
+	<!-- 分页查询差旅记录 -->
+	<select id="selectBusinessTripByPage" resultType="businessTrip">
+		select trip_id, business_trip.emp_id, emp_name, trip_date, trip_time, trip_location, trip_reason 
+		from business_trip inner join emp on business_trip.emp_id=emp.emp_id where business_trip.flag=1
+		limit #{pageIndex}, #{pageSize}
+	</select>
+	
+</mapper>
