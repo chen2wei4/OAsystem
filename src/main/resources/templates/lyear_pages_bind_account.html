@@ -53,23 +53,28 @@
             <div class="card">
               <div class="card-body">
                 
-                <form method="post" th:action="@{/emp/bindTel}" class="site-form">
+                <form method="post" th:action="@{/emp/bindTel}" class="site-form" style="height: 180px">
                   <div class="form-group">
-                    <label for="bindTel">手机号</label>
+                    <label for="bindTel" class="control-label" style="font-size: 25px">手机号</label>
                     <input type="text" class="form-control" name="bindTel" id="bindTel" placeholder="输入绑定手机号"
-                    style="width: 300px">
+                    style="width: 300px" th:if="${#strings.isEmpty(session.emp.empTel)}" >
+                    <div style="font-size: 15px;line-height: 40px;font-weight: 600" th:if="${not #strings.isEmpty(session.emp.empTel)}"
+                    >您已经绑定手机，绑定手机为：[[${session.emp.empTel}]]</div>
                   </div>
-                  <button type="submit" class="btn btn-primary">绑定手机</button>&emsp;
-         		  <span style="color: red;font-weight: 800">[[${bindTelMsg}]]</span>
+                  <button type="submit" class="btn btn-primary" th:if="${#strings.isEmpty(session.emp.empTel)}">绑定手机</button>&emsp;
+         		  <span style="color: red;font-weight: 800" id="bindTelMsg">[[${bindTelMsg}]]</span>
          		   </form>
-         		   <form method="post" th:action="@{/emp/bindEmail}" class="site-form">
+         		   
+         		   <form method="post" th:action="@{/emp/bindEmail}" class="site-form" style="height: 150px">
                   <div class="form-group">
-                    <label for="bindEmail">邮箱</label>
+                    <label for="bindEmail"  style="font-size: 25px">邮箱</label>
                     <input type="text" class="form-control" name="bindEmail" id="bindEmail" placeholder="输入绑定邮箱"
-                    style="width: 300px">
+                    style="width: 300px" th:if="${#strings.isEmpty(session.emp.empEmail)}">
+                    <div style="font-size: 15px;line-height: 40px;font-weight: 600 "th:if="${not #strings.isEmpty(session.emp.empEmail)}"
+                    >您已经绑定邮箱，绑定邮箱为：[[${session.emp.empEmail}]]</div>
                   </div>
-                  <button type="submit" class="btn btn-primary">绑定邮箱</button>
-         		  <span style="color: red;font-weight: 800">[[${bindEmailMsg}]]</span>
+                  <button type="submit" class="btn btn-primary" th:if="${#strings.isEmpty(session.emp.empEmail)}">绑定邮箱</button>
+         		  <span style="color: red;font-weight: 800" id="bindEmailMsg">[[${bindEmailMsg}]]</span>
                 </form>
               </div>
             </div>
@@ -88,5 +93,25 @@
 <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.min.js}"></script>
+<script type="text/javascript">
+$(function(){
+	$("#bindTel,#bindEmail").change(function(){
+		var telRegExp=/^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/;
+		var emailRegExp=/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+		var inputTel=$("#bindTel").val();
+		var inputEmail=$("#bindEmail").val();
+		if(telRegExp.test(inputTel)||inputTel==""||inputTel==undefined){
+			$("#bindTelMsg").html("");
+		}else{
+			$("#bindTelMsg").html("请正确输入11位手机号");
+		}
+		if(emailRegExp.test(inputEmail)||inputEmail==""||inputEmail==undefined){
+			$("#bindEmailMsg").html("");
+		}else{
+			$("#bindEmailMsg").html("请正确输入邮箱");
+		}
+	});
+})
+</script>
 </body>
 </html>

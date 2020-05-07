@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.OrderDao">
+	<!-- 插入一条商业订单 -->
+	<insert id="addGoodOrder">
+	insert into `order`(ordertype_id,contract_id,order_status,order_name,good_name,good_number,order_date,order_number)
+	values(1,#{contractId},'未分配',#{order.orderName},#{order.goodName},#{order.goodNumber},#{order.orderDate},#{order.orderNumber});
+	</insert>
+	<!-- 查询分页的所有订单信息 -->
+	<select id="showOrders" resultMap="orderSelectMap">
+		select * from `order` where flag=1 <include refid="orderSelectFactor"/> limit #{currentPage},10
+	</select>
+	<!-- 查询订单的总数据条数 -->
+	<select id="getOrderTotalData" resultType="int">
+		select count(*) from `order` where flag=1 <include refid="orderSelectFactor"/>
+	</select>
+	<resultMap type="Order" id="orderSelectMap">
+		<id column="order_id" property="orderId"/>
+		<result column="order_name" property="orderName"/>
+		<result column="good_name" property="goodName"/>
+		<result column="order_number" property="orderNumber"/>
+		<result column="good_number" property="goodNumber"/>
+		<result column="order_date" property="orderDate"/>
+		<result column="order_status" property="orderStatus"/>
+		<result column="order_director" property="orderDirector"/>
+		<result column="flag" property="flag"/>
+		<association property="orderType" javaType="OrderType" select="selectOrderType" column="ordertype_id"/>
+		<association property="contract" javaType="Contract" select="selectContract" column="contract_id"/>
+	</resultMap>
+	<!-- 根据订单类型id查询指定订单类型 -->
+	<select id="selectOrderType" resultType="OrderType">
+		select * from ordertype where flag=1 and ordertype_id=#{ordertype_id}
+	</select>
+	<!-- 根据合同id查询指定合同信息 -->
+	<select id="selectContract" resultType="Contract">
+		select * from contract where flag=1 and contract_id=#{contract_id}
+	</select>
+	<!-- 查询订单信息的sql片段复用 -->
+	<sql id="orderSelectFactor">
+		<if test="order.orderName!=null and order.orderName!=''">
+		  and order_name like '%' #{order.orderName} '%'
+		</if>
+		<if test="order.orderNumber!=null and order.orderNumber!=''">
+		  and order_number like '%' #{order.orderNumber} '%'
+		</if>
+		<if test="contractId!=null and contractId.size>0">
+		  and contract_id in
+		  <foreach collection="contractId" item="cid" open="(" close=")" separator=",">
+		  	#{cid}
+		  </foreach>
+		</if>
+		<if test="order.orderDirector!=null and order.orderDirector!=''">
+		  and order_director like '%' #{order.orderDirector} '%'
+		</if>
+		<if test="order.orderStatus!=null and order.orderStatus!=''">
+		  and order_status like '%' #{order.orderStatus} '%'
+		</if>
+	</sql>
+	<!-- 新增一条订单 -->
+	<insert id="newOrder">
+		insert into `order`(ordertype_id,contract_id,order_status,order_name,good_name,good_number,order_date,order_number)
+	values(#{orderTypeId},#{contractId},'未分配',#{order.orderName},#{order.goodName},#{order.goodNumber},#{order.orderDate},
+	#{order.orderNumber});
+	</insert>
+	<!-- 查询一条指定的订单信息 -->
+	<select id="showOrder"  resultMap="orderSelectMap">
+		select*from `order` where flag=1 and order_id = #{orderId}
+	</select>
+	<!-- 更改一条合同信息 -->
+	<update id="updateOrder">
+		update `order` set ordertype_id=#{orderTypeId},contract_id=#{contractId},
+		order_name=#{order.orderName},good_name=#{order.goodName},
+		good_number=#{order.goodNumber},order_date=#{order.orderDate},
+		order_number=#{order.orderNumber} where order_id=#{order.orderId} and flag=1
+	</update>
+	<!-- 删除复选框选中的订单信息 -->
+	<update id="deleteCheckedOrder">
+		update `order` set flag=0 
+		<where>
+			<if test="ids!=null and ids.length>0">
+				and order_id in
+				<foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+			</if>
+		</where>
+	</update>
+		<!-- 删除一条合同信息 -->
+	<update id="deleteOrder">
+		update `order` set flag=0 where order_id=#{orderId}
+	</update>
+ </mapper>

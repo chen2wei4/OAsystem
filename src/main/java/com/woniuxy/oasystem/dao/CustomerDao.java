@@ -19,7 +19,7 @@ import com.woniuxy.oasystem.entity.CustomerType;
  */
 public interface CustomerDao {
 	/**
-	 * 查询所有的客户信息
+	  * 查询所有的客户信息
 	 * @param customer 搜索引擎的查询条件
 	 * @param currentPage 当前页码
 	 * @return 返回客户信息的集合
@@ -28,9 +28,9 @@ public interface CustomerDao {
 	 */
 	List<Customer> showCustomers(@Param("customer")Customer customer,@Param("currentPage")Integer currentPage);
 	/**
-	 * 查询所有的客户信息的条数
+	  * 查询所有的客户信息的条数
 	 * @param customer 搜索引擎的查询条件
-	 * @return
+	 * @return 返回所有的客户信息的条数
 	 * @changeLog 1.创建 (2020年4月26日 上午11:17:44 [陈一玮]
 	 *            2.
 	 */
