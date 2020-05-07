@@ -44,6 +44,24 @@ public class UserRealm extends AuthorizingRealm{
 //		permissions.add("customer:delete");
 		permissions.add("customer:update");
 //		authorizationInfo.addStringPermissions(permissions);
+		//行政部门权限
+		Collection<String> administrativePermissions=new ArrayList<String>();
+		if(emp.getRole().getRoleName().equals("员工")) {
+			administrativePermissions.add("worker:select");
+			administrativePermissions.add("worker:insert");
+			administrativePermissions.add("worker:update");
+			administrativePermissions.add("worker:delete");
+			administrativePermissions.add("worker:upload");
+		}else if(emp.getRole().getRoleName().equals("行政部门")) {
+			administrativePermissions.add("AdministrativeManager:select");
+			administrativePermissions.add("AdministrativeManager:insert");
+			administrativePermissions.add("AdministrativeManager:update");
+			administrativePermissions.add("AdministrativeManager:delete");
+			administrativePermissions.add("AdministrativeManager:upload");
+		}
+		System.out.println(administrativePermissions);
+		authorizationInfo.addStringPermissions(administrativePermissions);
+		
 		authorizationInfo.addStringPermission("customer:delete");
 		authorizationInfo.addStringPermission("customer:select");
 		return authorizationInfo;
@@ -72,4 +90,45 @@ public class UserRealm extends AuthorizingRealm{
 		AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principal, credentials, this.getName());
 		return authenticationInfo;
 	}
-}
+	//根据用户的角色id，将权限进行分配
+	public Collection<String> getPermissions(Integer roleId){
+		Collection<String> permissions=new ArrayList<String>();
+		if(roleId==2) {
+			permissions.add("customer:select");
+			permissions.add("contract:select");
+			permissions.add("order:select");
+			
+		}else if(roleId==3) {
+			permissions.add("customer:select");
+			permissions.add("customer:select1");
+			permissions.add("contract:select1");
+			permissions.add("order:select1");
+			permissions.add("contract:select");
+			permissions.add("order:select");
+			permissions.add("customer:insert");
+			permissions.add("contract:insert");
+			permissions.add("order:insert");
+			permissions.add("customer:update");
+			permissions.add("contract:update");
+			permissions.add("order:update");
+		}else if(roleId==4) {
+			permissions.add("customer:select");
+			permissions.add("contract:select");
+			permissions.add("customer:select1");
+			permissions.add("contract:select1");
+			permissions.add("order:select1");
+			permissions.add("order:select");
+			permissions.add("customer:insert");
+			permissions.add("contract:insert");
+			permissions.add("order:insert");
+			permissions.add("customer:update");
+			permissions.add("contract:update");
+			permissions.add("order:update");
+			permissions.add("customer:delete");
+			permissions.add("contract:delete");
+			permissions.add("order:delete");
+		}
+		return permissions;
+		
+	}
+} 

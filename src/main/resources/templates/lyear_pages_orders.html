@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -237,4 +238,249 @@ $('.example-p-3').on('click', function () {
 });
 </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>订单信息 - 光年(Light Year Admin)后台管理系统模板</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description" content="LightYear是一个基于Bootstrap v3.3.7的后台管理系统的HTML模板。">
+<meta name="author" content="yinqi">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/js/jconfirm/jquery-confirm.min.css}">
+</head>
+  
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+        <div th:replace="common :: lefter"></div>
+    <!--End 左侧导航-->
+    
+    <!--头部信息-->
+    <header class="lyear-layout-header">
+      
+      <nav class="navbar navbar-default">
+        <div class="topbar">
+          
+          <div class="topbar-left">
+            <div class="lyear-aside-toggler">
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+            </div>
+            <span class="navbar-page-title"> 商务页面 - 订单信息 </span>
+          </div>
+        
+          <!-- 导航栏信息 -->
+          <ul class="topbar-right" th:replace="common :: header"></ul>  
+        </div>
+      </nav>
+      
+    </header>
+    <!--End 头部信息-->
+    
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+      
+      <div class="container-fluid">
+        
+        <div class="row">
+          <div class="col-lg-12" >
+            <div class="card" >
+              <div class="card-toolbar clearfix">
+              <div class="toolbar-btn-action col-md-2">
+                  <a class="btn btn-primary m-r-5" th:href="@{/addorder}"
+                  shiro:hasPermission="order:insert"><i class="mdi mdi-plus"></i> 新增</a>
+                  <a class="btn btn-danger delall" href="#!"
+                  shiro:hasPermission="order:delete"><i class="mdi mdi-window-close" ></i> 删除</a>
+                </div>
+                
+                <form class="form-horizontal" th:action="@{/business/orders}" method="get">
+                    <label class="col-md-1 control-label" for="example-hf-name">订单名</label>
+                    <div class="col-md-2">
+                      <input class="form-control" type="text" id="example-hf-name" name="orderName" th:value="${order?.orderName}">
+                  </div>
+                    <label class="col-md-1 control-label" for="example-hf-company">订单号</label>
+                    <div class="col-md-2">
+                      <input class="form-control" type="text" id="example-hf-company" name="orderNumber" th:value="${order?.orderNumber}">
+                    </div>
+                     <label class="col-md-1 control-label" for="example-hf-position">合同号</label>
+                    <div class="col-md-2">
+                      <input class="form-control" type="text" id="example-hf-position" name="contractNumber" th:value="${contractNumber}">
+                    </div>
+                    <div  class="col-md-1 control-label" style="height: 40px;"></div>
+                    <div  class="col-md-2 control-label" style="height: 30px"></div>
+                    <label class="col-md-1 control-label" for="example-hf-director">订单状态</label>
+                    <div class="col-md-2">
+                      <input class="form-control" type="text" id="example-hf-director" name="orderStatus" th:value="${order?.orderStatus}">
+                    </div>
+                    <label class="col-md-1 control-label" for="example-hf-director">负责人</label>
+                    <div class="col-md-2">
+                      <input class="form-control" type="text" id="example-hf-director" name="orderDirector" th:value="${order?.orderDirector}">
+                    </div>
+                    <div class="col-md-1">
+                      <input class="form-control" type="submit" value="搜索">
+                    </div>
+                </form>
+                
+              </div>
+
+
+              <div class="card-body">
+                
+                <div class="table-responsive">
+                 <form id="delAllForm" method="post" th:action="@{/business/orders}">
+                       	<input type="hidden" name="_method" value="delete">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th shiro:hasPermission="order:select1">
+                          <label class="lyear-checkbox checkbox-primary">
+                            <input type="checkbox" id="check-all"><span></span>
+                          </label>
+                        </th>
+                       <th>编号</th>
+                        <th>订单名</th>
+                        <th>合同号</th>
+                        <th>订单号</th>
+                        <th>负责人</th>
+                        <th>订单状态</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="order,orderStatus:${pb.beanList}" th:id="${order.orderId}" th:attr="status=${orderStatus.count}">
+                        <td  shiro:hasPermission="order:select1">
+                          <label class="lyear-checkbox checkbox-primary">
+                            <input type="checkbox" name="ids[]" th:value="${order.orderId}"><span></span>
+                          </label>
+                        </td>
+                        <td>[[${order.orderId}]]
+                        <input type="hidden" th:value="${order.goodName}" th:attr="gname=${order.orderId}">
+                        <input type="hidden" th:value="${order.goodNumber}" th:attr="gnumber=${order.orderId}">
+                        <input type="hidden" th:value="${order.orderType.orderTypeName}" th:attr="ordertype=${order.orderId}">
+                        <input type="hidden" th:value="${#dates.format(order.orderDate,'yyyy-MM-dd')}" th:attr="date=${order.orderId}">
+                        </td>
+                        <td th:text="${order.orderName}" th:attr="name=${order.orderId}"></td>
+                        <td th:text="${order.contract?.contractNumber}" th:attr="cnumber=${order.orderId}"></td>
+                        <td th:text="${order.orderNumber}" th:attr="onumber=${order.orderId}"></td>
+                        <td th:text="${order.orderDirector}" th:attr="director=${order.orderId}"></td>
+                        <td th:text="${order.orderStatus}" th:attr="status=${order.orderId}"></td>
+                        <td>
+                          <div class="btn-group">
+                            <a class="btn btn-xs btn-default" th:href="@{/business/order/}+${order.orderId}" title="编辑" data-toggle="tooltip"
+                             shiro:hasPermission="order:update">
+                            <i class="mdi mdi-pencil"></i>
+                            </a>
+                            <a class="btn btn-xs btn-default del" href="#!" title="删除" data-toggle="tooltip" th:attr="deluri=@{/business/orders/}+${order.orderId}"
+                             shiro:hasPermission="order:delete">
+                            <i class="mdi mdi-window-close"></i>
+                            </a>
+                            <!--  th:href="@{/business/customerdetail/}+${customer.customerId}" -->
+                             <a class="btn btn-xs btn-default example-p-3" title="查看" data-toggle="tooltip" th:attr="detail=${order.orderId}">
+                            <i class="mdi mdi-poll"></i>
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                   </form>
+                </div>
+                <ul class="pagination" >
+                  <li th:class="${pb.pageIndex ==1}?disabled">
+                  <a th:href="${pb.pageIndex ==1}?'javaScript:void(0)':${pb.url}+'&amp;currentPage='+${pb.pageIndex-1}">«</a>
+                  </li>
+                  <li th:class="${pb.pageIndex == i} ?active" th:each="i:${#numbers.sequence(1,pb.totalPage)}"  th:switch="${pb.pageIndex}">
+                  <a th:case="${i}">[[${i}]]</a>
+                  <a th:href="${pb.url}+'&amp;currentPage='+${i}"  th:case="*" th:if="${pb.totalPage!=0}">[[${i}]]</a>
+                  </li>
+                  <li th:class="${pb.pageIndex ==pb.totalPage or pb.totalPage==0 }?disabled">
+                  <a th:href="${pb.pageIndex == pb.totalPage or pb.totalPage==0 }?'javaScript:void(0)':${pb.url}+'&amp;currentPage='+${pb.pageIndex+1}"
+                  >»</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+      <form id="delForm" method="post">
+      	<input type="hidden" name="_method" value="delete">
+      </form>
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.min.js}"></script>>
+<script th:src="@{/js/jconfirm/jquery-confirm.min.js}"></script>
+<script type="text/javascript">
+$(function(){
+    $('.search-bar .dropdown-menu a').click(function() {
+        var field = $(this).data('field') || '';
+        $('#search-field').val(field);
+        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+    });
+    $(".del").click(function(){
+    	$("#delForm").attr("action",$(this).attr("deluri")).submit();
+    });
+    $(".delall").click(function(){
+    	var check=$("input[name='ids[]']:checked");
+    	$("#delAllForm").submit();
+    });
+});
+
+
+$('.example-p-3').on('click', function () {
+	var tdid=$(this).attr("detail");
+    $.confirm({
+    	theme:'material',
+    	width:'auto',
+    	columnClass:'col-sm-8 col-sm-offset-2',
+        title: '订单详情',
+        content: '' +
+        '<div class="formName">' +
+        '<div class="form-group form-horizontal">' +
+        '<label class="control-label col-md-2"">订单名</label>' +
+        '<div class="col-md-4"><span class="form-control">'+$("td[name='"+tdid+"']").html()+'</span></div>' +
+        '<label class="control-label col-md-2">合同号</label>' +
+        '<div class="col-md-4"><span class="form-control">'+$("td[cnumber='"+tdid+"']").html()+'</span></div></br></br>' +
+        '<label class="control-label col-md-2">订单号</label>' +
+        '<div class="col-md-4"><span class="form-control">'+$("td[onumber='"+tdid+"']").html()+'</span></div>' +
+        '<label class="control-label col-md-2">订单类型</label>' +
+        '<div class="col-md-4"><span class="form-control">'+$("input[ordertype='"+tdid+"']").val()+'</span></div></br></br>' +
+        '<label class="control-label col-md-2">产品名</label>' +
+        '<div class="col-md-4"><span class="form-control">'+$("input[gname='"+tdid+"']").val()+'</span></div>' +
+        '<label class="control-label col-md-2">产品数量</label>' +
+        '<div class="col-md-4"><span class="form-control">'+$("input[gnumber='"+tdid+"']").val()+'</span></div></br></br>' +
+        '<label class="control-label col-md-2">负责人</label>' +
+        '<div class="col-md-4"><span class="form-control">'+$("td[director='"+tdid+"']").html()+'</span></div>' +
+        '<label class="control-label col-md-2">截止时间</label>' +
+        '<div class="col-md-4"><span class="form-control">'+$("input[date='"+tdid+"']").val()+'</span></div>' +
+        '<label class="control-label col-md-2">订单状态</label>' +
+        '<div class="col-md-4"><span class="form-control">'+$("td[status='"+tdid+"']").html()+'</span></div>' +
+        '</div>' +
+        '</div>',
+        buttons: {
+            cancel: {
+                text: '取消'
+            },
+        },
+    });
+});
+</script>
+</body>
+>>>>>>> branch 'master' of https://github.com/chen2wei4/OAsystem.git
 </html>
