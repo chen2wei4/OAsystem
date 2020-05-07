@@ -2,6 +2,7 @@ package com.woniuxy.oasystem.controller;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,6 +45,7 @@ public class BoardroomController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:select")
 	public CommonResult<PageBean<Boardroom>> findAll(@RequestBody Vo<Boardroom> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {
@@ -70,6 +72,7 @@ public class BoardroomController {
 	 */
 	@RequestMapping("deleteByBoardroomId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:delete")
 	public CommonResult<PageBean<Boardroom>> deleteByBoardroomId(Integer boardroomId) {
 		try {
 			boardroomService.deleteByBoardroomId(boardroomId);
@@ -88,6 +91,7 @@ public class BoardroomController {
 	 */
 	@RequestMapping("updateByBoardroomId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:update")
 	public CommonResult<PageBean<Boardroom>> updateByBoardroomId(@RequestBody Boardroom boardroom) {
 		try {
 			boardroomService.updateByBoardroomId(boardroom);
@@ -106,6 +110,7 @@ public class BoardroomController {
 	 */
 	@RequestMapping("insert")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:insert")
 	public CommonResult<PageBean<Boardroom>> insert(@RequestBody Boardroom boardroom) {
 		try {
 			boardroomService.insert(boardroom);

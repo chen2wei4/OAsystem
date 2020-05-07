@@ -2,6 +2,7 @@ package com.woniuxy.oasystem.controller;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +47,7 @@ public class MeetingController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
+	@RequiresPermissions({"AdministrativeManager:select","worker:select"})
 	public CommonResult<PageBean<Meeting>> findAll(@RequestBody Vo<Meeting> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {
@@ -74,6 +76,7 @@ public class MeetingController {
 	 */
 	@RequestMapping("deleteByMid")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:delete")
 	public CommonResult<PageBean<Meeting>> deleteByMid(Integer meetingId) {
 		try {
 			meetingService.deleteByMid(meetingId);
@@ -92,6 +95,7 @@ public class MeetingController {
 	 */
 	@RequestMapping("updateByMid")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:update")
 	public CommonResult<PageBean<Meeting>> updateByCaId(@RequestBody Meeting meeting) {
 		try {
 			meetingService.updateByMid(meeting);
@@ -110,6 +114,7 @@ public class MeetingController {
 	 */
 	@RequestMapping("insert")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:insert")
 	public CommonResult<PageBean<Meeting>> insert(@RequestBody Meeting meeting) {
 		try {
 			meetingService.insert(meeting);

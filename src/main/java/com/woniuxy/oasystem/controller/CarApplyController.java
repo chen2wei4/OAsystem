@@ -2,6 +2,7 @@ package com.woniuxy.oasystem.controller;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +44,7 @@ public class CarApplyController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
+	@RequiresPermissions({"AdministrativeManager:select","worker:select"})
 	public CommonResult<PageBean<CarApply>> findAll(@RequestBody Vo<CarApply> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {
@@ -70,6 +72,7 @@ public class CarApplyController {
 	 */
 	@RequestMapping("deleteByCaId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:delete")
 	public CommonResult<PageBean<CarApply>> deleteByCaId(Integer caId) {
 		try {
 			carApplyService.deleteByCaId(caId);
@@ -88,6 +91,7 @@ public class CarApplyController {
 	 */
 	@RequestMapping("updateByCaId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:update")
 	public CommonResult<PageBean<CarApply>> updateByCaId(@RequestBody CarApply carApply) {
 		try {
 			carApplyService.updateByCaId(carApply);
@@ -106,6 +110,7 @@ public class CarApplyController {
 	 */
 	@RequestMapping("insert")
 	@ResponseBody
+	@RequiresPermissions({"AdministrativeManager:insert","worker:insert"})
 	public CommonResult<PageBean<CarApply>> insert(@RequestBody CarApply carApply) {
 		try {
 			carApplyService.insert(carApply);

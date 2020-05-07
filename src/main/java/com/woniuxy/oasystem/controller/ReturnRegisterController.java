@@ -2,6 +2,7 @@ package com.woniuxy.oasystem.controller;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,6 +46,7 @@ public class ReturnRegisterController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:select")
 	public CommonResult<PageBean<ReturnRegister>> findAll(@RequestBody Vo<ReturnRegister> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {
@@ -72,6 +74,7 @@ public class ReturnRegisterController {
 	 */
 	@RequestMapping("deleteByRrId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:delete")
 	public CommonResult<PageBean<ReturnRegister>> deleteByRrId(Integer rrId) {
 		try {
 			returnRegisterService.deleteByRrId(rrId);
@@ -91,6 +94,7 @@ public class ReturnRegisterController {
 	 */
 	@RequestMapping("updateByRrId")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:update")
 	public CommonResult<PageBean<ReturnRegister>> updateByRrId(@RequestBody ReturnRegister returnRegister) {
 		try {
 			returnRegisterService.updateByRrId(returnRegister);
@@ -109,6 +113,7 @@ public class ReturnRegisterController {
 	 */
 	@RequestMapping("insert")
 	@ResponseBody
+	@RequiresPermissions("AdministrativeManager:insert")
 	public CommonResult<PageBean<ReturnRegister>> insert(@RequestBody ReturnRegister returnRegister) {
 		try {
 			returnRegisterService.insert(returnRegister);
