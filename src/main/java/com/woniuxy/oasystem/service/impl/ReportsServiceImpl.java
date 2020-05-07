@@ -49,6 +49,40 @@ public class ReportsServiceImpl implements ReportsService {
 		return pb;
 	}
 
+	// 根据report_to和未审核分页查询
+	@Override
+	public PageBean<Reports> selectReportsByReportToAndConditionPage(Reports reports, int pageIndex, int pageSize) {
+		PageBean<Reports> pb = new PageBean<Reports>();
+		List<Reports> beanList = reportsDao.selectReportsByReportToAndConditionPage(reports, (pageIndex - 1) * pageSize,
+				pageSize);
+		pb.setBeanList(beanList);
+		pb.setPageIndex(pageIndex);
+		pb.setPageSize(pageSize);
+		int totalRecord = reportsDao.selectReportsByReportToAndConditionPageCount(reports);
+		pb.setTotalRecord(totalRecord);
+		pb.setTotalPage((totalRecord % pageSize == 0) ? totalRecord / pageSize : totalRecord / pageSize + 1);
+		pb.setPageBeginAndPageEnd();
+		System.out.println(pb);
+		return pb;
+	}
+
+	// 根据report_to和已审核分页查询
+	@Override
+	public PageBean<Reports> selectReportsByReportToAndConditionPage2(Reports reports, int pageIndex, int pageSize) {
+		PageBean<Reports> pb = new PageBean<Reports>();
+		List<Reports> beanList = reportsDao.selectReportsByReportToAndConditionPage2(reports,
+				(pageIndex - 1) * pageSize, pageSize);
+		pb.setBeanList(beanList);
+		pb.setPageIndex(pageIndex);
+		pb.setPageSize(pageSize);
+		int totalRecord = reportsDao.selectReportsByReportToAndConditionPageCount2(reports);
+		pb.setTotalRecord(totalRecord);
+		pb.setTotalPage((totalRecord % pageSize == 0) ? totalRecord / pageSize : totalRecord / pageSize + 1);
+		pb.setPageBeginAndPageEnd();
+		System.out.println(pb);
+		return pb;
+	}
+
 	// 软删除
 	@Override
 	public void deleteReportsByReportId(int reportId) {
@@ -79,5 +113,11 @@ public class ReportsServiceImpl implements ReportsService {
 	@Override
 	public void updateReportsByReportId(Reports reports) {
 		reportsDao.updateReportsByReportId(reports);
+	}
+
+	// 修改成已审核
+	@Override
+	public void updateReportsToCheckByReportId(int reportId) {
+		reportsDao.updateReportsToCheckByReportId(reportId);
 	}
 }

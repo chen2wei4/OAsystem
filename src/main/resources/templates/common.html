@@ -56,9 +56,29 @@
 						<li><a th:href="@{/reception_add}">新增接待</a></li>
 						<li><a th:href="@{/patchcard_add}">补签</a></li>
 						<li><a th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
-						<li><a th:href="@{/reportByReportFrom}">我的报告</a></li>
 					</ul></li>
-
+				<li class="nav-item nav-item-has-subnav"><a
+					href="javascript:void(0)"><i class="mdi mdi-menu"></i>报告管理</a>
+					<ul class="nav nav-subnav">
+						<li class="nav-item nav-item-has-subnav"><a href="#!">报告操作</a>
+							<ul class="nav nav-subnav">
+								<li><a th:href="@{/reportByReportFrom}">我的报告</a></li>
+								<li><a th:href="@{/addReportPageJumps}">新增报告</a></li>
+								<li th:if="${session.emp.role.roleId==1}"><a
+									th:href="@{/allReports}">所有报告</a></li>
+							</ul></li>
+						<li class="nav-item nav-item-has-subnav"><a href="#!">报告审核</a>
+							<ul class="nav nav-subnav">
+								<li><a th:href="@{/reportByReportTo}">去审核</a></li>
+								<li><a th:href="@{/reportByReportTo2}">历史审核</a></li>
+							</ul></li>
+						<li class="nav-item nav-item-has-subnav"
+							th:if="${session.emp.role.roleId==1}"><a href="#!">报告类别管理</a>
+							<ul class="nav nav-subnav">
+								<li><a th:href="@{/allReportType}">查看报告类型</a></li>
+								<li><a th:href="@{/addReportTypePageJumps}">新增报告类型</a></li>
+							</ul></li>
+					</ul></li>
 			</ul>
 		</nav>
 

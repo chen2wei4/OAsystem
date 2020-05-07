@@ -12,6 +12,12 @@ public interface ReportsService {
 	// 分页查所有
 	PageBean<Reports> selectAllReportsByConditionPage(Reports reports, int pageIndex, int pageSize);
 
+	// 根据report_to和未审核分页查询
+	PageBean<Reports> selectReportsByReportToAndConditionPage(Reports reports, int pageIndex, int pageSize);
+
+	// 根据report_to和已审核分页查询
+	PageBean<Reports> selectReportsByReportToAndConditionPage2(Reports reports, int pageIndex, int pageSize);
+
 	// 添加
 	void insertReports(Reports reports);
 
@@ -26,4 +32,7 @@ public interface ReportsService {
 
 	// 修改
 	void updateReportsByReportId(Reports reports);
+
+	// 修改成已审核
+	void updateReportsToCheckByReportId(int reportId);
 }

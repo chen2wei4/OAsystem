@@ -30,7 +30,7 @@
 									class="lyear-toggler-bar"></span> <span
 									class="lyear-toggler-bar"></span>
 							</div>
-							<span class="navbar-page-title"><h2>所有报告</h2></span>
+							<span class="navbar-page-title"><h2>报告类型</h2></span>
 						</div>
 						<!-- 导航栏信息 -->
 						<ul class="topbar-right" th:replace="common :: header"></ul>
@@ -46,17 +46,11 @@
 						<div class="card">
 							<div class="card-toolbar clearfix">
 								<form class="pull-right search-bar" method="get"
-									th:action="@{/allReports}" role="form">
+									th:action="@{/allReportType}" role="form">
 									<div class="input-group">
 										<input type="hidden" name="search_field" id="search-field"
-											value="title"><select name="reportStatus" size="1"
-											class="form-control" id="example-select">
-											<option value="">选择审核类型</option>
-											<option value="未审核">未审核</option>
-											<option value="已审核">已审核</option>
-										</select> <input type="text" class="form-control"
-											th:value="${reports.reportName}" name="reportName"
-											placeholder="请输入标题">
+											value="title"><input type="text" class="form-control"
+											value="" name="typeName" placeholder="请输入查询类型">
 									</div>
 									<div class="input-group-btn">
 										<button class="btn btn-label btn-primary" type="submit">
@@ -85,50 +79,25 @@
 														<input type="checkbox" id="check-all"><span></span>
 												</label></th> -->
 												<th>编号</th>
-												<th>标题</th>
-												<th>类型</th>
-												<th>报告人</th>
-												<th>状态</th>
-												<th>报告时间</th>
+												<th>类型名称</th>
 												<th>操作</th>
 											</tr>
 										</thead>
 										<tbody>
-											<tr th:each="report:${allpb.beanList}">
+											<tr th:each="reportType:${allpb.beanList}">
 												<!-- <td><label class="lyear-checkbox checkbox-primary">
 														<input type="checkbox" name="ids[]" value="1"><span></span>
 												</label></td> -->
-												<td th:text="${report.reportId}"></td>
-												<td>[[${report.reportName}]]</td>
-												<td>[[${report.reportType.typeName}]]</td>
-												<td>[[${report.reportFrom.empName}]]</td>
-												<td>[[${report.reportStatus}]]</td>
-												<td><font class="text-success">[[${#dates.format(report.reportDate,"yyyy-MM-dd
-														HH:mm:ss")}]]</font></td>
-												<td>
-													<div class="btn-group"
-														th:if="${report.reportStatus}=='未审核' ">
-														<a class="btn btn-xs btn-default"
-															th:href="@{/reportDetail?(reportId=${report.reportId })}"
-															title="查看" data-toggle="tooltip"><i
-															class="mdi mdi-message-bulleted"></i></a> <a
-															class="btn btn-xs btn-default"
-															th:href="@{/updateReportPageJumps?(reportId=${report.reportId })}"
-															title="编辑" data-toggle="tooltip"><i
-															class="mdi mdi-pencil"></i></a> <a
-															class="btn btn-xs btn-default"
-															th:onclick="'javascript:doDelete('+${report.reportId}+')'"
-															title="删除" data-toggle="tooltip"><i
-															class="mdi mdi-window-close"></i></a>
-													</div> <!-- 已审核只能查看 -->
-													<div class="btn-group"
-														th:if="${report.reportStatus}=='已审核' ">
-														<a class="btn btn-xs btn-default"
-															th:href="@{/reportDetail?(reportId=${report.reportId })}"
-															title="查看" data-toggle="tooltip"><i
-															class="mdi mdi-message-bulleted"></i></a>
-													</div>
-												</td>
+												<td th:text="${reportType.typeId}"></td>
+												<td>[[${reportType.typeName}]]</td>
+												<td><a class="btn btn-xs btn-default"
+													th:href="@{/updateReportTypePageJumps?(typeId=${reportType.typeId })}"
+													title="编辑" data-toggle="tooltip"><i
+														class="mdi mdi-pencil"></i></a> <a
+													class="btn btn-xs btn-default"
+													th:onclick="'javascript:doDelete('+${reportType.typeId}+')'"
+													title="删除" data-toggle="tooltip"><i
+														class="mdi mdi-window-close"></i></a></td>
 											</tr>
 										</tbody>
 									</table>
@@ -186,7 +155,7 @@
 		});
 		function doDelete(reportId) {
 			if (confirm("确认删除？")) {
-				window.location.href = "[[@{/deleteReport}]]" + "?reportId="
+				window.location.href = "[[@{/deleteReportType}]]" + "?typeId="
 						+ reportId;
 			}
 		}

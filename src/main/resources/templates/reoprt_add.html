@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>报表添加</title>
+<title>报告添加</title>
 <link rel="icon" href="favicon.ico" type="image/ico">
 <meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
 <meta name="description"
@@ -33,7 +33,7 @@
 									class="lyear-toggler-bar"></span> <span
 									class="lyear-toggler-bar"></span>
 							</div>
-							<span class="navbar-page-title"> 后台首页 </span>
+							<span class="navbar-page-title"><h2>新增报告</h2></span>
 						</div>
 						<!-- 导航栏信息 -->
 						<ul class="topbar-right" th:replace="common :: header"></ul>
@@ -54,7 +54,7 @@
 										<div class="form-controls">
 											<select name="typeId" class="form-control"
 												id="example-select" size="1">
-												<option value="" selected="selected" hidden="hidden">请选择报表类型</option>
+												<option value="" selected="selected" hidden="hidden">请选择报告类型</option>
 												<option th:each="reportType:${reportType}"
 													th:value="${reportType.typeId}">[[${reportType.typeName}]]</option>
 											</select>
@@ -63,11 +63,11 @@
 									<div class="form-group col-md-12">
 										<label for="type">接收人</label>
 										<div class="form-controls">
-											<select name="type" class="form-control" id="type">
-												<option value="1">王总</option>
-												<option value="2">周总</option>
-												<option value="3">李总</option>
-												<option value="4">张三</option>
+											<select name="reportToId" class="form-control"
+												id="example-select" size="1">
+												<option value="" selected="selected" hidden="hidden">请选择接收人</option>
+												<option th:each="allEmp:${allEmps}"
+													th:value="${allEmp.empId}">[[${allEmp.empName}]]</option>
 											</select>
 										</div>
 									</div>

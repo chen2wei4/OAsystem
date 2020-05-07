@@ -21,6 +21,7 @@
 	<resultMap type="Reports" id="reportsMapper">
 		<id column="report_Id" property="reportId" />
 		<result column="report_Name" property="reportName" />
+		<result column="report_Status" property="reportStatus" />
 		<result column="report_Date" property="reportDate" />
 		<result column="report_Content" property="reportContent" />
 		<result column="report_Trouble" property="reportTrouble" />
@@ -32,13 +33,20 @@
 			<id column="emp_Id" property="empId" />
 			<result column="emp_Name" property="empName" />
 		</collection>
+		<collection property="reportTo" ofType="Emp">
+			<id column="emp_Id" property="empId" />
+			<result column="emp_Name" property="empName" />
+		</collection>
 	</resultMap>
 	<!-- 根据report_from分页查询 -->
 	<select id="selectReportsByReportFromAndConditionPage"
 		resultMap="reportsMapper">
-	SELECT * FROM reports r,report_type t,emp e WHERE r.type_id=t.type_id
-	AND r.report_from=e.emp_id AND r.flag = 1 AND report_from =
-	#{reports.reportFromId} <include refid="condition" /> limit #{pageIndex},#{pageSize}
+		SELECT * FROM reports r,report_type t,emp e WHERE r.type_id=t.type_id
+		AND r.report_from=e.emp_id AND r.flag = 1 AND
+		report_from =
+		#{reports.reportFromId}
+		<include refid="condition" />
+		limit #{pageIndex},#{pageSize}
 	</select>
 	<!-- 根据report_from查分页数量 -->
 	<select id="selectReportsByReportFromAndConditionPageCount"
@@ -62,6 +70,42 @@
 		select count(*) from reports WHERE flag = 1
 		<include refid="condition" />
 	</select>
+	<!-- 根据report_To和未审核分页查询 -->
+	<select id="selectReportsByReportToAndConditionPage"
+		resultMap="reportsMapper">
+		SELECT * FROM reports r,report_type t,emp e WHERE r.type_id=t.type_id
+		AND r.report_From=e.emp_id AND r.flag = 1 AND
+		report_to =
+		#{reports.reportToId} AND report_status = '未审核'
+		<include refid="condition" />
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<!-- 根据report_To和未审核查分页数量 -->
+	<select id="selectReportsByReportToAndConditionPageCount"
+		resultType="int">
+		select count(*) from reports WHERE report_to =
+		#{reports.reportToId}
+		AND flag = 1
+		<include refid="condition" />
+	</select>
+	<!-- 根据report_To和已审核分页查询 -->
+	<select id="selectReportsByReportToAndConditionPage2"
+		resultMap="reportsMapper">
+		SELECT * FROM reports r,report_type t,emp e WHERE r.type_id=t.type_id
+		AND r.report_From=e.emp_id AND r.flag = 1 AND
+		report_to =
+		#{reports.reportToId} AND report_status = '已审核'
+		<include refid="condition" />
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<!-- 根据report_To和已审核查分页数量 -->
+	<select id="selectReportsByReportToAndConditionPageCount2"
+		resultType="int">
+		select count(*) from reports WHERE report_to =
+		#{reports.reportToId}
+		AND flag = 1
+		<include refid="condition" />
+	</select>
 	<!-- 查询的条件 -->
 	<sql id="condition">
 		<if test="reports!=null">
@@ -72,6 +116,9 @@
 			</if>
 			<if test="reports.reportName!=null and reports.reportName!=''">
 				and report_name like '%' #{reports.reportName} '%'
+			</if>
+			<if test="reports.reportStatus!=null and reports.reportStatus!=''">
+				and report_status = #{reports.reportStatus}
 			</if>
 			<!-- <if test="reports.reportFromId!=null and reports.reportFromId!=''"> 
 				and report_from=#{reports.reportFromId} </if> -->
@@ -85,19 +132,24 @@
 	<!-- 新增 -->
 	<insert id="insertReports">
 		insert into
-		Reports(type_id,report_from,report_name,report_date,report_content,report_trouble)
-		values(#{typeId},#{reportFromId},#{reportName},#{reportDate},#{reportContent},#{reportTrouble});
+		Reports(type_id,report_from,report_to,report_name,report_date,report_content,report_trouble,report_status)
+		values(#{typeId},#{reportFromId},#{reportToId},#{reportName},#{reportDate},#{reportContent},#{reportTrouble},'未审核');
 	</insert>
 	<!-- 假性删除，修改flag值为0 -->
-	<delete id="deleteReportsByReportId">
+	<update id="deleteReportsByReportId">
 		UPDATE reports SET flag = 0 WHERE report_id =
 		#{reportId}
-	</delete>
+	</update>
 	<!-- 修改 -->
 	<update id="updateReportsByReportId">
 		UPDATE reports SET
 		type_id=#{typeId},report_from=#{reportFromId},report_name=#{reportName},report_date=#{reportDate},report_content=#{reportContent},report_trouble=#{reportTrouble}
 		WHERE report_id=#{reportId}
+	</update>
+	<!-- 修改成已审核 -->
+	<update id="updateReportsToCheckByReportId">
+		UPDATE reports SET report_status='已审核' WHERE
+		report_id=#{reportId}
 	</update>
 </mapper>
 

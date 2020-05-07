@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.ReportCheckDao">
+	<!-- 新增 -->
+	<insert id="insertReportCheck">
+		insert into
+		report_check(report_id,emp_id,check_comment,check_date)
+		values(#{reportIdd},#{empIdd},#{checkComment},#{checkDate});
+	</insert>
+	<!-- 根据ReportId查询 -->
+	<select id="selectByReportId" resultMap="reportCheckMapper">
+		SELECT * FROM
+		report_check c,emp e WHERE c.emp_id=e.emp_id AND report_id=#{reportId}
+		AND c.flag = 1
+	</select>
+	<resultMap type="ReportCheck" id="reportCheckMapper">
+		<id column="check_id" property="checkId" />
+		<result column="check_comment" property="checkComment" />
+		<result column="check_date" property="checkDate" />
+		<collection property="empId" ofType="Emp">
+			<id column="emp_Id" property="empId" />
+			<result column="emp_Name" property="empName" />
+		</collection>
+	</resultMap>
+</mapper>
+
