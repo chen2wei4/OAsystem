@@ -34,9 +34,13 @@ public class FileUtil {
         String fileName = file.getOriginalFilename();
         //获取后缀名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        if(suffixName!=null) {
       //为上传的文件建立一个新名字，避免文件名重复。这里用当前时间戳 加 一个6位随机数 加 文件后缀名
         fileName = System.currentTimeMillis() +""+ ((int)(Math.random()*1000000)) + suffixName;
-      //在磁盘创建这个文件目录
+        }else {
+        fileName = System.currentTimeMillis() +""+ ((int)(Math.random()*1000000)) ;
+        }
+        //在磁盘创建这个文件目录
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdir();

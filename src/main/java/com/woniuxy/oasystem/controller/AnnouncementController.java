@@ -256,8 +256,6 @@ public class AnnouncementController {
 		// 修改公告本身的内容
 		announcementService.updateAnnouncement(ann);
 		// 判断有无文件上传，有则上传文件。并且把文件的信息添加到数据库，没有则直接返回
-		System.out.println(files.length);
-		System.out.println(111111111);
 		if (files.length > 0) {
 			System.out.println(2323);
 			for (MultipartFile file : files) {
