@@ -57,7 +57,11 @@ public class ShiroConfig {
 		filterMap.put("/render", "anon");
 		filterMap.put("/emp/logoff", "logout");
 		filterMap.put("/**", "authc");
+		//authc
+		//无认证访问页面
 		shiroFilterFactoryBean.setLoginUrl("/");
+		//无授权访问页面
+		//shiroFilterFactoryBean.setUnauthorizedUrl("/lyear_pages_login.html");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 		return shiroFilterFactoryBean;
 	}

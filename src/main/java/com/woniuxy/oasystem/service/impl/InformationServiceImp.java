@@ -52,7 +52,7 @@ public class InformationServiceImp implements InformationService{
 	@Override
 	public Pager queryInformations(Integer did,Integer pageNum) {
 		 // 掉用分页方法当前页，及每页数
-			PageHelper.startPage(pageNum,2);
+			PageHelper.startPage(pageNum,4);
 			//写在分页下面
 	List<Information>  ly=informationDao.queryInformations(did);
 		//返回来的只有留言人id

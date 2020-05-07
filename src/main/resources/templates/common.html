@@ -32,23 +32,6 @@
                 <li> <a th:href="@{/business/orders}">订单信息</a> </li>
                 <li> <a th:href="@{/business/contracts}">合同信息</a> </li>
 					</ul></li>
-<<<<<<< HEAD
-
-			   <!-- 事务管理 -->
-			 <li class="nav-item nav-item-has-subnav">
-              <a href="javascript:void(0)"><i class="mdi mdi-file-outline"></i> 事务管理</a>
-              <ul class="nav nav-subnav">
-                <li> <a th:href="@{/information}">留言</a> </li>
-                <li> <a th:href="@{/queryInformation?(did=${session.emp.empId},pageNum=1)}">留言查询</a> </li>
-                <li> <a th:href="@{/queryApplys?(pageNum=1)}">申请查询</a> </li>
-                <li> <a th:href="@{/apply_add}">事务申请</a></li>
-                <li> <a th:href="@{/queryReception?(empId=${session.emp.empId})}">接待查询</a></li>
-                <li> <a th:href="@{/reception_add}">新增接待</a></li>
-                <li> <a th:href="@{/patchcard_add}">补签</a></li>
-                <li> <a th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
-                <li><a th:href="@{/reportByReportFrom}">我的报告</a></li>
-              </ul>
-            </li>	
             
             <!-- 人事模块 -->
 			 <li class="nav-item nav-item-has-subnav">
@@ -63,26 +46,6 @@
                 <li> <a href="/checkIn">考勤记录</a></li>
               </ul>
             </li>	
-								
-
-			<!-- 行政管理 -->
-			<li class="nav-item nav-item-has-subnav"><a
-				href="javascript:void(0)"><i class="mdi mdi-server"></i> 行政管理</a>
-				<ul class="nav nav-subnav">
-					<li><a th:href="@{/car.html}">车辆管理</a></li>
-					<li><a th:href="@{/carApply.html}">车辆申请管理</a></li>
-					<li><a th:href="@{/returnRegister.html}">车辆归还登记</a></li>
-					<li><a th:href="@{/officeSupplies.html}">办公用品管理</a></li>
-					<li><a th:href="@{/officeSuppliesApply.html}">办公用品申请</a></li>
-					<li><a th:href="@{/officeSuppliesReturn.html}">办公用品归还</a></li>
-					<li><a th:href="@{/officeSuppliesBuy.html}">办公用品请购</a></li>
-					<li><a th:href="@{/meeting.html}">会议管理</a></li>
-					<li><a th:href="@{/meetingApply.html}">会议申请</a></li>
-					<li><a th:href="@{/boardroom.html}">会议室</a></li>
-					<li><a th:href="@{/administrativeArchives.html}">行政档案管理</a></li>
-				</ul>
-			</li>
-=======
 				<!-- 行政管理 -->
 				<li class="nav-item nav-item-has-subnav"><a
 					href="javascript:void(0)"><i class="mdi mdi-server"></i> 行政管理</a>
@@ -97,31 +60,23 @@
 						<li><a th:href="@{/meeting.html}">会议管理</a></li>
 						<li><a th:href="@{/meetingApply.html}">会议申请</a></li>
 						<li><a th:href="@{/boardroom.html}">会议室</a></li>
+						<li><a th:href="@{/administrativeArchives.html}">行政档案管理</a></li>
 						<li><a shiro:hasPermission="AdministrativeManager:select"  th:href="@{/administrativeArchives.html}">行政档案管理</a></li>
-					</ul></li>
+					</ul></li>				
 				<!-- 事务管理 -->
-				<li class="nav-item nav-item-has-subnav"><a
-					href="javascript:void(0)"><i class="mdi mdi-file-outline"></i>
-						事务管理</a>
+				<li class="nav-item nav-item-has-subnav"><a href="javascript:void(0)"><i class="mdi mdi-file-outline"></i>事务管理</a>
 					<ul class="nav nav-subnav">
 						<li><a th:href="@{/information}">留言</a></li>
-						<li><a
-							th:href="@{/queryInformation?(did=${session.emp.empId},pageNum=1)}">留言查询</a>
-						</li>
-						<li><a th:href="@{/queryApplys?(pageNum=1)}">申请查询</a></li>
-						<li><a th:href="@{/apply_add}">事务申请</a></li>
-						<li><a
-							th:href="@{/queryReception?(empId=${session.emp.empId})}">接待查询</a></li>
-						<li><a th:href="@{/reception_add}">新增接待</a></li>
+						<li><a th:href="@{/queryInformation?(did=${session.emp.empId},pageNum=1)}">留言查询</a></li>
+						<li><a shiro:hasPermission="apply:add" th:href="@{/queryApplys?(pageNum=1)}">申请查询</a></li>
+						<li><a  th:href="@{/apply_add}">事务申请</a></li>
+						<li><a th:href="@{/queryReception?(empId=${session.emp.empId})}">接待查询</a></li>
+						<li><a  shiro:hasPermission="reception:add" th:href="@{/reception_add}">新增接待</a></li>
 						<li><a th:href="@{/patchcard_add}">补签</a></li>
-						<li><a th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
-						<li><a th:href="@{/reportByReportFrom}">我的报告</a></li>
+						<li><a shiro:hasPermission="patchcard:query" th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
 					</ul></li>
->>>>>>> branch 'master' of https://github.com/chen2wei4/OAsystem.git
-
 			</ul>
 		</nav>
-
 		<div class="sidebar-footer">
 			<p class="copyright">
 				Copyright © 2020 蜗牛学院JAVA65期二组</a>
