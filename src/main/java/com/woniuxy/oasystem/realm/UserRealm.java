@@ -38,6 +38,8 @@ public class UserRealm extends AuthorizingRealm{
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		System.out.println("doGetAuthorizationInfo");
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+		
+		
 		Collection<String> permissions=new ArrayList<String>();
 		permissions.add("customer:insert");
 		permissions.add("customer:select");
@@ -59,7 +61,12 @@ public class UserRealm extends AuthorizingRealm{
 			administrativePermissions.add("AdministrativeManager:delete");
 			administrativePermissions.add("AdministrativeManager:upload");
 		}
-		System.out.println(administrativePermissions);
+		
+		//事务模块权限叠加
+		 administrativePermissions=affair(administrativePermissions);
+		 //公告模块权限
+		 administrativePermissions=affairann(administrativePermissions);
+
 		authorizationInfo.addStringPermissions(administrativePermissions);
 		
 		authorizationInfo.addStringPermission("customer:delete");
@@ -90,6 +97,7 @@ public class UserRealm extends AuthorizingRealm{
 		AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principal, credentials, this.getName());
 		return authenticationInfo;
 	}
+
 	//根据用户的角色id，将权限进行分配
 	public Collection<String> getPermissions(Integer roleId){
 		Collection<String> permissions=new ArrayList<String>();
@@ -131,4 +139,35 @@ public class UserRealm extends AuthorizingRealm{
 		return permissions;
 		
 	}
+	
+	//事务权限
+	public Collection<String> affair(Collection<String> permissions){
+		//获得当前员工权限
+		Integer roleId=emp.getRole().getRoleId();
+		if(roleId==1) {
+			//管理员
+		permissions.add("apply:add");
+		permissions.add("patchcard:query");
+		permissions.add("reception:add");
+		}else if(roleId==2) {
+				
+		}else {
+				
+		}
+		return  permissions;
+	}	
+
+	//公告权限
+		public Collection<String> affairann(Collection<String> permissions){
+			//获得当前员工权限
+			Integer roleId=emp.getRole().getRoleId();
+			if(roleId==1) {
+				//管理员
+			permissions.add("announcement:manage");
+			permissions.add("announcement:select");
+			}else {
+			permissions.add("announcement:select");		
+			}
+			return  permissions;
+		}
 } 

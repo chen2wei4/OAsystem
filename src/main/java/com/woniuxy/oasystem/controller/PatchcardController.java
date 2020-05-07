@@ -3,6 +3,7 @@
  */
 package com.woniuxy.oasystem.controller;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +47,7 @@ public class PatchcardController {
 //		   model.addAttribute("patchcardPager",pager);
 //		}
 		//查询所有补签
+	@RequiresPermissions("patchcard:query")
 		@RequestMapping("/queryPatchcards")
 		public  String patchcardQuery(String e,String d,Integer pageNum,Model model) {		
 			model.addAttribute("e",e);

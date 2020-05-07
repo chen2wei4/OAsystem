@@ -11,6 +11,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -90,6 +92,7 @@ public class ApplyController {
 		}
 		
 		//批准申请
+		@RequiresPermissions("apply:add")
 		@RequestMapping("/approvalApplys")
 		 public String  approvalApplys(Integer[] approvals){
 			//转化成集合

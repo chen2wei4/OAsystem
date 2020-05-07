@@ -54,7 +54,7 @@
               <div class="card-body">
               
               <!-- 警示框 --> 
-        <div class="alert alert-danger col-md-12" role="alert" th:if="${no} ne null">[[${no}]]</div>
+        <div id="qaq" class="alert alert-danger col-md-12" role="alert" th:if="${no} ne null">[[${no}]]</div>
                 <!--接待事务功能-->
                 <form th:action="@{/addReception}" method="post" class="row" >
                
@@ -84,8 +84,8 @@
 
                   
 
-                  <div class="form-group col-md-12">
-                    <button class="btn btn-label btn-primary" ><label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认提交</button>
+                   <div class="form-group col-md-12">
+                    <button class="btn btn-label btn-primary" onclick="yes()"><label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认提交</button>
                     <button class="btn btn-label btn-danger"><label><i class="mdi mdi-close"></i></label><a th:href="@{/index}">返回首页</a></button>
                   </div>
                 </form>
@@ -108,7 +108,6 @@
 <script type="text/javascript" src="js/perfect-scrollbar.min.js"></script>
 <!--标签插件-->
 <script src="js/jquery-tags-input/jquery.tagsinput.min.js"></script>
-<script type="text/javascript" src="js/main.min.js"></script>
 <!--时间选择插件-->
 <script src="js/bootstrap-datetimepicker/moment.min.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
@@ -146,7 +145,14 @@ $(function() {
     
    
     
-    });  
+    }); 
+
+ function yes(){
+	 var result=$("#qaq").text();
+	 if(result==null || result==""){
+		  alert("已提交");
+	 }
+ }
  </script>
 
 </body>
