@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.woniuxy.oasystem.dao.EmpDao;
 import com.woniuxy.oasystem.entity.Emp;
+import com.woniuxy.oasystem.entity.PageBean;
 import com.woniuxy.oasystem.service.EmpService;
 /**
  * 
@@ -52,5 +53,49 @@ public class EmpServiceImp implements EmpService {
 	@Override
 	public void bindEmail(Integer empId, String bindEmail) {
 		empDao.bindEmail(empId, bindEmail);
+	}
+	@Override
+	public PageBean<Emp> selectEmpByPage(Emp emp, int pageIndex, int pageSize) {
+		PageBean<Emp> pageBean = new PageBean<Emp>();
+		// 查询本页包含的数据
+		List<Emp> emps = empDao.selectEmpByPage(emp, (pageIndex-1)*pageSize, pageSize);
+		pageBean.setBeanList(emps); // 将数据添加至本页
+		pageBean.setPageIndex(pageIndex);
+		pageBean.setPageSize(pageSize);
+		int totalRecord = empDao.countByPage(emp, null, null, null, null);
+		pageBean.setTotalRecord(totalRecord); // 设置数据总条数
+		// 根据数据总条数计算总页数
+		pageBean.setTotalPage((totalRecord%pageSize==0)?totalRecord/pageSize:totalRecord/pageSize+1);
+		pageBean.setPageBeginAndPageEnd(); // 设置起始和末尾页码
+		return pageBean;
+	}
+
+	@Override
+	public PageBean<Emp> searchEmp(String parameter, String empGender, String educationBackground, Integer departmentId,
+			Emp emp, int pageIndex, int pageSize) {
+		PageBean<Emp> pageBean = new PageBean<Emp>();
+		// 查询本页包含的数据
+		List<Emp> emps = empDao.searchEmp(parameter, departmentId, empGender, educationBackground, emp, (pageIndex-1)*pageSize, pageSize);
+		pageBean.setBeanList(emps); // 将数据添加至本页
+		pageBean.setPageIndex(pageIndex);
+		pageBean.setPageSize(pageSize);
+		int totalRecord = empDao.countByPage(emp, null, null, null, null);
+		pageBean.setTotalRecord(totalRecord); // 设置数据总条数
+		// 根据数据总条数计算总页数
+		pageBean.setTotalPage((totalRecord%pageSize==0)?totalRecord/pageSize:totalRecord/pageSize+1);
+		pageBean.setPageBeginAndPageEnd(); // 设置起始和末尾页码
+		return pageBean;
+	}
+
+
+	@Override
+	public void modifyEmp(Emp emp) {
+		empDao.modifyEmp(emp);
+	}
+
+	@Override
+	public Emp verifyEmpIdNumber(String empIdNumber) {
+		Emp emp = empDao.verifyEmpIdNumber(empIdNumber);
+		return emp;
 	}
 }

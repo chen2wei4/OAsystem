@@ -48,7 +48,25 @@ public class WebMvcConfig {
 				registry.addViewController("/apply_add").setViewName("apply_add");
 				registry.addViewController("/reception_add").setViewName("reception_add");
 				registry.addViewController("/patchcard_add").setViewName("patchcard_add");
-				
+				//人事模块
+				registry.addViewController("/leaving").setViewName("hr_leaving");
+				registry.addViewController("/interview").setViewName("hr_interview");
+				registry.addViewController("/intervieweeInfo").setViewName("hr_intervieweeInfo");
+				registry.addViewController("/emptyPosition").setViewName("hr_emptyPosition");
+				registry.addViewController("/businessTrip").setViewName("hr_businessTrip");
+				registry.addViewController("/checkIn").setViewName("hr_checkIn");
+				registry.addViewController("/emp").setViewName("hr_emp");
+				registry.addViewController("/addLeaving").setViewName("hr_addLeaving");
+				registry.addViewController("/addInterview").setViewName("hr_addInterview");
+				registry.addViewController("/addIntervieweeInfo").setViewName("hr_addIntervieweeInfo");
+				registry.addViewController("/addEmptyPosition").setViewName("hr_addEmptyPosition");
+				registry.addViewController("/addBusinessTrip").setViewName("hr_addBusinessTrip");
+				registry.addViewController("/updateLeaving").setViewName("hr_updateLeaving");
+				registry.addViewController("/updateInterview").setViewName("hr_updateInterview");
+				registry.addViewController("/updateIntervieweeInfo").setViewName("hr_updateIntervieweeInfo");
+				registry.addViewController("/updateEmp").setViewName("hr_updateEmp");
+				registry.addViewController("/updateEmptyPosition").setViewName("hr_updateEmptyPosition");
+				registry.addViewController("/updateBusinessTrip").setViewName("hr_updateBusinessTrip");
 			}
 		};
 	}

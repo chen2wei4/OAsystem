@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<!-- <script type="text/javascript" src="js/jquery.min.js"></script> -->
 <!--左侧导航-->
 <aside class="lyear-layout-sidebar" th:fragment="lefter">
 
@@ -40,21 +41,19 @@
                 <li> <a th:href="@{/queryPatchcards?(e='',d='',pageNum=1)}">补签查询</a></li>
               </ul>
             </li>	
-            
-            <!-- 人事模块 -->
+				<!-- 人事模块 -->
 			 <li class="nav-item nav-item-has-subnav">
               <a href="javascript:void(0)"><i class="mdi mdi-file-outline"></i> 人事模块</a>
               <ul class="nav nav-subnav">
                 <li> <a href="/emp">员工信息</a> </li>
                 <li> <a href="/emptyPosition">空缺职位记录</a> </li>
-                <li> <a href="/intervieweeInfo">面试人员信息</a></li>
-                <li> <a href="/interview">面试记录</a></li>
                 <li> <a href="/leaving">请假记录</a> </li>
                 <li> <a href="/businessTrip">差旅记录</a> </li>
+                <li> <a href="/intervieweeInfo">面试人员信息</a></li>
+                <li> <a href="/interview">面试记录</a></li>
                 <li> <a href="/checkIn">考勤记录</a></li>
               </ul>
-            </li>	
-								
+            </li>			
 			</ul>
 		</nav>
 
@@ -164,6 +163,58 @@
 			</span></li>
 		</ul></li>
 	<!--切换主题配色-->
+	
+	<script>
+		// 签到函数
+		function checkIn(){
+			var empId = $("#currentEmpId").html();
+			if (empId != ""){
+				$.ajax({
+					url:"/signIn/checkIn",
+					method:"POST",
+					data:{
+						'empId':empId
+					},
+			 	    dataType:"json",
+			 	    success:function(data){
+			 	    	alert(data.result);
+			 	    },
+				});				
+			}
+		}
+		
+		// 签到验证函数
+		function verifyCheckIn(){
+			var empId = $("#currentEmpId").html();
+			alert(empId);
+			if (empId != ""){
+				$.ajax({
+					url:"/signIn/verifyCheckIn",
+					method:"POST",
+					data:{
+						'empId':empId
+					},
+			 	    dataType:"json",
+			 	    success:function(data){
+			 	    	alert(data.result);
+			 	    },
+				});				
+			}
+		}
+		
+	</script>
+	
+	<li id="sign">
+		<a href="javaScript:checkIn()">签</a>
+	</li>
+	<!-- 存储当前登录的员工id -->
+	<li style="display:none" id="currentEmpId">[[${session.emp.empId}]]</li>
 </ul>
 <!-- END 头部信息 -->
+	<script type="text/javascript">
+	$(function(){
+	    // 检查本用户今日是否已签到
+		verifyCheckIn();
+	});
+	</script>
 </html>
