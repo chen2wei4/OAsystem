@@ -9,6 +9,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -52,6 +54,7 @@ public class ContractController {
 	 * @changeLog 1.创建 (2020年4月26日 下午6:00:20 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("contract:select")
 	@RequestMapping("/business/contracts")
 	public String showMyCunstomers(Model model,Contract contract,Integer currentPage,HttpServletRequest req) {
 		if(currentPage==null) {
@@ -75,6 +78,7 @@ public class ContractController {
 	 * @changeLog 1.创建 (2020年4月26日 下午8:40:10 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("contract:insert")
 	@PostMapping("/business/contracts")
 	public String addContract(Contract contract,@DateTimeFormat(iso=ISO.DATE)Date setDate,@DateTimeFormat(iso=ISO.DATE)Date getDate,
 			Model model) {
@@ -108,6 +112,7 @@ public class ContractController {
 	 * @changeLog 1.创建 (2020年4月27日 下午6:18:44 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("contract:delete")
 	@DeleteMapping("/business/contracts")
 	public String deleteAllCustomer(@RequestParam(value = "ids[]" ,required = false)Integer[] ids)  {
 		System.out.println(ids);
@@ -122,6 +127,7 @@ public class ContractController {
 	 * @changeLog 1.创建 (2020年4月27日 上午9:38:10 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("contract:update")
 	@GetMapping("/business/contracts/{contractId}")
 	public String showContract(@PathVariable("contractId")Integer contractId,Model model,HttpServletRequest req) {
 		System.out.println(req.getQueryString());
@@ -136,6 +142,7 @@ public class ContractController {
 	 * @changeLog 1.创建 (2020年4月27日 上午10:38:58 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("contract:update")
 	@PutMapping("/business/contracts")
 	public String updateContract(Contract contract,
 			@DateTimeFormat(iso=ISO.DATE)Date setDate,@DateTimeFormat(iso=ISO.DATE)Date getDate,Model model) {
@@ -159,6 +166,7 @@ public class ContractController {
 	 * @changeLog 1.创建 (2020年4月27日 下午6:17:57 [陈一玮]
 	 *            2.
 	 */
+	@RequiresPermissions("contract:delete")
 	@DeleteMapping("/business/contracts/{contractId}")
 	public String deleteCustomer(@PathVariable("contractId")Integer contractId) {
 		contractService.deleteContract(contractId);
@@ -268,6 +276,8 @@ public class ContractController {
 		if(ex instanceof ContractException) {
 			System.out.println("ContractException");
 			mv.setViewName("/lyear_pages_error404");
+		}if(ex instanceof UnauthorizedException) {
+			mv.setViewName("redirect:/business/contracts");
 		}
 		return mv;
 	}

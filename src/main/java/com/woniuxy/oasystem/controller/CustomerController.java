@@ -6,7 +6,9 @@ package com.woniuxy.oasystem.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -233,6 +235,8 @@ public class CustomerController {
 		if(ex instanceof CustomerException) {
 			System.out.println("customerException");
 			mv.setViewName("/lyear_pages_error404");
+		}if(ex instanceof UnauthorizedException) {
+			mv.setViewName("redirect:/business/customers");
 		}
 		return mv;
 	}

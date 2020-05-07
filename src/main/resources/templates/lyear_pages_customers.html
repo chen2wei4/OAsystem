@@ -54,8 +54,10 @@
             <div class="card" >
               <div class="card-toolbar clearfix">
               <div class="toolbar-btn-action col-xs-2">
-                  <a class="btn btn-primary m-r-5" th:href="@{/addcustomer}"><i class="mdi mdi-plus"></i> 新增</a>
-                  <a class="btn btn-danger delall" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+                  <a class="btn btn-primary m-r-5" th:href="@{/addcustomer}"
+                  shiro:hasPermission="customer:insert"><i class="mdi mdi-plus"></i> 新增</a>
+                  <a class="btn btn-danger delall" href="#!"
+                  shiro:hasPermission="customer:delete"><i class="mdi mdi-window-close"></i> 删除</a>
                 </div>
                 <div>
                 <div>
@@ -97,7 +99,7 @@
                   <table class="table table-bordered">
                     <thead>
                       <tr>
-                        <th>
+                        <th shiro:hasPermission="customer:delete">
                           <label class="lyear-checkbox checkbox-primary">
                             <input type="checkbox" id="check-all"><span></span>
                           </label>
@@ -113,7 +115,7 @@
                     </thead>
                     <tbody>
                       <tr th:each="customer,customerStatus:${pb.beanList}" th:id="${customer.customerId}" th:attr="status=${customerStatus.count}">
-                        <td>
+                        <td shiro:hasPermission="customer:delete" >
                           <label class="lyear-checkbox checkbox-primary">
                             <input type="checkbox" name="ids[]" th:value="${customer.customerId}"><span></span>
                           </label>
@@ -131,11 +133,11 @@
                         <td th:text="${#dates.format(customer.customerTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td>
                           <div class="btn-group">
-                            <a class="btn btn-xs btn-default" th:href="@{/business/customer/}+${customer.customerId}" title="编辑" data-toggle="tooltip">
-                            <i class="mdi mdi-pencil"></i>
+                            <a shiro:hasPermission="customer:update"  class="btn btn-xs btn-default" th:href="@{/business/customer/}+${customer.customerId}" title="编辑" data-toggle="tooltip">
+                            <i class="mdi mdi-pencil" shiro:hasPermission="customer:update" ></i>
                             </a>
                             <a shiro:hasPermission="customer:delete" class="btn btn-xs btn-default del" href="#!" title="删除" data-toggle="tooltip" th:attr="deluri=@{/business/customers/}+${customer.customerId}">
-                            <i class="mdi mdi-window-close"></i>
+                            <i class="mdi mdi-window-close" shiro:hasPermission="customer:delete" ></i>
                             </a>
                             <!--  th:href="@{/business/customerdetail/}+${customer.customerId}" -->
                              <a class="btn btn-xs btn-default example-p-3" title="查看" data-toggle="tooltip" th:attr="detail=${customer.customerId}">
