@@ -3,7 +3,7 @@ kaptcha:
   height: 40
   width: 150
   content:
-    length: 4
+    length: 1
     source: 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ
     space: 3
   font:
