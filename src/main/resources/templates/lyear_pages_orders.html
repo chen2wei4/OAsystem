@@ -193,11 +193,15 @@ $(function(){
         $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
     });
     $(".del").click(function(){
+    	if(confirm("确认删除所选订单么？")){
     	$("#delForm").attr("action",$(this).attr("deluri")).submit();
+    	}
     });
     $(".delall").click(function(){
+    	if(confirm("确认删除所选订单么？")){
     	var check=$("input[name='ids[]']:checked");
     	$("#delAllForm").submit();
+    	}
     });
 });
 
