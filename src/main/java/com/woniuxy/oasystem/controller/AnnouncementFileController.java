@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,7 @@ public class AnnouncementFileController {
 
 	@Autowired
 	AnnouncementFileService announcementFileService;
-
+	@RequiresPermissions("announcement:select")
 	@RequestMapping("/downloadFile")
 	public String downloadFile2(AnnouncementFile annf, HttpServletResponse response ,Model model) {
 		String downloadFilePath = annf.getAfAddress();// 被下载的文件在服务器中的路径,
@@ -81,6 +82,7 @@ public class AnnouncementFileController {
 	/*
 	 *软删除公告
 	 */
+	@RequiresPermissions("announcement:manage")
 	@ResponseBody
 	@RequestMapping("/deletefiles")
 	public ResponseResult<AnnouncementFile> deleteannouncementFile(HttpServletRequest req, AnnouncementFile af,

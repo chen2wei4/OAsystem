@@ -7,6 +7,8 @@ package com.woniuxy.oasystem.configuration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
@@ -55,16 +57,19 @@ public class ShiroConfig {
 		filterMap.put("/render", "anon");
 		filterMap.put("/emp/logoff", "logout");
 		filterMap.put("/**", "authc");
+		//authc
+		//无认证访问页面
 		shiroFilterFactoryBean.setLoginUrl("/");
-//		shiroFilterFactoryBean.setUnauthorizedUrl("/lyear_pages_error.html");
+		//无授权访问页面
+		//shiroFilterFactoryBean.setUnauthorizedUrl("/lyear_pages_login.html");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
 		return shiroFilterFactoryBean;
 	}
 	//配置授权缓存，使用内置的缓存
-//	@Bean
-//	public MemoryConstrainedCacheManager cacheManager() {
-//		return new MemoryConstrainedCacheManager();
-//	}
+	@Bean
+	public MemoryConstrainedCacheManager cacheManager() {
+		return new MemoryConstrainedCacheManager();
+	}
 //	//配置凭证匹配器
 //	public HashedCredentialsMatcher credentialsMatcher() {
 //		HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
@@ -74,6 +79,7 @@ public class ShiroConfig {
 //	}
 	//配置thymeleaf支持权限标签的核心类
 	//Dialect
+	@Bean
 	public ShiroDialect shiroDialect() {
 		return new ShiroDialect();
 	}

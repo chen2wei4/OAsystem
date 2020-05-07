@@ -3,50 +3,54 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.woniuxy.oasystem.dao.ReportTypeDao">
-	<!-- 插入新的公告类别 
-	<insert id="insertAnnouncementType">
-		insert into announcement_type
-		values(null,#{atName},#{atFlag},#{atDescription})
-	</insert> -->
-	<!-- 查询所有报表类别 -->
-	<select id="selectAllReportType"
-		resultType="ReportType">
-		select * from report_type where flag=1
+	<select id="selectAllReportType" resultType="ReportType">
+		select * from
+		report_type where flag=1
 	</select>
-	<!--  修改公告类别 
-	<update id="updateAnnouncementTypeById">
-		update announcement_type set at_name=#{atName} , at_description=#{atDescription} where
-		at_id=#{atId}
-	</update>
-	软删除
-	<update id="deleteAnnouncementType">
-		update announcement_type set at_flag=0 where
-		at_id=#{atId}
-	</update>
-	通过ID查询公告类别
-	<select id="selectAnnouncementTypeById"
-		resultMap="AnnouncementMapper">
-		select * from announcement_type,announcement where
-		announcement_type.at_id=announcement.an_type and at_id=#{id} and at_flag=1
+	<!-- 分页查所有 -->
+	<select id="selectAllReportTypeByConditionPage"
+		resultMap="reportTypeMapper">
+		SELECT * FROM report_type WHERE flag = 1
+		<include refid="condition" />
+		limit #{pageIndex},#{pageSize}
 	</select>
-	<resultMap type="AnnouncementType" id="AnnouncementMapper">
-		<id column="at_id" property="atId" />
-		<result column="at_name" property="atName" />
-		<result column="at_flag" property="atFlag" />
-		<result column="at_description" property="atDescription"/>
-		<collection property="ans" ofType="Announcement">
-			<id column="an_id" property="anId" />
-			<result column="an_emp_id" property="anEmpId" />
-			<result column="an_type" property="anType" />
-			<result column="an_name" property="anName" />
-			<result column="an_content" property="anContent" />
-			<result column="an_time" property="anTime" />
-			<result column="an_flag" property="anFlag" />
-		</collection>
+	<!-- 分页查所有数量 -->
+	<select id="selectAllReportTypeByConditionPageCount"
+		resultType="int">
+		select count(*) from report_type WHERE flag = 1
+		<include refid="condition" />
+	</select>
+	<!-- 查询的条件 -->
+	<sql id="condition">
+		<if test="reportType!=null">
+			<if test="reportType.typeName!=null and reportType.typeName!=''">
+				and type_name like '%' #{reportType.typeName} '%'
+			</if>
+		</if>
+	</sql>
+	<!-- resultMap -->
+	<resultMap type="ReportType" id="reportTypeMapper">
+		<id column="type_Id" property="typeId" />
+		<result column="type_Name" property="typeName" />
 	</resultMap>
-	查询所有公告类别数量
-	<select id="selectAnnouncementTypeCount"
-		resultType="Integer">
-		select count(*) from announcement_type where at_flag=1
-	</select> -->
+	<!-- 根据编号查询 -->
+	<select id="selectByTypeId" resultMap="reportTypeMapper">
+		SELECT * FROM report_type
+		WHERE type_id=#{typeId} AND flag = 1
+	</select>
+	<!-- 添加 -->
+	<insert id="insertReportType">
+		insert into report_type(type_name)
+		values(#{typeName});
+	</insert>
+	<!-- 修改 -->
+	<update id="updateReportTypeByTypeId">
+		UPDATE report_type SET type_name=#{typeName} WHERE
+		type_id=#{typeId}
+	</update>
+	<!-- 假性删除，修改flag值为0 -->
+	<update id="deleteReportTypeByTypeId">
+		UPDATE report_type SET flag = 0 WHERE type_id =
+		#{typeId}
+	</update>
 </mapper>

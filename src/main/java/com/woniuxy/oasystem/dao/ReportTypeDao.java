@@ -1,21 +1,29 @@
 package com.woniuxy.oasystem.dao;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 import com.woniuxy.oasystem.entity.ReportType;
 
 public interface ReportTypeDao {
-//	//添加新的类别
-//	public void insertAnnouncementType(AnnouncementType antype);
-//	//软删除公告类别
-//	public void deleteAnnouncementType(Integer id);
-	//查询所有公告类别
+	// 查询所有报告类别
 	public List<ReportType> selectAllReportType();
-//	//通过ID查询公告类别(查询当前公告类别下所有公告)
-//	public AnnouncementType selectAnnouncementTypeById(Integer id);
-//	//修改公告类别名称
-//	public void updateAnnouncementTypeById(AnnouncementType antype);
-//	//查询公告类别数量
-//	public Integer selectAnnouncementTypeCount();
-	
-}
 
+	// 分页查所有
+	public List<ReportType> selectAllReportTypeByConditionPage(@Param("reportType") ReportType reportType,
+			@Param("pageIndex") int pageIndex, @Param("pageSize") int pageSize);
+
+	// 查所有数量
+	int selectAllReportTypeByConditionPageCount(@Param("reportType") ReportType reportType);
+
+	// 根据编号查
+	ReportType selectByTypeId(int typeId);
+
+	// 添加
+	void insertReportType(ReportType reportType);
+
+	// 修改
+	void updateReportTypeByTypeId(ReportType reportType);
+
+	// 软删除
+	void deleteReportTypeByTypeId(int typeId);
+}

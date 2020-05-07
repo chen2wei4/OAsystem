@@ -72,7 +72,7 @@
 				                  </div>
 				                </form>
 								<div class="toolbar-btn-action">
-									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
+									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)" shiro:hasPermission="AdministrativeManager:select"><i
 										class="mdi mdi-plus"></i> 新增</a> 
 								</div>
 							</div>
@@ -88,7 +88,7 @@
 												<th>维护状态</th>
 												<th>使用状态</th>
 												<th>停车位</th>
-												<th>操作</th>
+												<th shiro:hasPermission="AdministrativeManager:select">操作</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -98,12 +98,12 @@
 												<td>{{item.maintenance}}</td>
 												<td>{{item.useState}}</td>
 												<td>{{item.parkingSpace}}</td>
-												<td>
+												<td shiro:hasPermission="AdministrativeManager:select">
 													<div class="btn-group">
 														<a class="btn btn-xs btn-default " href="#!"
-															title="编辑" data-toggle="tooltip" @click="update(item,pb.pageIndex)"><i class="mdi mdi-pencil"></i></a>
+															title="编辑" data-toggle="tooltip" @click="update(item,pb.pageIndex)" shiro:hasPermission="AdministrativeManager:select"><i class="mdi mdi-pencil"></i></a>
 														<a class="btn btn-xs btn-default " href="#!" title="删除"
-															data-toggle="tooltip" @click="del(item.carId,pb.pageIndex)">
+															data-toggle="tooltip" @click="del(item.carId,pb.pageIndex)" shiro:hasPermission="AdministrativeManager:select">
 														<i class="mdi mdi-window-close"></i></a>
 													</div>
 												</td>
