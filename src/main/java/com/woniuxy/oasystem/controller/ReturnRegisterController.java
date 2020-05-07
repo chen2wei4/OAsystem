@@ -46,7 +46,7 @@ public class ReturnRegisterController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	@RequiresPermissions("AdministrativeManager:select")
+
 	public CommonResult<PageBean<ReturnRegister>> findAll(@RequestBody Vo<ReturnRegister> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {

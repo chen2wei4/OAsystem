@@ -45,7 +45,7 @@ public class BoardroomController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	@RequiresPermissions("AdministrativeManager:select")
+	
 	public CommonResult<PageBean<Boardroom>> findAll(@RequestBody Vo<Boardroom> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {

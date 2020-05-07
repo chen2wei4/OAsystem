@@ -47,7 +47,7 @@ public class MeetingController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	@RequiresPermissions({"AdministrativeManager:select","worker:select"})
+	
 	public CommonResult<PageBean<Meeting>> findAll(@RequestBody Vo<Meeting> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {

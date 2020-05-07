@@ -44,7 +44,7 @@ public class CarApplyController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	@RequiresPermissions({"AdministrativeManager:select","worker:select"})
+	
 	public CommonResult<PageBean<CarApply>> findAll(@RequestBody Vo<CarApply> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {

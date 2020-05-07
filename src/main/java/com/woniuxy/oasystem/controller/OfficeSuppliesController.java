@@ -34,7 +34,7 @@ public class OfficeSuppliesController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	@RequiresPermissions("AdministrativeManager:select")
+
 	public CommonResult<PageBean<OfficeSupplies>> findAll(@RequestBody Vo<OfficeSupplies> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {

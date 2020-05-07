@@ -46,7 +46,7 @@ public class AdministrativeArchivesController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	@RequiresPermissions("AdministrativeManager:select")
+	
 	public CommonResult<PageBean<AdministrativeArchives>> findAll(@RequestBody Vo<AdministrativeArchives> vo) {
 		
 		if(vo.t==null) {

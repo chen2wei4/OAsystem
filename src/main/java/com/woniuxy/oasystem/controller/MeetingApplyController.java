@@ -49,7 +49,7 @@ public class MeetingApplyController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	@RequiresPermissions({"AdministrativeManager:select","worker:select"})
+	
 	public CommonResult<PageBean<MeetingApply>> findAll(@RequestBody Vo<MeetingApply> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {

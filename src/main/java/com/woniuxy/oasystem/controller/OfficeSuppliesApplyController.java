@@ -43,7 +43,7 @@ public class OfficeSuppliesApplyController {
 	 */
 	@RequestMapping("/list")
 	@ResponseBody
-	@RequiresPermissions({"AdministrativeManager:select","worker:select"})
+
 	public CommonResult<PageBean<OfficeSuppliesApply>> findAll(@RequestBody Vo<OfficeSuppliesApply> vo) {
 		System.out.println(vo.t);
 		if(vo.t==null) {
