@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www. thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>新增文档 - 光年(Light Year Admin)后台管理系统模板</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description"
+	content="LightYear是一个基于Bootstrap v3.3.7的后台管理系统的HTML模板。">
+<meta name="author" content="yinqi">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<!--标签插件-->
+<link rel="stylesheet"
+	th:href="@{js/jquery-tags-input/jquery.tagsinput.min.css}">
+
+</head>
+
+<body>
+	<div class="lyear-layout-web">
+		<div class="lyear-layout-container">
+			<!--左侧导航-->
+			<div th:replace="common :: lefter"></div>
+			<!--End 左侧导航-->
+			<!--头部信息-->
+			<header class="lyear-layout-header">
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 后台首页 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header">
+						</ul>
+					</div>
+				</nav>
+			</header>
+			<!--End 头部信息-->
+			<!--页面主要内容-->
+			<main class="lyear-layout-content">
+			<div class="container-fluid">
+
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-body">
+
+								<form th:action="@{/updateannouncement}" method="post" class="row" enctype="multipart/form-data">
+									<input type="hidden" name="anId" th:value="${anInfo.anId}">
+									<div class="form-group col-md-12">
+										<label for="title">公告类别</label> <select name="anType"
+											class="form-control" id="example-select" size="1">
+											<option th:each="antype:${antypes}" th:value="${antype.atId}"
+												th:selected="${antype.atId==anInfo.anType}">[[${antype.atName}]]</option>
+										</select>
+									</div>
+									<div class="form-group col-md-12">
+										<label for="title">标题</label> <input type="text"
+											class="form-control" id="title" name="anName"
+											th:value="${anInfo.anName}" placeholder="请输入标题" />
+									</div>
+									<div class="form-group col-md-12">
+										<label for="seo_description">正文</label>
+										<textarea class="form-control" id="seo_description"
+											name="anContent" rows="5" placeholder="正文">[[${anInfo.anContent}]]</textarea>
+									</div>
+										<div class="form-group col-md-12">
+										<label for="example-file-multiple-input">添加附件</label>
+										<input type="file" id="example-file-multiple-input" multiple="multiple" 
+											name="files">
+									</div>
+									<div class="form-group col-md-12">
+										<button type="submit" class="btn btn-primary ajax-post"
+											target-form="add-form">确 定</button>
+										<button type="button" class="btn btn-default"
+											onclick="javascript:history.back(-1);return false;">返
+											回</button>
+									</div>
+								</form>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+						<!-- .row -->
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>原有附件</h4>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-4">
+										<span th:if="${not #lists.isEmpty(files)}">
+											<ul th:each="file:${files}">
+												<li th:id="${file.afId}">[[${file.afName}]]
+													<button class="btn btn-xs btn-primary"
+														th:onclick="'javascript:deleteFiles('+${file.afId}+')'">删除当前附件</button>
+												</li>
+											</ul>
+										</span> <span th:if="${#lists.isEmpty(files)}">当前暂无附件 </span>
+
+									</div>
+								</div>
+
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- .row -->
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-header">
+								<h4>留言板管理</h4>
+							</div>
+							<div class="card-body" th:if="${not #lists.isEmpty(messages)}">
+								<div class="row" th:each="message:${messages}">
+									<div class="col-md-4" th:id="aa+${message.amId}">
+										<span>留言人：[[${message.emp.empName}]]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+										<span>留言时间：[[${#dates.format(message.amTime,"yyyy--MM--dd")}]]</span><br>
+										<span>留言内容：[[${message.amContent}]]</span> <a href="#"
+											th:onclick="'javascript:deleteMessage('+${message.amId}+')'">删除留言</a>
+										<br>
+										<br>
+										<br>
+										<br>
+										<br>
+									</div>
+								</div>
+							</div>
+							<div class="card-body" th:if="${#lists.isEmpty(messages)}">
+								<div class="row">
+									<div class="col-md-4">
+										<span>当前公告暂无留言</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+
+			</main>
+			<!--End 页面主要内容-->
+		</div>
+	</div>
+
+	<script type="text/javascript" th:src="@{js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{js/perfect-scrollbar.min.js}"></script>
+	<!--标签插件-->
+	<script th:src="@{js/jquery-tags-input/jquery.tagsinput.min.js}"></script>
+	<script type="text/javascript" th:src="@{js/main.min.js}"></script>
+	<script type="text/javascript">
+	//获取根路径
+	function getRootPath(){
+		var pathname=window.location.pathname;
+		var index= pathname.indexOf("/",1);
+		var rootPath=pathname.substring(0,index);
+		return rootPath;
+	}	
+	//删除公告留言
+		function deleteMessage(amId) {
+		if (confirm("确认删除？")) {
+			$.get(getRootPath() + "/deletemessage", {
+				amId : amId
+			}, function(d) {
+				if (d.stateCode == 200) {
+					$("#aa"+amId).remove();
+				} else {
+					alert("系统错误，请联系管理员")
+				}
+			})
+		}
+		}
+		//删除原有附件
+		function deleteFiles(afId) {
+		if (confirm("确认删除？")) {
+			$.get(getRootPath() + "/deletefiles", {
+				afId : afId
+			}, function(d) {
+				if (d.stateCode == 200) {
+					$("#"+afId).remove();
+				} else {
+					alert("系统错误，请联系管理员")
+				}
+			})
+		}
+		}
+	</script>
+</body>
+</html>

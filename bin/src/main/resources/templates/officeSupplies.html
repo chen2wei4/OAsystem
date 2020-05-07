@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>办公用品管理</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+<!--对话框-->
+<link rel="stylesheet" th:href="@{/js/jconfirm/jquery-confirm.min.css}">
+
+<script th:src="@{/js/vue.js}"></script>
+<script th:src="@{/js/axios.js}"></script>
+</head>
+
+<body>
+	<div class="lyear-layout-web">
+		<div class="lyear-layout-container">
+			<!--左侧导航-->
+			<div th:replace="common :: lefter"></div>
+			<!--End 左侧导航-->
+
+			<!--头部信息-->
+			<header class="lyear-layout-header">
+
+				<nav class="navbar navbar-default">
+					<div class="topbar">
+
+						<div class="topbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span> <span
+									class="lyear-toggler-bar"></span>
+							</div>
+							<span class="navbar-page-title"> 办公用品管理 </span>
+						</div>
+						<!-- 导航栏信息 -->
+						<ul class="topbar-right" th:replace="common :: header"></ul>
+
+					</div>
+				</nav>
+
+			</header>
+			<!--End 头部信息-->
+
+
+			<!--页面主要内容-->
+			<main class="lyear-layout-content" id="content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-toolbar clearfix">
+								<form class="pull-right search-bar" method="get" action="#!" role="form">
+				                  <div class="input-group">
+				                    <div class="input-group-btn">
+				                      
+				                      <button class="btn btn-default dropdown-toggle" id="search-btn" data-toggle="dropdown" type="button" 
+				                      	aria-haspopup="true" aria-expanded="false" data-field="osName">
+				                      		办公用品名 <span class="caret"></span>
+				                      </button>
+				                      <ul class="dropdown-menu" @click="turn()">
+				                        <li> <a tabindex="-1" href="#" data-field="osName">办公用品名</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="osNumber">用品编号</a> </li>
+				                        <li> <a tabindex="-1" href="#" data-field="sort">种类</a> </li>
+				                      </ul>
+				                    </div>
+				                    <input type="text" class="form-control" id="condition" data-field="osName" name="keyword" placeholder="请输入" @change="send(pb.pageIndex)">
+				                  </div>
+				                </form>
+								<div class="toolbar-btn-action">
+									<a class="btn btn-primary m-r-5" href="#!" @click="insert(pb.pageEnd)"><i
+										class="mdi mdi-plus"></i> 新增</a> 
+								</div>
+							</div>
+							<!--正文-->
+							<div class="card-body">
+								<!--内容-->
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead>
+											<tr>
+												
+												<th>办公用品名</th>
+												<th>用品编号</th>
+												<th>类别</th>
+												<th>价格</th>
+												<th>数量</th>
+												<th>入库时间</th>
+												<th>使用状态</th>
+												<th>维护</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="item in list">
+												
+												<td>{{item.osName}}</td>
+												<td>{{item.osNumber}}</td>
+												<td>{{item.sort}}</td>
+												<td>{{item.prince}}</td>
+												<td>{{item.number}}</td>
+												<td>{{item.osTime}}</td>
+												<td>{{item.useState}}</td>
+												<td>{{item.maintenance}}</td>
+												<td>
+													<div class="btn-group">
+														<a class="btn btn-xs btn-default " href="#!"
+															title="编辑" data-toggle="tooltip" @click="update(item,pb.pageIndex)"><i class="mdi mdi-pencil"></i></a>
+														<a class="btn btn-xs btn-default " href="#!" title="删除"
+															data-toggle="tooltip" @click="del(item.osId,pb.pageIndex)">
+														<i class="mdi mdi-window-close"></i></a>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<!--页码-->
+								<ul class="pagination">
+									<li :class="pb.pageIndex==1?'disabled':''"><a href="#"
+										@click="(pb.pageIndex-1)>=1?send(pb.pageIndex-1):'' ">«</a></li>
+									<li :class="pb.pageIndex==i?'active':''"
+										v-for="i in pb.pageEnd"><a href="#" @click="send(i)">{{i}}</a>
+									</li>
+									<li :class="pb.pageIndex==pb.totalPage?'disabled':''"><a
+										href="#"
+										@click="(pb.pageIndex+1)<=pb.totalPage?send(pb.pageIndex+1):''">»</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</main>
+			<!--End 页面主要内容-->
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/main.min.js}"></script>
+	<!--对话框-->
+	<script th:src="@{/js/jconfirm/jquery-confirm.min.js}"></script>
+
+	<script type="text/javascript">
+	var list = new Vue({
+	    el:"#content",
+	    data:{
+	      pb:"",//页码信息
+	      list:[]//数据
+	    },
+	    methods:{
+	    	//展示所有数据
+	    	send(pageIndex){
+	    		var that=this;
+		    	  //获取查询条件
+		    	  var type = $("#condition").attr('data-field');
+			  	  var param = $("#condition").val();
+			  	  var osName,osNumber,sort;
+			  	  if(type=="osName"){osName=param};
+			  	  if(type=="osNumber"){osNumber=param};
+			  	  if(type=="sort"){sort=param};
+			  	//发送查询请求 
+	            axios({
+				        	url:'[[@{/officeSupplies/list}]]',
+				        	method:'post',
+				        	data:{
+				        			"t":{
+				        				"osName":osName,
+					        			"osNumber":osNumber,
+					        			"sort":sort
+				        			},
+				        			"pageIndex":pageIndex
+				        		}
+				        }).then(res=>{
+				        	this.list=res.data.data.beanList;
+				        	this.pb=res.data.data
+				        })	 
+	      },
+	      //根据ID删除
+	      del(osId,pageIndex){
+	    		var that=this;    
+	    	  	//弹出确认框
+	    		$.alert({
+	    		        title: '',
+	    		        content: '确认删除吗',
+	    				buttons: {
+	    					confirm: {
+	    						text: '确认',
+	    						btnClass: 'btn-primary',
+	    						action: function(){
+	    							//发送删除请求 
+	    							axios({
+	    						        	url:'[[@{/officeSupplies/deleteByOsId?osId=}]]'+osId,
+	    						        	method:'post'
+	    						        }).then(res=>{
+	    						        	alert(res.data.message);
+	    						        	that.send(pageIndex);
+	    						        })
+	    						}
+	    					},
+	    					cancel: {
+	    						text: '取消',
+	    						action: function () {
+	    		                    
+	    						}
+	    					}
+	    				}
+	    		    });
+	      },
+	      //根据id编辑
+	      update(item,pageIndex){
+	    	  var that=this;
+	    	  $.confirm({
+	    	        title: '编辑',
+	    	        content: '' +
+	    	        '<form action="" class="formName">' +
+	    	        '<div class="form-group">' +
+	    	        '<label> 办公用品名 </label>' +
+	    	        '<input id="osName" type="text" value="'+item.osName+'" class="name form-control" required />' +
+	    	        '<label> 用品编号 </label>' +
+	    	        '<input id="osNumber" type="text" value="'+item.osNumber+'" class="name form-control" required />' +
+	    	        '<label> 类别 </label>' +
+	    	        '<input id="sort" type="text" value="'+item.sort+'" class="name form-control" required />' +
+	    	        '<label> 价格 </label>' +
+	    	        '<input id="prince" type="text" value="'+item.prince+'" class="name form-control" required />' +
+	    	        '<label> 数量 </label>' +
+	    	        '<input id="number" type="text" value="'+item.number+'" class="name form-control" required />' +
+	    	        '<label> 入库时间 </label>' +
+	    	        '<input id="osTime" type="text" value="'+item.osTime+'" class="name form-control" required />' +
+	    	        '<label> 使用状态 </label>' +
+	    	        '<input id="useState" type="text" value="'+item.useState+'" class="name form-control" required />' +
+	    	        '<label> 维护 </label>' +
+	    	        '<input id="maintenance" type="text" value="'+item.maintenance+'" class="name form-control" required />' +
+	    	        '</div>' +
+	    	        '</form>',
+	    	        buttons: {
+	    	        	confirm: {
+	    	                text: '提交',
+	    	                btnClass: 'btn-blue',
+	    	                action: function () {
+	    	                	var osName=$("#osName").val();
+    							var osNumber=$("#osNumber").val();
+    							var sort=$("#sort").val();
+    							var prince=$("#prince").val();
+    							var number=$("#number").val();
+    							var osTime=$("#osTime").val();
+    							var useState=$("#useState").val();
+    							var maintenance=$("#maintenance").val();
+	    	                    if(!osName||!osNumber||!sort||!prince||!number||!osTime||!useState||!maintenance){
+	    	                        $.alert('请输入完整信息');
+	    	                        return false;
+	    	                    }
+	    	                  //发送编辑请求 
+    						
+	    	                  axios({
+    						        	url:'[[@{/officeSupplies/updateByOsId}]]',
+    						        	method:'post',
+    						        	data:{
+    						        			"osId":item.osId,
+    						        			"osName":osName,
+    						        			"osNumber":osNumber,
+    						        			"sort":sort,
+    						        			"prince":prince,
+    						        			"number":number,
+    						        			"osTime":osTime,
+    						        			"useState":useState,
+    						        			"maintenance":maintenance
+    						        		}
+    						        }).then(res=>{
+    						        	alert(res.data.message);
+    						        	that.send(pageIndex);
+    						        })
+	    	                }
+	    	            },
+	    	            cancel: {
+	    	                text: '取消'
+	    	            },
+	    	        }
+	    	    });
+	      },
+	      //新增数据
+	      insert(pageEnd){
+	    	  var that=this;
+	    	  $.confirm({
+	    	        title: '添加',
+	    	        content: '' +
+	    	        '<form action="" class="formName">' +
+	    	        '<div class="form-group">' +
+	    	        '<label> 办公用品名 </label>' +
+	    	        '<input id="osName" type="text" class="name form-control" required />' +
+	    	        '<label> 用品编号 </label>' +
+	    	        '<input id="osNumber" type="text" class="name form-control" required />' +
+	    	        '<label> 类别 </label>' +
+	    	        '<input id="sort" type="text" class="name form-control" required />' +
+	    	        '<label> 价格 </label>' +
+	    	        '<input id="prince" type="text" class="name form-control" required />' +
+	    	        '<label> 数量 </label>' +
+	    	        '<input id="number" type="text" class="name form-control" required />' +
+	    	        '<label> 入库时间 </label>' +
+	    	        '<input id="osTime" type="text" class="name form-control" required />' +
+	    	        '</div>' +
+	    	        '</form>',
+	    	        buttons: {
+	    	        	confirm: {
+	    	                text: '提交',
+	    	                btnClass: 'btn-blue',
+	    	                action: function () {
+	    	                	var osName=$("#osName").val();
+    							var osNumber=$("#osNumber").val();
+    							var sort=$("#sort").val();
+    							var prince=$("#prince").val();
+    							var number=$("#number").val();
+    							var osTime=$("#osTime").val();
+    							
+	    	                    if(!osName||!osNumber||!sort||!prince||!number||!osTime){
+	    	                        $.alert('请输入完整信息');
+	    	                        return false;
+	    	                    }
+	    	                  //发送添加请求 
+	    	                  axios({
+    						        	url:'[[@{/officeSupplies/insert}]]',
+    						        	method:'post',
+    						        	data:{
+						        			"osNumber":osNumber,
+						        			"osName":osName,
+						        			"sort":sort,
+						        			"prince":prince,
+						        			"number":number,
+						        			"osTime":osTime,
+						        			"useState":"未使用",
+						        			"maintenance":"完好"
+    						        		}
+    						        }).then(res=>{
+    						        	alert(res.data.message);
+    						        	that.send(pageEnd);
+    						        })
+	    	                }
+	    	            },
+	    	            cancel: {
+	    	                text: '取消'
+	    	            },
+	    	        }
+	    	    });
+	      },
+	      //模糊查询
+	      turn(){
+	    	 //查询条件切换
+	    	  $('.search-bar .dropdown-menu a').click(function() {
+			        var field = $(this).data('field');
+			        $('#condition').attr('data-field',field);
+			        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+			    });
+	      }
+	    },
+	    //页面加载时调用
+	    created(){
+	    	this.send(1);
+	    }
+	  })
+
+
+	</script>
+</body>
+</html>

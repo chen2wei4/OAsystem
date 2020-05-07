@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 会议申请管理 -->
+<mapper namespace="com.woniuxy.oasystem.dao.MeetingApplyDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultMap="empMap">
+		select * 
+		from meeting_apply ma
+		inner join emp e on e.emp_id = ma.emp_id
+		inner join boardroom b on ma.boardroom_id = b.boardroom_id
+		where ma.flag = 1
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<resultMap type="MeetingApply" id="empMap">
+		<id column="ma_id" property="maId"/>
+		<result column="apply_time" property="applyTime"/>
+		<result column="start_time" property="startTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="purpose" property="purpose"/>
+		<result column="review" property="review"/>
+		
+		<collection property="emp" ofType="Emp">
+			<result column="emp_name" property="empName"/>
+		</collection>
+		<collection property="boardroom" ofType="Boardroom">
+			<result column="name" property="name"/>
+		</collection>
+	</resultMap>
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(distinct ma_id) 
+		from meeting_apply ma
+		inner join emp e on e.emp_id = ma.emp_id
+		inner join boardroom b on ma.boardroom_id = b.boardroom_id
+		where ma.flag = 1
+		<include refid="conditionSql"/>
+	</select>
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="ma.emp.empName!= null and ma.emp.empName!=''">
+				and emp_Name like '%' #{ma.emp.empName} '%'
+			</if>
+			<if test="ma.applyTime!= null and ma.applyTime!=''">
+				and apply_time like '%' #{ma.applyTime} '%'
+			</if>
+			<if test="ma.startTime!= null and ma.startTime!=''">
+				and start_time like '%' #{ma.startTime} '%'
+			</if>
+			<if test="ma.endTime!= null and ma.endTime!=''">
+				and end_time like '%' #{ma.endTime} '%'
+			</if>
+			<if test="ma.purpose!= null and ma.purpose!=''">
+				and purpose like '%' #{ma.purpose} '%'
+			</if>
+			<if test="ma.boardroom.name!= null and ma.boardroom.name!=''">
+				and b.name like '%' #{ma.boardroom.name} '%'
+			</if>
+			<if test="ma.review!= null and ma.review!=''">
+				and review like '%' #{ma.review} '%'
+			</if>
+			
+	</sql>
+	<!-- 根据MaId删除 -->
+	<update id="deleteByMaId">
+		update meeting_apply set flag = 0 where ma_id = #{maId}
+	</update>
+	<!-- 根据MaId修改 -->
+	<update id="updateByMaId">
+		update meeting_apply set 
+		emp_id=#{ma.empId},apply_time=#{ma.applyTime},start_time=#{ma.startTime},
+		end_time=#{ma.endTime},purpose=#{ma.purpose},boardroom_id=#{ma.boardroomId},review=#{ma.review}
+		where ma_id = #{ma.maId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into meeting_apply (emp_id,apply_time,start_time,end_time,purpose,boardroom_id,review) 
+		values (#{ma.empId},#{ma.applyTime},#{ma.startTime},#{ma.endTime},#{ma.purpose},#{ma.boardroomId},#{ma.review})
+	</insert>
+</mapper>

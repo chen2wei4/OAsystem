@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www. thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>文档列表 - 光年(Light Year Admin)后台管理系统模板</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="LightYear,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description" content="LightYear是一个基于Bootstrap v3.3.7的后台管理系统的HTML模板。">
+<meta name="author" content="yinqi">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{/css/materialdesignicons.min.css}" rel="stylesheet">
+<link th:href="@{/css/style.min.css}" rel="stylesheet">
+</head>
+  
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    
+       <!--左侧导航-->
+    <div th:replace="common :: lefter"></div>
+    <!--End 左侧导航-->
+    
+    <!--头部信息-->
+    <header class="lyear-layout-header">
+      
+      <nav class="navbar navbar-default">
+        <div class="topbar">
+          
+          <div class="topbar-left">
+            <div class="lyear-aside-toggler">
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+            </div>
+            <span class="navbar-page-title"> 后台首页 </span>
+          </div>
+          <!-- 导航栏信息 -->
+          <ul class="topbar-right" th:replace="common :: header"></ul>
+          
+        </div>
+      </nav>
+      
+    </header>
+    <!--End 头部信息-->
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+      
+      <div class="container-fluid">
+        
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-toolbar clearfix">
+                <div class="toolbar-btn-action">
+                  <a class="btn btn-primary m-r-5" th:href="@{/addaantype}"><i class="mdi mdi-plus"></i>新增公告类别</a>
+                </div>
+                <div class="toolbar-btn-action">
+									<a class="btn btn-danger m-r-5"
+										th:href="@{/anmanage(pageIndex=1)}"><i
+										class="mdi mdi-keyboard-backspace"></i>返回</a>
+								</div>
+              </div>
+              	
+              <div class="card-body">
+                
+                <div class="table-responsive">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>公告类别</th>
+                        <th>类别描述</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="antype:${antypes.beanList}" th:id="${antype.atId}">
+                        <td>[[${antype.atName}]]</td>
+                        <td>[[${antype.atDescription}]]</td>
+                        <td><font class="text-success" th:if="${antype.atFlag}">启用</font>
+							<font class="alert-link" th:if="${not antype.atFlag}">禁用</font></td>
+                        <td>
+                          <div class="btn-group">
+                            <a  th:if="${not antype.atFlag}" class="btn btn-xs btn-default" href="#" th:onclick="'javascript:doStart('+${antype.atId}+')'" title="启用" data-toggle="tooltip"><i class="mdi mdi-radiobox-blank"></i></a>
+                            <a  th:if="${antype.atFlag}" class="btn btn-xs btn-default" href="#" th:onclick="'javascript:doDelete('+${antype.atId}+')'" title="禁用" data-toggle="tooltip"><i class="mdi mdi-close"></i></a>
+							<a class="btn btn-xs btn-default" th:href="@{/updantype(atId=${antype.atId})}" title="编辑" data-toggle="tooltip"><i class="mdi mdi-lead-pencil"></i></a>                         
+</div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+               	<div class="row">
+									<!--文字信息-->
+									<div class="col-md-6">当前第 [[${antypes.pageIndex}]] 页.总共
+										[[${antypes.totalPage}]] 页.一共 [[${antypes.totalRecord}]] 条记录</div>
+									<!--点击分页-->
+									<div class="col-md-6" th:if="${antypes.pageIndex != 0}">
+										<nav aria-label="Page navigation">
+											<ul class="pagination">
+												<!-- 首页 -->
+												<li th:if="${antypes.pageIndex!=1}"><a
+													th:href="@{/selectallantype(pageIndex=1)}">首页</a></li>
+												<!-- 上一页 -->
+												<li th:if="${antypes.pageIndex!=1}"><a
+													th:href="@{/selectallantype(pageIndex=${antypes.pageIndex-1})}"
+													aria-label="Previous">«</a></li>
+												<!--循环遍历连续显示的页面，若是当前页就高亮显示，并且没有链接-->
+												<li
+													th:each="i:${#numbers.sequence(antypes.pageBegin,antypes.pageEnd)}">
+													<a th:href="@{/selectallantype(pageIndex=${i})}" th:text="${i}"
+													th:if="${antypes.PageIndex!=i}"></a> <span
+													th:if="${antypes.PageIndex==i}" th:text="${i}"
+													style="background-color: #C0C0C0"></span>
+												</li>
+												<!--下一页-->
+												<li th:if="${antypes.pageIndex!=antypes.pageEnd}"><a
+													th:href="@{/selectallantype(pageIndex=${antypes.pageIndex+1})}">»</a>
+												</li>
+												<!-- 尾页 -->
+												<li th:if="${antypes.pageIndex!=antypes.pageEnd}"><a
+													th:href="@{/selectallantype(pageIndex=${antypes.totalPage})}">尾页</a></li>
+											</ul>
+										</nav>
+									</div>
+								</div>
+       
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+      
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.min.js}"></script>
+<script type="text/javascript">
+$(function(){
+    $('.search-bar .dropdown-menu a').click(function() {
+        var field = $(this).data('field') || '';
+        $('#search-field').val(field);
+        $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
+    });
+});
+function doDelete(atId) {
+	if (confirm("确认禁用？")) {
+		window.location.href = "[[@{/delantype}]]" + "?atId=" + atId;
+	}
+}
+function doStart(atId) {
+	if (confirm("确认启用？")) {
+		window.location.href = "[[@{/startantype}]]" + "?atId=" + atId;
+	}
+}
+</script>
+</body>
+</html>

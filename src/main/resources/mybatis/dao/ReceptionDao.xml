@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniuxy.oasystem.dao.ReceptionDao">
+<!-- 新增接待内容-->
+ <insert id="addReception">
+   insert into reception(reception_eid,reception_content,reception_time) values
+      (#{reception.emp.empId},#{reception.receptionContent},#{reception.receptionTime})
+ </insert>
+ 
+ 
+ 
+ <!-- 查看所有被留言 -->
+  <select id="queryRecptions" resultMap="queryRecptionsMapper">
+       select * from <include refid="queryRecption"/> 
+  </select>
+
+<resultMap type="Reception" id="queryRecptionsMapper">
+         <id column="reception_id" property="receptionId" />
+         <result column="reception_content" property="receptionContent"/>
+         <result column="reception_check" property="receptionCheck"/>
+         <result  column="reception_time" property="receptionTime"/>
+         <association property="emp" javaType="Emp">
+             <id  column="emp_id" property="empId"/>
+             <result column="emp_name" property="empName"/>
+         </association>
+</resultMap>
+    
+    
+    <!-- 查询被留言sql片段 -->
+    <sql id="queryRecption">
+       reception rt,emp e where rt.reception_eid=e.emp_id  
+       and rt.reception_eid=#{empId}
+       and rt.flag=1
+    </sql>
+
+<!-- 完成接待 -->
+  <update id="okReception">
+     update reception set flag=0 where reception_id=#{receptionId}
+  </update>
+</mapper>

@@ -45,6 +45,30 @@ public class WebMvcConfig {
 					registry.addViewController("/addcontract").setViewName("/lyear_pages_addcontract");
 					//localhost:8080/addorder进入新增订单界面
 					registry.addViewController("/addorder").setViewName("/lyear_pages_addorder");
+					// 公告相关
+					registry.addViewController("/addaantype").setViewName("addantype");
+					registry.addViewController("/anmanage").setViewName("announcementmanage");
+					registry.addViewController("/anmanagetype").setViewName("announcementtypemanage");
+					//车辆管理相关
+					registry.addViewController("/car.html").setViewName("car");
+					registry.addViewController("/carApply.html").setViewName("carApply");
+					registry.addViewController("/returnRegister.html").setViewName("returnRegister");
+					//会议管理相关
+					registry.addViewController("/meeting.html").setViewName("meeting");
+					registry.addViewController("/meetingApply.html").setViewName("meetingApply");
+					registry.addViewController("/boardroom.html").setViewName("boardroom");
+					//办公用品管理相关
+					registry.addViewController("/officeSupplies.html").setViewName("officeSupplies");
+					registry.addViewController("/officeSuppliesApply.html").setViewName("officeSuppliesApply");
+					registry.addViewController("/officeSuppliesReturn.html").setViewName("officeSuppliesReturn");
+					registry.addViewController("/officeSuppliesBuy.html").setViewName("officeSuppliesBuy");
+					//行政档案管理相关
+					registry.addViewController("/administrativeArchives.html").setViewName("administrativeArchives");
+					//事务模块
+					registry.addViewController("/information").setViewName("information");
+					registry.addViewController("/apply_add").setViewName("apply_add");
+					registry.addViewController("/reception_add").setViewName("reception_add");
+					registry.addViewController("/patchcard_add").setViewName("patchcard_add");
 		}
 			@Override
 			public void addInterceptors(InterceptorRegistry registry) {
@@ -56,4 +80,5 @@ public class WebMvcConfig {
 			}
 	};
 }
+				
 }

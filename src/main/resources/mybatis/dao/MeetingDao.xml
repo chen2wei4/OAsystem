@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 会议管理 -->
+<mapper namespace="com.woniuxy.oasystem.dao.MeetingDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultMap="empMap">
+		select * 
+		from meeting m
+		inner join emp e on m.emp_id = e.emp_id
+		inner join boardroom b on m.boardroom_id = b.boardroom_id
+		where m.flag = 1
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	
+	<resultMap type="Meeting" id="empMap">
+		<id column="meeting_id" property="meetingId"/>
+		<result column="principal" property="principal"/>
+		<result column="recorder" property="recorder"/>
+		<result column="topic" property="topic"/>
+		<result column="start_time" property="startTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="file" property="file"/>
+		
+		<collection property="emp" ofType="Emp">
+			<result column="emp_name" property="empName"/>
+		</collection>
+		<collection property="boardroom" ofType="Boardroom">
+			<result column="name" property="name"/>
+		</collection>
+	</resultMap>
+	
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(distinct meeting_id) 
+		from meeting m
+		inner join emp e on m.emp_id = e.emp_id
+		inner join boardroom b on m.boardroom_id = b.boardroom_id
+		where m.flag = 1
+		<include refid="conditionSql"/>
+	</select>
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="m.emp.empName!= null and m.emp.empName!=''">
+				and emp_Name like '%' #{m.emp.empName} '%'
+			</if>
+			<if test="m.principal!= null and m.principal!=''">
+				and principal like '%' #{m.principal} '%'
+			</if>
+			<if test="m.recorder!= null and m.recorder!=''">
+				and recorder like '%' #{m.recorder} '%'
+			</if>
+			<if test="m.topic!= null and m.topic!=''">
+				and topic like '%' #{m.topic} '%'
+			</if>
+			<if test="m.boardroom.name!= null and m.boardroom.name!=''">
+				and b.name like '%' #{m.boardroom.name} '%'
+			</if>
+			<if test="m.startTime!= null and m.startTime!=''">
+				and start_time like '%' #{m.startTime} '%'
+			</if>
+			<if test="m.endTime!= null and m.endTime!=''">
+				and end_time like '%' #{m.endTime} '%'
+			</if>
+			
+	</sql>
+	<!-- 根据mid删除 -->
+	<update id="deleteByMid">
+		update meeting set flag = 0 where meeting_id = #{meetingId}
+	</update>
+	<!-- 根据mid修改 -->
+	<update id="updateByMid">
+		update meeting set 
+		principal=#{m.principal},recorder=#{m.recorder},topic=#{m.topic},boardroom_id=#{m.boardroom.boardroomId},
+		start_time=#{m.startTime},end_time=#{m.endTime},file=#{m.file}
+		where meeting_id = #{m.meetingId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into meeting (emp_id,principal,recorder,topic,boardroom_id,start_time,end_time,file) 
+		values (#{m.emp.empId},#{m.principal},#{m.recorder},#{m.topic},#{m.boardroom.boardroomId},#{m.startTime},#{m.endTime},#{m.file})
+	</insert>
+	
+	<!-- 根据用户名查询empId -->
+	<select id="findIdByBoardroomName" resultType="Integer">
+		select boardroom_id from boardroom where name = #{name}
+	</select>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 车辆申请管理 -->
+<mapper namespace="com.woniuxy.oasystem.dao.ReturnRegisterDao">
+	<!-- 分页查询 -->
+	<select id="findAllByPage" resultMap="empMap">
+		select * 
+		from return_register rr,emp e
+		where rr.flag = 1 and rr.emp_id=e.emp_id
+		<include refid="conditionSql"/>
+		limit #{pageIndex},#{pageSize}
+	</select>
+	<resultMap type="ReturnRegister" id="empMap">
+		<id column="rr_id" property="rrId"/>
+		<result column="license" property="license"/>
+		<result column="return_time" property="returnTime"/>
+		<result column="maintenance" property="maintenance"/>
+		<result column="place" property="place"/>
+		<result column="mileage" property="mileage"/>
+		<result column="oil" property="oil"/>
+		<result column="parking_place" property="parkingPlace"/>
+		
+		<collection property="emp" ofType="Emp">
+			<result column="emp_name" property="empName"/>
+		</collection>
+	</resultMap>
+	<!-- 总条数-->
+	<select id="findAllByPageCount" resultType="int">
+		select count(distinct rr_id) 
+		from return_register rr,emp e
+		where rr.flag = 1 and rr.emp_id=e.emp_id
+		<include refid="conditionSql"/>
+	</select>
+	<!-- 模糊查询条件 -->
+	<sql id="conditionSql">
+			<if test="rr.emp.empName!= null and rr.emp.empName!=''">
+				and emp_name like '%' #{rr.emp.empName} '%'
+			</if>
+			<if test="rr.license!= null and rr.license!=''">
+				and license like '%' #{rr.license} '%'
+			</if>
+			<if test="rr.returnTime!= null and rr.returnTime!=''">
+				and return_time like '%' #{rr.returnTime} '%'
+			</if>
+			<if test="rr.maintenance!= null and rr.maintenance!=''">
+				and maintenance like '%' #{rr.maintenance} '%'
+			</if>
+			<if test="rr.place!= null and rr.place!=''">
+				and place like '%' #{rr.place} '%'
+			</if>
+	</sql>
+	<!-- 根据rrId删除 -->
+	<update id="deleteByRrId">
+		update return_register set flag = 0 where rr_id = #{rrId}
+	</update>
+	<!-- 根据rrId修改 -->
+	<update id="updateByRrId">
+		update return_register set 
+		license=#{rr.license},emp_id=#{rr.empId},return_time=#{rr.returnTime},
+		maintenance=#{rr.maintenance},place=#{rr.place},mileage=#{rr.mileage},oil=#{rr.oil},
+		parking_place=#{rr.parkingPlace}
+		where rr_id = #{rr.rrId}
+	</update>
+	<!-- 添加 -->
+	<insert id="insert">
+		insert into return_register (license,emp_id,return_time,maintenance,place,mileage,oil,parking_place) 
+		values (#{rr.license},#{rr.emp.empId},#{rr.returnTime},#{rr.maintenance},#{rr.place},#{rr.mileage},#{rr.oil},#{rr.parkingPlace})
+	</insert>
+</mapper>
