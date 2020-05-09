@@ -74,8 +74,10 @@ public class UserRealm extends AuthorizingRealm{
 			permissions.add("customer:select");
 			permissions.add("contract:select");
 			permissions.add("order:select");
-			
+			permissions.add("announcement:select");		
 		}else if(roleId==3) {
+			permissions.add("announcement:manage");
+			permissions.add("announcement:select");
 			permissions.add("customer:select");
 			permissions.add("customer:select1");
 			permissions.add("contract:select1");
@@ -126,17 +128,4 @@ public class UserRealm extends AuthorizingRealm{
 		return  permissions;
 	}	
 
-	//公告权限
-		public Collection<String> affairann(Collection<String> permissions){
-			//获得当前员工权限
-			Integer roleId=emp.getRole().getRoleId();
-			if(roleId==1) {
-				//管理员
-			permissions.add("announcement:manage");
-			permissions.add("announcement:select");
-			}else {
-			permissions.add("announcement:select");		
-			}
-			return  permissions;
-		}
 } 
